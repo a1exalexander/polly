@@ -1,22 +1,19 @@
 'use server';
 
-import { RoomList, CreateRoomForm, Footer } from '@/components';
-import { Room, UserOnRoom } from '@/types';
+import { CreateRoomForm, Footer, RoomList } from '@/components';
 import { createClient } from '@/utils/supabase/server';
 import styles from './page.module.css';
 
 export default async function Home() {
     const supabase = await createClient();
-    const [{data: serverRooms}, {data: serverUsersOnRooms}] = await Promise.all([
-        supabase.from('Rooms').select('*'),
-        supabase.from('UsersOnRooms').select('*')
-    ]);
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: publicUser } = await supabase.from('Users').select('*').eq('user_id', String(user?.id)).single();
 
     return (
         <div className={styles.page}>
             <main className={styles.main}>
                 <CreateRoomForm />
-                <RoomList serverUsersOnRooms={serverUsersOnRooms as UserOnRoom[]} serverRooms={serverRooms as Room[]} />
+                <RoomList serverUser={publicUser} />
             </main>
             <Footer />
         </div>

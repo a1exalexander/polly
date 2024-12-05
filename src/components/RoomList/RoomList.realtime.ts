@@ -2,25 +2,25 @@ import { Room, UserOnRoom } from '@/types';
 import { ActionTypes, DispatchType } from './RoomList.store';
 import { RealtimeChannel } from '@supabase/realtime-js';
 
-export const realtime = (channel: RealtimeChannel, dispatch: DispatchType)=> {
+export const realtime = (channel: RealtimeChannel, dispatch: DispatchType, userId: number)=> {
     return channel
         .on(
             'postgres_changes',
-            { event: 'INSERT', schema: 'public', table: 'Rooms' },
+            { event: 'INSERT', schema: 'public', table: 'Rooms', filter: 'public_user_id=eq.' + userId },
             (payload) => {
                 dispatch({ type: ActionTypes.ROOM_CREATED, payload: payload.new as Room });
             },
         )
         .on(
             'postgres_changes',
-            { event: 'DELETE', schema: 'public', table: 'Rooms' },
+            { event: 'DELETE', schema: 'public', table: 'Rooms', filter: 'public_user_id=eq.' + userId },
             (payload) => {
                 dispatch({ type: ActionTypes.ROOM_DELETED, payload: payload.old as Room });
             },
         )
         .on(
             'postgres_changes',
-            { event: 'UPDATE', schema: 'public', table: 'Rooms' },
+            { event: 'UPDATE', schema: 'public', table: 'Rooms', filter: 'public_user_id=eq.' + userId },
             (payload) => {
                 dispatch({ type: ActionTypes.ROOM_UPDATED, payload: payload.new as Room });
             },

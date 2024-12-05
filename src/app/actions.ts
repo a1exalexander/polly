@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
-import { encodedRedirect } from '@/utils/utils';
+import { encodedRedirect, getURL } from '@/utils/utils';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -9,14 +9,12 @@ export const signInAction = async () => {
     const supabase = await createClient();
     const headersMap = await headers();
 
-    const origin = headersMap.get('origin');
     const referer = headersMap.get('referer');
     const params = String(referer).split('?')[1];
-
     const { error, data } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: `${origin}/auth/callback?${params}`,
+            redirectTo: `${getURL()}auth/callback?${params}`,
         },
     });
 

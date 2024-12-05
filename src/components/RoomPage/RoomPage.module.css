@@ -8,7 +8,9 @@
     gap: calc(var(--grid-size) * 4);
 }
 
-
+.isHost {
+    padding: calc(var(--grid-size) * 26) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
+}
 
 @media (min-width: 768px) {
     .page {

@@ -2,29 +2,28 @@
 
 import { Loader, RoomItem } from '@/components';
 import { realtime } from '@/components/RoomList/RoomList.realtime';
-import { Room, UserOnRoom } from '@/types';
-import { ActionTypes, createInitialState, getters, reducer } from './RoomList.store';
+import { Room, User, UserOnRoom } from '@/types';
 import { createClient } from '@/utils/supabase/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useReducer } from 'react';
 import { useBoolean } from 'usehooks-ts';
 import styles from './RoomList.module.css';
+import { ActionTypes, createInitialState, getters, reducer } from './RoomList.store';
 
 interface RoomListProps {
     className?: string;
-    serverRooms: Room[];
-    serverUsersOnRooms: UserOnRoom[];
+    serverUser: User | null;
 }
 
-export const RoomList = ({ className, serverRooms, serverUsersOnRooms }: RoomListProps) => {
+export const RoomList = ({ className, serverUser }: RoomListProps) => {
     const loading = useBoolean(true);
     const [state, dispatch] = useReducer(
         reducer,
         {
-            usersOnRooms: serverUsersOnRooms,
-            rooms: serverRooms
+            usersOnRooms: [],
+            rooms: [],
         },
-        createInitialState
+        createInitialState,
     );
 
     useEffect(() => {
@@ -33,8 +32,8 @@ export const RoomList = ({ className, serverRooms, serverUsersOnRooms }: RoomLis
         const getRooms = async () => {
             loading.setTrue();
             const [rooms, usersOnRooms] = await Promise.all([
-                supabase.from('Rooms').select('*'),
-                supabase.from('UsersOnRooms').select('*')
+                supabase.from('Rooms').select('*').eq('public_user_id', Number(serverUser?.id)),
+                supabase.from('UsersOnRooms').select('*'),
             ]);
             dispatch({ type: ActionTypes.ROOMS_FETCHED, payload: rooms.data as Room[] });
             dispatch({ type: ActionTypes.USER_ON_ROOMS_FETCHED, payload: usersOnRooms.data as UserOnRoom[] });
@@ -62,14 +61,18 @@ export const RoomList = ({ className, serverRooms, serverUsersOnRooms }: RoomLis
                     {state.rooms?.map(({ id, title }) => {
                         const UsersOnRooms = getters.getUsersOnRoom(state, id);
                         return (
-                            <li className={styles.item} key={id}>
+                            <li
+                                className={styles.item}
+                                key={id}
+                            >
                                 <RoomItem
                                     roomId={id}
                                     title={title}
                                     membersAmount={UsersOnRooms?.length}
-                                    onlineAmount={UsersOnRooms?.filter(({ active }) => !!active).length} />
+                                    onlineAmount={UsersOnRooms?.filter(({ active }) => !!active).length}
+                                />
                             </li>
-                        )
+                        );
                     })}
                 </ul>}
             </div>

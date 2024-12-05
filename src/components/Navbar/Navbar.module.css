@@ -13,11 +13,11 @@
 
 .container {
     --navbar-height: calc(var(--grid-size) * 5);
-    --navbar-width: calc(var(--grid-size) * 60);
+    --navbar-width: calc(var(--grid-size) * 70);
     --navbar-height-expanded: calc(var(--grid-size) * 6);
-    --navbar-width-expanded: calc(var(--grid-size) * 90);
+    --navbar-width-expanded: calc(var(--grid-size) * 100);
     --time-width: calc(var(--grid-size) * 12);
-    --time-width-expanded: calc(var(--grid-size) * 14);
+    --time-width-expanded: calc(var(--grid-size) * 12);
     border-radius: calc(var(--grid-size) * 4);
     background-color: var(--primary-color);
     color: var(--secondary-color);
@@ -33,7 +33,7 @@
     transform-origin: center center;
     transition: height var(--bounce) var(--transition-time), width var(--bounce) var(--transition-time), background-color ease-in-out var(--transition-time), color ease-in-out var(--transition-time);
     overflow: hidden;
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 500;
     will-change: height, width;
 }
@@ -63,6 +63,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .expanded .head {
@@ -104,7 +105,7 @@
     align-items: center;
     margin: 0 calc(var(--grid-size) * 2);
     will-change: width;
-    transition: width var(--transition-time) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: width var(--transition-time) var(--bounce), flex var(--transition-time) var(--bounce), opacity var(--transition-time) ease-in-out;
 }
 
 .timeWrapper.isTimeVisible {
@@ -119,7 +120,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex: 0 0 calc((100% - var(--time-width) - var(--grid-size) * 4 - 2px) / 2);
+    flex: 1 0 calc((100% - var(--time-width) - var(--grid-size) * 4 - 2px) / 2);
+    transition: width var(--transition-time) var(--bounce), flex var(--transition-time) var(--bounce), opacity var(--transition-time) ease-in-out;
 }
 
 .time {
@@ -129,8 +131,20 @@
 }
 
 .title {
-    display: flex;
-    justify-content: center;
+    transform-origin: left;
+}
+
+.title:hover {
+    flex-grow: 1;
+}
+
+.title:hover ~ * {
+    width: 0;
+    margin: 0;
+    opacity: 0;
+    flex-basis: 0;
+    flex-grow: 0;
+    flex-shrink: 1;
 }
 
 .story {

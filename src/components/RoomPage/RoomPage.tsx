@@ -55,7 +55,7 @@ export const RoomPage = ({
         return userOnStory?.value || null;
     }, [state.usersOnStory, serverUser.id, story]);
     const isVotingDisabled = useMemo(
-        () => !story?.started_at || !!story?.finished_at || !currentUser?.active,
+        () => !story?.started_at || !currentUser?.active,
         [story, currentUser],
     );
     const isVotingInProgress = useMemo(() => !!story?.started_at && !story?.finished_at, [story]);
