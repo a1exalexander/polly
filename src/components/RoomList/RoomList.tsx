@@ -41,7 +41,7 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
         };
         getRooms();
 
-        const channel = realtime(supabase.channel('realtime rooms'), dispatch);
+        const channel = realtime(supabase.channel('realtime rooms'), dispatch, Number(serverUser?.id));
 
         return () => {
             supabase.removeChannel(channel);
