@@ -1,27 +1,29 @@
-import type { Metadata, Viewport } from "next";
+import { CSPostHogProvider } from '@/app/providers';
+import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/montserrat';
-import "./globals.css";
-
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Polly",
-  description: "A simple planning app",
+    title: 'Polly',
+    description: 'A simple planning app',
 };
 
 export const viewport: Viewport = {
     themeColor: 'light',
-}
+};
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+        <CSPostHogProvider>
+            <body>
+            {children}
+            </body>
+        </CSPostHogProvider>
+        </html>
+    );
 }
