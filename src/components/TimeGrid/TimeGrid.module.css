@@ -1,0 +1,13 @@
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: calc(var(--grid-size) * 2);
+    flex-basis: 680px;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        gap: calc(var(--grid-size) * 3);
+    }
+}

@@ -1,0 +1,193 @@
+.button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--grid-size) * 1);
+    border-radius: var(--grid-size);
+    box-shadow: none;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+    transition: transform var(--bounce) var(--transition-time),
+    box-shadow var(--bounce) var(--transition-time),
+    background-color ease-in-out var(--transition-time),
+    color ease-in-out var(--transition-time),
+    border-color ease-in-out var(--transition-time);
+}
+
+.text {
+    font-size: inherit;
+    font-weight: 500;
+    color: inherit;
+    transition: color var(--transition-time) ease;
+}
+
+.icon {
+    flex-shrink: 0;
+}
+
+.icon > * {
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    fill: currentColor;
+    stroke: currentColor;
+    transition-property: fill, stroke;
+    transition-timing-function: ease;
+    transition-duration: var(--transition-time);
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.button:focus-visible, .button:focus:not(:active) {
+    outline: 2px solid var(--info-color);
+    outline-offset: 2px;
+}
+
+.button:active, .button:focus {
+    transform: translateY(0);
+}
+
+.primary {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.primary.isBordered {
+    border-color: var(--secondary-color);
+}
+
+.secondary {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.secondary.isBordered {
+    border-color: var(--primary-color);
+}
+
+.inverted {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.inverted.isBordered {
+    border-color: var(--primary-color);
+}
+
+.ghost {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: none;
+}
+
+.ghost-inverted {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: none;
+}
+
+.danger {
+    background-color: var(--danger-color);
+    color: var(--secondary-color);
+    border: 1px solid var(--danger-color);
+}
+
+.button.isOnlyIcon {
+    padding: 0;
+    flex-shrink: 0;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50vmax;
+    background-color: transparent;
+}
+
+.isOnlyIcon:focus-visible, .isOnlyIcon:focus:not(:active) {
+    outline: none;
+}
+
+.ghost.isOnlyIcon {
+    border: none;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.isLoading > *:not(.loader) {
+    opacity: 0;
+}
+
+.loader {
+    stroke: currentColor;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    animation: spin 1s var(--bounce) infinite;
+    opacity: 1;
+    position: absolute;
+}
+
+.icon {
+    flex-shrink: 0;
+}
+
+.icon > * {
+    width: inherit;
+    height: inherit;
+}
+
+.xs {
+    padding: 0 calc(var(--grid-size) * 1);
+    height: calc(var(--grid-size) * 3);
+    font-size: 0.9rem;
+}
+
+.xs:hover {
+    transform: translateY(-1px);
+}
+
+.xs .icon {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.s {
+    padding: 0 calc(var(--grid-size) * 3);
+    height: calc(var(--grid-size) * 4);
+    font-size: 1rem;
+}
+
+.s .icon {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.m {
+    padding: 0 calc(var(--grid-size) * 6);
+    height: calc(var(--grid-size) * 5);
+    font-size: 1rem;
+}
+
+.m .icon {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+
+

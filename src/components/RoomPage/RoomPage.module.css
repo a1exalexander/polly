@@ -1,0 +1,20 @@
+.page {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: calc(var(--grid-size) * 22) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 4);
+}
+
+
+
+@media (min-width: 768px) {
+    .page {
+        flex-direction: row;
+    }
+    .isHost .memberList {
+        min-width: 400px;
+    }
+}

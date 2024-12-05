@@ -1,0 +1,69 @@
+.button {
+    border-radius: var(--grid-size);
+    padding: 0 calc(var(--grid-size) * 3);
+    font-size: 1.8rem;
+    font-weight: 500;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    border: 2px solid var(--primary-color);
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-property: color, background-color, transform, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: calc(50% - var(--grid-size));
+    will-change: transform;
+}
+
+.isDisabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.button:not(.isDisabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 375px) {
+    .button {
+        width: calc(33.3% - var(--grid-size) * 4 / 3);
+    }
+}
+
+@media (min-width: 375px) {
+    .button {
+        width: calc(33.3% - var(--grid-size) * 4 / 3);
+    }
+}
+
+@media (min-width: 414px) {
+    .button {
+        height: 140px;
+        width: calc(25% - var(--grid-size) * 3 / 2);
+    }
+}
+
+@media (min-width: 768px) {
+    .button {
+        height: 140px;
+        width: calc(33.3% - var(--grid-size) * 4 / 3);
+    }
+}
+
+@media (min-width: 1024px) {
+    .button {
+        height: 140px;
+        width: calc(20% - var(--grid-size) * 12 / 5);
+    }
+}
+
+.isSelected {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}

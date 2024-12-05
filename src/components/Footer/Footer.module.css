@@ -1,0 +1,16 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 3);
+    padding: calc(var(--grid-size) * 6) calc(var(--grid-size) * 3);
+    background-color: var(--primary-color);
+}
+
+.button {
+    align-self: flex-end;
+}
+
+.copy {
+    text-align: center;
+    color: var(--grey-light);
+}

@@ -1,0 +1,89 @@
+.container {
+    position: relative;
+    height: calc(var(--grid-size) * 7);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 calc(var(--grid-size) * 2) 0 calc(var(--grid-size) * 2.5);
+    gap: calc(var(--grid-size) * 1);
+    transition: opacity var(--transition-time) ease-in-out;
+}
+
+.container::after {
+    opacity: 1;
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: var(--success-color);
+    position: absolute;
+    left: 7px;
+}
+
+.isDisabled {
+    background-color: var(--grey-lighen);
+}
+
+.isDisabled > *:not(.tail) {
+    opacity: 0.4;
+}
+
+.isDisabled::after {
+    background-color: var(--danger-color);
+}
+
+.head {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.tail {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--grid-size);
+}
+
+.name {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2;
+    flex-grow: 0;
+    flex-shrink: 1;
+    white-space: nowrap;
+}
+
+.value {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.icon {
+    fill: var(--success-color);
+    font-size: 1.1rem;
+    position: relative;
+    right: -3px;
+    flex-shrink: 0;
+}
+
+.star {
+    flex-shrink: 0;
+    fill: var(--warning-color);
+    font-size: 1.1rem;
+    margin-left: var(--grid-size);
+}
+
+.valueSlot {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 26px;
+}
+
+

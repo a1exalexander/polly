@@ -1,0 +1,45 @@
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loader {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary-color);
+}
+
+.icon {
+    stroke: currentColor;
+    width: 1.4rem;
+    height: 1.4rem;
+    animation: spin 1s var(--bounce) infinite;
+}
+
+.small {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.medium {
+    width: 2rem;
+    height: 2rem;
+}
+
+.large {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.isOverlay {
+    border-radius: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}

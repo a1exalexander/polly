@@ -1,0 +1,123 @@
+@keyframes fadeIn {
+    from {
+        transform: scale(0.8);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.container {
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    border-radius: calc(var(--grid-size) * 2);
+    border: 2px solid var(--primary-color);
+    transition-property: border-color, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    background-color: var(--secondary-color);
+}
+
+.list {
+    position: relative;
+    flex-grow: 1;
+}
+
+@media (min-width: 375px) {
+    .list {
+        min-width: 325px;
+    }
+}
+
+.list.visible .container {
+    box-shadow: 0 0 2px 2px var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.list.isHost:hover .container {
+    border-color: var(--warning-color);
+}
+
+.bluredOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: backdrop-filter 0.2s ease;
+}
+
+.list.visible .bluredOverlay {
+    backdrop-filter: blur(0px);
+}
+
+.item {
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    transition-property: background-color;
+
+}
+
+.list.visible .button {
+    background-color: rgba(255, 152, 0, 0.2);
+}
+
+.button:hover {
+    transform: scale(1.2);
+}
+
+.buttonIcon {
+    animation: fadeIn 0.2s ease both;
+    font-size: 1.5rem;
+}
+
+.status {
+    position: absolute;
+    bottom: calc(100% - 12px);
+    border: 2px solid var(--success-color);
+    height: calc(var(--grid-size) * 6);
+    width: 100%;
+    border-radius: calc(var(--grid-size) * 2) calc(var(--grid-size) * 2) 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 6px;
+    font-weight: 700;
+    overflow: hidden;
+    transition: transform 0.2s var(--bounce), box-shadow 0.2s ease;
+    transform: translateY(100%);
+}
+
+.status.isVisible {
+    transform: translateY(0);
+}
+
+.progress {
+    background-color: var(--success-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(100% + 2px);
+    transition: width var(--transition-time) ease;
+}
+
+.progressValue {
+    position: relative;
+    z-index: 2;
+}
