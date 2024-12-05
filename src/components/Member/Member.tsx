@@ -28,7 +28,7 @@ export const Member = ({
         removingLoading.setTrue();
         await onRemoveUser?.(id);
         removingLoading.setFalse();
-    }, [onRemoveUser, id]);
+    }, [onRemoveUser, id, removingLoading]);
 
     const valueContent = useMemo(() => {
         switch (true) {
@@ -41,7 +41,8 @@ export const Member = ({
             default:
                 return <span className={styles.value}>{value}</span>;
         }
-    }, []);
+    }, [isDisabled, isValueVisible, value]);
+
     return (
         <div className={clsx(styles.container, { [styles.isDisabled]: isDisabled }, className)}>
             <div className={styles.head}>

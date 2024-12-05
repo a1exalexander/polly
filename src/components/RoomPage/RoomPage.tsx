@@ -42,18 +42,18 @@ export const RoomPage = ({
     const activeUsers = useMemo(() => state.users.filter(({ active }) => active), [state.users]);
     const host = useMemo(() => getters.getHost(state), [state]);
     const usersWithVotes = useMemo(() => getters.getUsersWithVotes(state), [state]);
-    const isHost = useMemo(() => host?.id === serverUser.id, [host, serverUser]);
+    const isHost = useMemo(() => host?.id === serverUser.id, [host, serverUser.id]);
     const storyId = useMemo(() => state.story?.id || null, [state]);
     const story = useMemo(() => state?.story, [state]);
-    const currentUser = useMemo(() => state.users.find(({ id }) => id === serverUser.id), [state, serverUser]);
+    const currentUser = useMemo(() => state.users.find(({ id }) => id === serverUser.id), [state, serverUser.id]);
     const selectedTime = useMemo(() => {
         const userOnStory = state.usersOnStory.find(
             ({ public_user_id, story_id }) => {
-                return public_user_id === serverUser.id && state.story?.id === story_id;
+                return public_user_id === serverUser.id && story?.id === story_id;
             },
         );
         return userOnStory?.value || null;
-    }, [currentUser, state.usersOnStory]);
+    }, [state.usersOnStory, serverUser.id, story]);
     const isVotingDisabled = useMemo(
         () => !story?.started_at || !!story?.finished_at || !currentUser?.active,
         [story, currentUser],
@@ -66,7 +66,7 @@ export const RoomPage = ({
         return activeUsers.every(({ id }) => {
             return state.usersOnStory.some(({ public_user_id, value }) => public_user_id === id && !!value);
         });
-    }, [state.usersOnStory, state.users, activeUsers]);
+    }, [state.usersOnStory, activeUsers, story]);
     const average = useMemo(() => getters.averageStoryValue(state), [state]);
     const isStoryFinished = useMemo(() => getters.isStoryFinished(state), [state]);
 
@@ -93,7 +93,7 @@ export const RoomPage = ({
             dispatch({ type: ActionTypes.USERS_FETCHED, payload: users });
         }
         dispatch({ type: ActionTypes.STORY_FETCHED, payload: story || null });
-    }, [roomPageService, dispatch]);
+    }, [roomPageService]);
 
     const fetchUsersOnStory = useCallback(async () => {
         if (!roomPageService || !state?.story?.id) {
@@ -102,35 +102,35 @@ export const RoomPage = ({
         dispatch({ type: ActionTypes.USERS_ON_STORY_FETCH });
         const usersOnStory = await roomPageService.getUsersOnStory(state.story.id);
         dispatch({ type: ActionTypes.USERS_ON_STORY_FETCHED, payload: usersOnStory });
-    }, [roomPageService, dispatch, state?.story?.id]);
+    }, [roomPageService, state?.story?.id]);
 
     const startStory = useCallback(async () => {
         if (!roomPageService || !state?.story?.id) {
             return;
         }
         return roomPageService.startStory(state?.story?.id);
-    }, [roomPageService, dispatch, state?.story?.id]);
+    }, [roomPageService, state?.story?.id]);
 
     const nextStory = useCallback(async () => {
         if (!roomPageService || !state?.story) {
             return;
         }
         return roomPageService.nextStory(state.story);
-    }, [roomPageService, dispatch, state?.story]);
+    }, [roomPageService, state?.story]);
 
     const stopStory = useCallback(async () => {
         if (!roomPageService || !state?.story?.id) {
             return;
         }
         return roomPageService.stopStory(state.story.id);
-    }, [roomPageService, dispatch, state?.story?.id]);
+    }, [roomPageService, state?.story?.id]);
 
     const selectTime = useCallback(async (value: number) => {
-        if (!roomPageService || !state?.story?.id) {
+        if (!roomPageService || !story?.id) {
             return;
         }
-        return roomPageService.selectTime(state.story.id, serverUser.id, value);
-    }, [roomPageService, dispatch, state?.story?.id]);
+        return roomPageService.selectTime(story?.id, serverUser.id, value);
+    }, [roomPageService, story, serverUser.id]);
 
     const exit = useCallback(async () => {
         if (!roomPageService || !serverUser.id) {
@@ -138,21 +138,21 @@ export const RoomPage = ({
         }
         await roomPageService.removeUserFromRoom(serverUser.id);
         router.push('/');
-    }, [roomPageService, dispatch, serverUser.id]);
+    }, [router, roomPageService, serverUser.id]);
 
     const removeUserFromRoom = useCallback(async (userId: number) => {
         if (!roomPageService) {
             return;
         }
         return roomPageService.removeUserFromRoom(userId);
-    }, [roomPageService, dispatch]);
+    }, [roomPageService]);
 
     const changeUserActivity = useCallback(async (active: boolean) => {
         if (!roomPageService || !serverUser.id) {
             return;
         }
         return roomPageService.changeUserActivity(serverUser.id, active);
-    }, [roomPageService, dispatch, serverUser.id]);
+    }, [roomPageService, serverUser.id]);
 
     useEffect(() => {
         const roomPageService = new RoomPageService(roomId);

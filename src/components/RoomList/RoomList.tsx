@@ -47,6 +47,7 @@ export const RoomList = ({ className, serverRooms, serverUsersOnRooms }: RoomLis
         return () => {
             supabase.removeChannel(channel);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const isRoomsEmpty = useMemo(() => getters.isRoomsEmpty(state), [state]);

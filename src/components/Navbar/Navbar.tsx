@@ -51,36 +51,37 @@ export const Navbar = ({
         startLoading.setTrue();
         await onStart?.();
         startLoading.setFalse();
-    }, [onStart]);
+    }, [onStart, startLoading]);
 
     const handleNext = useCallback(async () => {
         nextLoading.setTrue();
         await onNext?.();
         nextLoading.setFalse();
-    }, [onNext]);
+    }, [onNext, nextLoading]);
 
     const handleStop = useCallback(async () => {
         stopLoading.setTrue();
         await onStop?.();
         stopLoading.setFalse();
-    }, [onStop]);
+    }, [onStop, stopLoading]);
 
     const handleExit = useCallback(async () => {
         exitLoading.setTrue();
         await onStop?.();
         await onExit?.();
         exitLoading.setFalse();
-    }, [onExit, onStop]);
+    }, [onExit, onStop, exitLoading]);
 
     const handleChangeActivity = useCallback(async () => {
         activityLoading.setTrue();
         activityState.toggle();
         await onChangeActivity?.(!isUserActive);
         activityLoading.setFalse();
-    }, [onExit, isUserActive]);
+    }, [onChangeActivity, isUserActive, activityState, activityLoading]);
 
     useEffect(() => {
         activityState.setValue(!!isUserActive);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isUserActive]);
 
     useEffect(() => {
