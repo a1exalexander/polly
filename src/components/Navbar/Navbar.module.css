@@ -4,7 +4,7 @@
     position: fixed;
     z-index: 2;
     height: 0;
-    top: calc(var(--grid-size) * 8);
+    top: calc(var(--grid-size) * 10);
     display: flex;
     justify-content: center;
     align-items: center;
