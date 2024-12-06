@@ -113,11 +113,11 @@ export class RoomPageService {
             .eq('id', storyId);
     }
 
-    async nextStory(oldStory: Story) {
+    async nextStory(oldStory: Story, nextStoryIndex: number) {
         const { data, error } = await this.supabase
             .from('Stories')
             .insert({
-                title: `Story ${(parseInt(String(oldStory?.title)) || oldStory.id) + 1}`,
+                title: `Story ${nextStoryIndex}`,
                 user_id: oldStory.user_id,
                 public_user_Id: oldStory?.public_user_Id,
             })
@@ -166,14 +166,23 @@ export class RoomPageService {
     }
 
     async removeUserFromRoom(userId: number) {
-        console.log('Removing user from room', userId);
-        const response = await this.supabase
+        return this.supabase
             .from('UsersOnRooms')
             .delete()
             .eq('room_id', this.roomId)
-            .eq('public_user_id', userId)
-            .select();
-        console.log(response);
-        return response;
+            .eq('public_user_id', userId);
+    }
+
+    async getStoriesCount(): Promise<number> {
+        const { error, count } = await this.supabase
+            .from('StoriesOnRooms')
+            .select('*', { count: 'exact', head: true })
+            .eq('room_id', this.roomId)
+        if (error) {
+            console.error('Error fetching stories count', error);
+            return 0;
+        }
+
+        return count || 0;
     }
 }

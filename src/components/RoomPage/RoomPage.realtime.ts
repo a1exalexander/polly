@@ -46,11 +46,16 @@ export const realtime = ({
                     return;
                 }
                 dispatch({ type: ActionTypes.STORY_FETCH });
-                const story = await roomPageService?.getStory();
-                if (!story) {
-                    return;
+                const [story, storiesCount] = await Promise.all([
+                    roomPageService?.getStory(),
+                    roomPageService?.getStoriesCount(),
+                ]);
+                if (story) {
+                    dispatch({ type: ActionTypes.STORY_FETCHED, payload: story });
                 }
-                dispatch({ type: ActionTypes.STORY_FETCHED, payload: story });
+                if (typeof storiesCount !== 'undefined') {
+                    dispatch({ type: ActionTypes.STORIES_COUNT_UPDATED, payload: storiesCount });
+                }
             },
         )
         .on(

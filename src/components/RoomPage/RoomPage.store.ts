@@ -9,6 +9,7 @@ export interface IState {
     storyLoading: boolean;
     usersOnStoryLoading: boolean;
     roomLoading: boolean;
+    storiesCount: number;
 }
 
 export enum ActionTypes {
@@ -28,6 +29,9 @@ export enum ActionTypes {
     USERS_ON_STORY_FETCHED = 'USERS_ON_STORY_FETCHED',
     USER_ON_STORY_CREATED = 'USER_ON_STORY_CREATED',
     USER_ON_STORY_UPDATED = 'USER_ON_STORY_UPDATED',
+    STORIES_COUNT_FETCH = 'STORIES_COUNT_FETCH',
+    STORIES_COUNT_FETCHED = 'STORIES_COUNT_FETCHED',
+    STORIES_COUNT_UPDATED = 'STORIES_COUNT_UPDATED',
 }
 
 export type IAction = {
@@ -74,6 +78,14 @@ export type IAction = {
     type: ActionTypes.ROOM_FETCH;
 } | {
     type: ActionTypes.USERS_ON_STORY_FETCH;
+} | {
+    type: ActionTypes.STORIES_COUNT_FETCHED;
+    payload: number;
+} | {
+    type: ActionTypes.STORIES_COUNT_UPDATED;
+    payload: number;
+} | {
+    type: ActionTypes.STORIES_COUNT_FETCH;
 }
 
 export type DispatchType = (args: IAction) => void;
@@ -131,6 +143,10 @@ export const reducer = (state: IState, action: IAction) => {
             return { ...state, roomLoading: true };
         case ActionTypes.USERS_ON_STORY_FETCH:
             return { ...state, usersOnStoryLoading: true };
+        case ActionTypes.STORIES_COUNT_FETCHED:
+            return { ...state, storiesCount: action.payload };
+        case ActionTypes.STORIES_COUNT_UPDATED:
+            return { ...state, storiesCount: action.payload };
         default:
             return state;
     }
@@ -138,14 +154,7 @@ export const reducer = (state: IState, action: IAction) => {
 
 export const createInitialState = (initData: IState): IState => {
     return {
-        users: initData.users,
-        story: initData.story,
-        usersOnStory: initData.usersOnStory,
-        room: initData.room,
-        usersLoading: initData.usersLoading,
-        storyLoading: initData.storyLoading,
-        usersOnStoryLoading: initData.usersOnStoryLoading,
-        roomLoading: initData.roomLoading,
+        ...initData,
     };
 };
 

@@ -37,6 +37,7 @@ export const RoomPage = ({
         usersLoading: true,
         storyLoading: true,
         usersOnStoryLoading: false,
+        storiesCount: 0,
     }, createInitialState);
 
     const activeUsers = useMemo(() => state.users.filter(({ active }) => active), [state.users]);
@@ -81,10 +82,12 @@ export const RoomPage = ({
             room,
             users,
             story,
+            storiesCount,
         ] = await Promise.all([
-            roomPageService?.getRoom(),
-            roomPageService?.getUsers(),
-            roomPageService?.getStory(),
+            roomPageService.getRoom(),
+            roomPageService.getUsers(),
+            roomPageService.getStory(),
+            roomPageService.getStoriesCount(),
         ]);
         if (room) {
             dispatch({ type: ActionTypes.ROOM_FETCHED, payload: room });
@@ -93,6 +96,7 @@ export const RoomPage = ({
             dispatch({ type: ActionTypes.USERS_FETCHED, payload: users });
         }
         dispatch({ type: ActionTypes.STORY_FETCHED, payload: story || null });
+        dispatch({ type: ActionTypes.STORIES_COUNT_FETCHED, payload: storiesCount });
     }, [roomPageService]);
 
     const fetchUsersOnStory = useCallback(async () => {
@@ -112,11 +116,12 @@ export const RoomPage = ({
     }, [roomPageService, state?.story?.id]);
 
     const nextStory = useCallback(async () => {
-        if (!roomPageService || !state?.story) {
+        if (!roomPageService || !story) {
             return;
         }
-        return roomPageService.nextStory(state.story);
-    }, [roomPageService, state?.story]);
+        await roomPageService.nextStory(story, state.storiesCount + 1);
+        dispatch({ type: ActionTypes.STORIES_COUNT_UPDATED, payload: state.storiesCount + 1 });
+    }, [roomPageService, story, state.storiesCount]);
 
     const stopStory = useCallback(async () => {
         if (!roomPageService || !state?.story?.id) {
