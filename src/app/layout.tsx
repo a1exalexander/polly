@@ -5,7 +5,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
     title: 'Polly',
-    description: 'A simple planning app',
+    description: 'Real-Time Task Estimation and Voting Platform',
 };
 
 export const viewport: Viewport = {
@@ -21,7 +21,9 @@ export default function RootLayout({
         <html lang="en">
         <CSPostHogProvider>
             <body>
-            {children}
+                <div className="layout">
+                    {children}
+                </div>
             </body>
         </CSPostHogProvider>
         </html>

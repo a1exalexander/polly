@@ -93,10 +93,18 @@
     border: none;
 }
 
+.ghost.isBordered {
+    border: 1px solid var(--primary-color);
+}
+
 .ghost-inverted {
     background-color: transparent;
     color: var(--secondary-color);
     border: none;
+}
+
+.ghost-inverted.isBordered {
+    border: 1px solid var(--secondary-color);
 }
 
 .danger {

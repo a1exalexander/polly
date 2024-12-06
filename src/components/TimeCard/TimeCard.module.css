@@ -11,7 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition-property: color, background-color, transform, box-shadow;
+    transition-property: color, background-color, transform, box-shadow, border-color;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     flex-grow: 0;
@@ -22,7 +22,8 @@
 
 .isDisabled {
     cursor: not-allowed;
-    opacity: 0.3;
+    border-color: var(--grey-light);
+    color: var(--grey-light);
 }
 
 .button:not(.isDisabled):hover {

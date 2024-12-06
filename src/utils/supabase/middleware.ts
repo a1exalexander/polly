@@ -50,6 +50,7 @@ export const updateSession = async (request: NextRequest) => {
 
         return response;
     } catch {
+        console.log('Supabase client could not be created');
         // If you are here, a Supabase client could not be created!
         // This is likely because you have not set up environment variables.
         // Check out http://localhost:3000 for Next Steps.

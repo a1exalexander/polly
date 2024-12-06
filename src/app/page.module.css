@@ -10,16 +10,17 @@
     flex-grow: 1;
     margin: 0 auto;
     max-width: var(--container);
-    padding: calc(var(--grid-size) * 2);
+    padding: calc(var(--grid-size) * 4) calc(var(--grid-size) * 2) calc(var(--grid-size) * 0);
     display: flex;
     flex-direction: column;
-    gap: calc(var(--grid-size) * 3);
+    gap: calc(var(--grid-size) * 4);
 }
 
 .form {
     display: flex;
     gap: calc(var(--grid-size) * 2);
 }
+
 .buttons {
     display: flex;
     gap: calc(var(--grid-size) * 2);

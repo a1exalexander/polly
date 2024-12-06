@@ -17,6 +17,7 @@
   --container: 1140px;
   --transition-time: 0.2s;
   --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   color-scheme: only light;
 }
 
@@ -37,12 +38,20 @@ html, body {
   height: 100%;
 }
 
+
 body {
   color: var(--primary-color) !important;
   background-color: inherit !important;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   font-family: 'Montserrat Variable', sans-serif;
+
+}
+
+.layout {
+  height: 100%;
+  background-image: radial-gradient(#3443ab 0.5px, #ffffff 0.5px);
+  background-size: 10px 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -65,5 +74,6 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 #root, #__next {
+  height: 100%;
   isolation: isolate;
 }

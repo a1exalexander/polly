@@ -6,13 +6,15 @@ export const Footer = () => {
 
     return (
         <footer className={styles.footer}>
-            <Button
-                className={styles.button}
-                variant="inverted"
-                onClick={signOutAction}>
-                Sign Out
-            </Button>
-            <p className={styles.copy}>© 2024 Planning Poker App</p>
+            <p className={styles.copy}>© 2024 Polly – Real-Time Task Estimation and Voting Platform</p>
+            <form className={styles.form}>
+                <Button
+                    className={styles.button}
+                    variant="secondary"
+                    formAction={signOutAction}>
+                    Sign Out
+                </Button>
+            </form>
         </footer>
     )
 }

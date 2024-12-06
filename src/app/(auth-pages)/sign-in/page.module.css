@@ -1,7 +1,21 @@
 .page {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
     padding: calc(var(--grid-size) * 2);
+    width: 100%;
+    margin: 0 auto;
+    max-width: var(--container);
+}
+
+.title {
+    margin-bottom: var(--grid-size);
+}
+
+.description {
+    margin-bottom: calc(var(--grid-size) * 6);
+    font-size: 1.1rem;
+    font-weight: 500;
 }
