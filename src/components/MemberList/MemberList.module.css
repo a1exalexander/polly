@@ -18,6 +18,7 @@
     transition-duration: 0.2s;
     transition-timing-function: ease;
     background-color: var(--secondary-color);
+    min-height: calc(var(--grid-size) * 7 * 3);
 }
 
 .list {

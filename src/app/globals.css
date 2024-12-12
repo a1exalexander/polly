@@ -49,9 +49,32 @@ body {
 }
 
 .layout {
-  min-height: 100vh;
-  background-image: radial-gradient(#3443ab 0.5px, #ffffff 0.5px);
-  background-size: 10px 10px;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.layout > * {
+    position: relative;
+    z-index: 1;
+}
+
+.layout::after {
+    position: absolute;
+    content: '';
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#3443ab 0.75px, transparent 0.75px), radial-gradient(#3443ab 0.75px, #e5e5f7 0.75px);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+    z-index: 0;
 }
 
 @media (prefers-color-scheme: dark) {
