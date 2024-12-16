@@ -57,7 +57,7 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
             <div className={styles.content}>
                 {loading.value && <Loader isOverlay />}
                 {!loading.value && isRoomsEmpty && <div className={styles.empty}>No rooms yet</div>}
-                {!loading.value && !isRoomsEmpty && <ul className={clsx(styles.list, className)}>
+                {!loading.value && !isRoomsEmpty && <ul id="room-list" className={clsx(styles.list, className)}>
                     {state.rooms?.map(({ id, title }) => {
                         const UsersOnRooms = getters.getUsersOnRoom(state, id);
                         return (

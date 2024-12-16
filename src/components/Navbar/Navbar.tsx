@@ -125,6 +125,7 @@ export const Navbar = ({
                 />}
                 {isHost && <div className={styles.controls}>
                     {isIdle && <Button
+                        id="start-story"
                         onClick={handleStart}
                         icon={<TbPlayerPlay />}
                         size="xs"
@@ -136,6 +137,7 @@ export const Navbar = ({
                         Start Story
                     </Button>}
                     {isInProgress && <Button
+                        id="stop-story"
                         onClick={handleStop}
                         icon={<TbPlayerStop />}
                         size="xs"
@@ -146,6 +148,7 @@ export const Navbar = ({
                         Finish Story
                     </Button>}
                     {(isIdle || isFinished) && <Button
+                        id="next-story"
                         onClick={handleNext}
                         icon={<TbPlayerTrackNext />}
                         size="xs"
@@ -168,6 +171,7 @@ export const Navbar = ({
                 </div>
                 <div className={styles.footer}>
                     <Button
+                        id="change-activity"
                         onClick={handleChangeActivity}
                         icon={activityState.value ? <LuCoffee /> : <MdOutlineHowToVote />}
                         size="xs"
@@ -180,6 +184,7 @@ export const Navbar = ({
                         {activityState.value ? 'Just watch' : 'Participate'}
                     </Button>
                     <Button
+                        id="exit-room"
                         onClick={handleExit}
                         icon={<IoExit />}
                         size="xs"

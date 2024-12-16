@@ -7,6 +7,7 @@ import { useFormStatus } from 'react-dom';
 import styles from './Button.module.css';
 
 export interface ButtonProps {
+    id?: string;
     className?: string;
     icon?: ReactNode;
     onClick?: () => void | Promise<void>;
@@ -19,9 +20,11 @@ export interface ButtonProps {
     formAction?: ButtonHTMLAttributes<HTMLButtonElement>['formAction'];
     type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
     bordered?: boolean;
+    "data-ph"?: string;
 }
 
 export const Button = ({
+    id,
     isLoading,
     icon,
     className,
@@ -34,11 +37,14 @@ export const Button = ({
     ariaLabel,
     size = 'm',
     bordered,
+    "data-ph": dataPh,
 }: ButtonProps) => {
     const { pending } = useFormStatus();
 
     return (
         <button
+            data-ph={dataPh}
+            id={id}
             aria-label={ariaLabel}
             title={ariaLabel}
             disabled={isDisabled || isLoading}

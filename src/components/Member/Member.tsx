@@ -44,13 +44,14 @@ export const Member = ({
     }, [isDisabled, isValueVisible, value]);
 
     return (
-        <div className={clsx(styles.container, { [styles.isDisabled]: isDisabled }, className)}>
+        <div data-ph="member" className={clsx(styles.container, { [styles.isDisabled]: isDisabled }, className)}>
             <div className={styles.head}>
                 <span className={styles.name}>{name}</span>
                 {isMemberHost && <FaStar className={styles.star} />}
             </div>
             <div className={styles.tail}>
                 {isCurrentUserHost && <Button
+                    data-ph="remove-user"
                     variant="danger"
                     onClick={handleRemoveUser}
                     isLoading={removingLoading.value}

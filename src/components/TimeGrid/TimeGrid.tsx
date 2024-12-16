@@ -31,7 +31,7 @@ export const TimeGrid = ({
         onSelect?.(value);
     }
 
-    return <div className={clsx(styles.grid, className)}>
+    return <div id="time-grid" className={clsx(styles.grid, className)}>
         {values.map((value) => (
             <TimeCard
                 isSelected={selected === value}

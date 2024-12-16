@@ -69,6 +69,7 @@ export const MemberList = ({
                 {isHostInProgress && (
                     <>
                         <button
+                            id="toggle-visibility"
                             onClick={visibility.toggle}
                             className={styles.button}
                         >
