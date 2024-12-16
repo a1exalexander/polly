@@ -7,6 +7,7 @@ import { User } from '@/types';
 import { createClient } from '@/utils/supabase/client';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
+import { usePostHog } from 'posthog-js/react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
@@ -24,6 +25,7 @@ export const RoomPage = ({
     timeValues,
 }: RoomPageProps) => {
     const router = useRouter();
+    const posthog = usePostHog();
     const [roomPageService, setRoomPageService] = useState<RoomPageService | null>(null);
     const [
         state,
@@ -158,6 +160,15 @@ export const RoomPage = ({
         }
         return roomPageService.changeUserActivity(serverUser.id, active);
     }, [roomPageService, serverUser.id]);
+
+    useEffect(() => {
+        posthog.capture('room_joined', {
+            roomId,
+            roomTitle: state.room?.title,
+            userName: serverUser.name,
+            userId: serverUser.user_id,
+        })
+    }, [posthog, roomId, state.room?.title, serverUser]);
 
     useEffect(() => {
         const roomPageService = new RoomPageService(roomId);
