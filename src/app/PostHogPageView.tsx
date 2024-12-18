@@ -27,7 +27,6 @@ function PostHogPageView() {
 
         const identifyUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
-            console.log('identifyUser', user);
             if (user) {
                 posthog.identify(user.id, { email: user.email, name: getUserName(user) });
             }

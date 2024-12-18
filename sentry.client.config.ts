@@ -2,7 +2,10 @@
 // The config you add here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
+import { getPostHogClient, initPostHog } from '@/utils/posthog';
 import * as Sentry from "@sentry/nextjs";
+
+initPostHog();
 
 Sentry.init({
   dsn: "https://66f8c67aaeedf9095fdc1fb85e4fc90d@o4508488037171200.ingest.de.sentry.io/4508488039333968",
@@ -10,6 +13,11 @@ Sentry.init({
   // Add optional integrations for additional features
   integrations: [
     Sentry.replayIntegration(),
+    getPostHogClient().sentryIntegration({
+      organization: 'polly-nc',
+      projectId: 4508488039333968,
+      severityAllowList: ['error', 'warning', 'fatal'],
+    })
   ],
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.

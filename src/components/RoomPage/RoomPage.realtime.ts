@@ -89,7 +89,6 @@ export const realtime = ({
                     return;
                 }
                 const user = await roomPageService?.getMember(userOnRoom.public_user_id);
-                console.log('User created', userOnRoom, user);
                 if (!user) {
                     return;
                 }
