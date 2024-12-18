@@ -42,11 +42,8 @@ export const updateSession = async (request: NextRequest) => {
 
     const isProtectedRoute = protectedRoutes.includes(path);
 
-    if (user?.error) {
+    if (isProtectedRoute && user?.error) {
         await supabase.auth.signOut();
-    }
-
-    if (isProtectedRoute) {
         return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
