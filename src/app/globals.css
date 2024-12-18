@@ -30,7 +30,7 @@
 }
 
 html {
-  background-color: #fff !important;
+  background-color: #ebebf8 !important;
 
 }
 
@@ -50,6 +50,7 @@ body {
 
 .layout {
     min-height: 100vh;
+    min-height: 100dvh;
     position: relative;
     display: flex;
     flex-direction: column;
