@@ -3,8 +3,9 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
-import { getPostHogClient } from '@/utils/posthog';
+import { getPostHogClient, initPostHog } from '@/utils/posthog';
 
+initPostHog();
 
 Sentry.init({
   dsn: "https://66f8c67aaeedf9095fdc1fb85e4fc90d@o4508488037171200.ingest.de.sentry.io/4508488039333968",
@@ -12,7 +13,7 @@ Sentry.init({
   // Add optional integrations for additional features
   integrations: [
     Sentry.replayIntegration(),
-    getPostHogClient().sentryIntegration({
+    getPostHogClient()?.sentryIntegration({
       organization: 'polly-nc',
       projectId: 4508488039333968,
     })
