@@ -1,5 +1,6 @@
 'use client';
 
+import * as Sentry from "@sentry/browser";
 import { createClient } from '@/utils/supabase/client';
 import { getUserName } from '@/utils/utils';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -29,6 +30,9 @@ function PostHogPageView() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 posthog.identify(user.id, { email: user.email, name: getUserName(user) });
+                Sentry.setUser({ id: user.id, email: user.email, username: getUserName(user) });
+            } else {
+                Sentry.setUser(null);
             }
         };
 
