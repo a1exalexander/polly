@@ -207,6 +207,19 @@ export const RoomPage = ({
         }
     }, [allUsersVoted, stopStory]);
 
+    useEffect(() => {
+        const onPageBack = () => {
+            if (document.visibilityState === 'visible') {
+                console.log('Page is back');
+                fetchPageData();
+            }
+        }
+        document.addEventListener('visibilitychange', onPageBack);
+        return () => {
+            document.removeEventListener('visibilitychange', onPageBack);
+        }
+    }, [fetchPageData]);
+
     return (
         <>
             <div className={clsx(styles.page, { [styles.isHost]: isHost })}>
