@@ -8,7 +8,7 @@ import styles from './TimeGrid.module.css';
 export interface TimeGridProps {
     className?: string;
     values: number[];
-    selectedTime?: number | null;
+    selectedTime: number | null;
     isDisabled?: boolean;
     onSelect?: (value: number) => void | Promise<unknown>;
 }
@@ -23,7 +23,7 @@ export const TimeGrid = ({
     const [selected, setSelected] = useState<number | null>(null);
 
     useEffect(() => {
-        setSelected?.(selectedTime || null);
+        setSelected(selectedTime);
     }, [selectedTime]);
 
     const handleSelect = (value: number) => {

@@ -4,6 +4,7 @@ import { Footer, Navbar, TimeGrid } from '@/components';
 import { MemberList } from '@/components/MemberList';
 import { RoomPageService } from '@/components/RoomPage/RoomPage.service';
 import { User } from '@/types';
+import { isNumber } from '@/utils/isNumber';
 import { createClient } from '@/utils/supabase/client';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -58,7 +59,7 @@ export const RoomPage = ({
                 return public_user_id === serverUser.id && story?.id === story_id;
             },
         );
-        return userOnStory?.value || null;
+        return isNumber(userOnStory?.value) ? userOnStory?.value : null;
     }, [state.usersOnStory, serverUser.id, story]);
     const isVotingDisabled = useMemo(
         () => !story?.started_at || !currentUser?.active,

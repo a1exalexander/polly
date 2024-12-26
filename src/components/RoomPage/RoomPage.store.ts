@@ -1,4 +1,5 @@
 import { Room, Story, UserOnStory, UserWithActivity, UserWithVote } from '@/types';
+import { isNumber } from '@/utils/isNumber';
 import { Reducer } from 'react';
 
 export interface IState {
@@ -171,7 +172,7 @@ export const getters = {
             });
             return {
                 ...user,
-                value: userOnStory?.value || null,
+                value: isNumber(userOnStory?.value) ? userOnStory.value : null,
             };
         });
     },
