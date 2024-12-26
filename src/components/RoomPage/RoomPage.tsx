@@ -210,7 +210,6 @@ export const RoomPage = ({
     useEffect(() => {
         const onPageBack = () => {
             if (document.visibilityState === 'visible') {
-                console.log('Page is back');
                 fetchPageData();
             }
         }
