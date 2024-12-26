@@ -113,6 +113,12 @@
     border: 1px solid var(--danger-color);
 }
 
+.danger-inverted {
+    background-color: transparent;
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
 .button.isOnlyIcon {
     padding: 0;
     flex-shrink: 0;

@@ -52,7 +52,7 @@ export const Member = ({
             <div className={styles.tail}>
                 {isCurrentUserHost && <Button
                     data-ph="remove-user"
-                    variant="danger"
+                    variant="danger-inverted"
                     onClick={handleRemoveUser}
                     isLoading={removingLoading.value}
                     size="xs"
