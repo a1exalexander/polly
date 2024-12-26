@@ -11,7 +11,7 @@ import { usePostHog } from 'posthog-js/react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
-import { ActionTypes, createInitialState, getters, reducer } from './RoomPage.store';
+import { ActionTypes, getters, reducer } from './RoomPage.store';
 
 export interface RoomPageProps {
     roomId: number;
@@ -30,17 +30,20 @@ export const RoomPage = ({
     const [
         state,
         dispatch,
-    ] = useReducer(reducer, {
-        room: null,
-        users: [],
-        story: null,
-        usersOnStory: [],
-        roomLoading: true,
-        usersLoading: true,
-        storyLoading: true,
-        usersOnStoryLoading: false,
-        storiesCount: 0,
-    }, createInitialState);
+    ] = useReducer(
+        reducer,
+        {
+            users: [],
+            story: null,
+            usersOnStory: [],
+            room: null,
+            roomLoading: true,
+            usersLoading: true,
+            storyLoading: true,
+            usersOnStoryLoading: false,
+            storiesCount: 0,
+        },
+    );
 
     const activeUsers = useMemo(() => state.users.filter(({ active }) => active), [state.users]);
     const host = useMemo(() => getters.getHost(state), [state]);
@@ -77,13 +80,14 @@ export const RoomPage = ({
         if (!roomPageService) {
             return;
         }
+
         dispatch({ type: ActionTypes.ROOM_FETCH });
         dispatch({ type: ActionTypes.USERS_FETCH });
         dispatch({ type: ActionTypes.STORY_FETCH });
         const [
             room,
             users,
-            story,
+            storyData,
             storiesCount,
         ] = await Promise.all([
             roomPageService.getRoom(),
@@ -97,7 +101,7 @@ export const RoomPage = ({
         if (users) {
             dispatch({ type: ActionTypes.USERS_FETCHED, payload: users });
         }
-        dispatch({ type: ActionTypes.STORY_FETCHED, payload: story || null });
+        dispatch({ type: ActionTypes.STORY_FETCHED, payload: storyData || null });
         dispatch({ type: ActionTypes.STORIES_COUNT_FETCHED, payload: storiesCount });
     }, [roomPageService]);
 

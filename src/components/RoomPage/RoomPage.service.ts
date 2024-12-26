@@ -48,7 +48,13 @@ export class RoomPageService {
     async getStory() {
         const { data } = await this.supabase
             .from('StoriesOnRooms')
-            .select('*, story:Stories(*)')
+            .select(`
+                *,
+                story:Stories (
+                  *,
+                  users:UsersOnStories(*)
+                )
+             `)
             .eq('room_id', this.roomId)
             .order('created_at', { ascending: false })
             .limit(1)

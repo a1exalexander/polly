@@ -1,4 +1,5 @@
 import { Room, Story, UserOnStory, UserWithActivity, UserWithVote } from '@/types';
+import { Reducer, ReducerState } from 'react';
 
 export interface IState {
     users: UserWithActivity[];
@@ -90,7 +91,7 @@ export type IAction = {
 
 export type DispatchType = (args: IAction) => void;
 
-export const reducer = (state: IState, action: IAction) => {
+export const reducer: Reducer<IState, IAction> = (state, action) => {
     switch (action.type) {
         case ActionTypes.USERS_FETCHED:
             return { ...state, users: action.payload, usersLoading: false };
@@ -112,8 +113,9 @@ export const reducer = (state: IState, action: IAction) => {
             }
             return { ...state, users: shallowCopy };
         }
-        case ActionTypes.STORY_FETCHED:
-            return { ...state, story: action.payload, usersOnStory: [], storyLoading: false };
+        case ActionTypes.STORY_FETCHED: {
+            return { ...state, story: action.payload, usersOnStory: action.payload?.users || [], storyLoading: false };
+        }
         case ActionTypes.STORY_CREATED:
             return { ...state, story: action.payload, usersOnStory: [] };
         case ActionTypes.STORY_UPDATED: {
