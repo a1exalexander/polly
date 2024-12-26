@@ -67,7 +67,7 @@ export const RoomPage = ({
             return false;
         }
         return activeUsers.every(({ id }) => {
-            return state.usersOnStory.some(({ public_user_id, value }) => public_user_id === id && !!value);
+            return state.usersOnStory.some(({ public_user_id, value }) => public_user_id === id && value !== null);
         });
     }, [state.usersOnStory, activeUsers, story]);
     const average = useMemo(() => getters.averageStoryValue(state), [state]);
