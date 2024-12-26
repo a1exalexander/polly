@@ -1,5 +1,5 @@
 import { Room, Story, UserOnStory, UserWithActivity, UserWithVote } from '@/types';
-import { Reducer, ReducerState } from 'react';
+import { Reducer } from 'react';
 
 export interface IState {
     users: UserWithActivity[];

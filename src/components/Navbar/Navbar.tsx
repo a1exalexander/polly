@@ -89,8 +89,8 @@ export const Navbar = ({
             setTime(null);
             return;
         }
-        setTime(new Date(differenceInMilliseconds(new Date(), startTime)));
-    }, [startTime]);
+        setTime(new Date(differenceInMilliseconds(finishTime || new Date(), startTime)));
+    }, [startTime, finishTime]);
 
     useInterval(
         () => {
