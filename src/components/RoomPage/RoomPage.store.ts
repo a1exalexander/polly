@@ -1,5 +1,6 @@
 import { Room, Story, UserOnStory, UserWithActivity, UserWithVote } from '@/types';
 import { isNumber } from '@/utils/isNumber';
+import { round } from '@/utils/round';
 import { Reducer } from 'react';
 
 export interface IState {
@@ -180,13 +181,15 @@ export const getters = {
         if (!state.story?.finished_at) {
             return null;
         }
-        return state.usersOnStory.reduce((acc, { value, public_user_id }) => {
+        const average = state.usersOnStory.reduce((acc, { value, public_user_id }) => {
             const user = state.users.find(({ id }) => id === public_user_id);
             if (value === null || !user?.active) {
                 return acc;
             }
             return acc + value;
         }, 0) / (state.usersOnStory.length || 1);
+
+        return round(average, 2);
     },
     isStoryFinished: (state: IState): boolean => {
         return !!state.story?.finished_at;
