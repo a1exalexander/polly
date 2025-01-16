@@ -2,6 +2,7 @@
 
 import { VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { UserWithActivity, UserWithVote } from '@/types';
+import { isNumber } from '@/utils/isNumber';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
@@ -100,7 +101,7 @@ export const MemberList = ({
                         isCurrentUserHost={isHost}
                         isMemberHost={hostId === id}
                         name={name}
-                        value={roomType === VoteValuesTypes.boolean && typeof value === 'number' ?
+                        value={roomType === VoteValuesTypes.boolean && isNumber(value) ?
                             (value
                                     ? 'Yes'
                                     : 'No'
