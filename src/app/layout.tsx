@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
     themeColor: 'light',
+    colorScheme: 'light',
 };
 
 export default function RootLayout({
@@ -21,9 +22,9 @@ export default function RootLayout({
         <html lang="en">
         <CSPostHogProvider>
             <body>
-                <div className="layout">
-                    {children}
-                </div>
+            <div className="layout">
+                {children}
+            </div>
             </body>
         </CSPostHogProvider>
         </html>

@@ -1,0 +1,65 @@
+.tag {
+    display: inline-flex;
+    height: 1.4rem;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--primary-color);
+    border-radius: var(--grid-size);
+    color: var(--secondary-color);
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 0 calc(var(--grid-size) * 1.5);
+    font-size: 0.875rem;
+    transition-property: border-color, background-color, color;
+    transition-duration: var(--transition-time);
+    transition-timing-function: ease-in-out;
+}
+
+.input:focus + .tag,
+.tag:active {
+    box-shadow: 0 0 1px 1px currentColor;
+}
+
+.label {
+    position: relative;
+    display: flex;
+    cursor: pointer;
+}
+
+.input {
+    z-index: -1;
+    position: absolute;
+}
+
+.input:checked + .info,
+.info:hover,
+.textTag.info {
+    border-color: var(--info-color);
+    color: var(--info-color);
+}
+
+.textTag.info {
+    background-color: var(--info-color-opacity);
+}
+
+.input:checked + .warning,
+.warning:hover,
+.textTag.warning {
+    border-color: var(--warning-color);
+    color: var(--warning-color);
+
+}
+
+.textTag.warning {
+    background-color: var(--warning-color-opacity);
+}
+
+.input:checked + .danger,
+.danger:hover,
+.textTag.danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.textTag.danger {
+    background-color: var(--danger-color-opacity);
+}

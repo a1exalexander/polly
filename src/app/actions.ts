@@ -41,6 +41,7 @@ export const signOutAction = async () => {
 export const createRoomAction = async (formData: FormData) => {
     const supabase = await createClient();
     const title = formData.get('title') as string;
+    const type = formData.get('type') as string;
     const {
         data: { user },
     } = await supabase.auth.getUser();
@@ -53,6 +54,10 @@ export const createRoomAction = async (formData: FormData) => {
         return encodedRedirect('error', '/', 'Title is required');
     }
 
+    if (!type) {
+        return encodedRedirect('error', '/', 'Type is required');
+    }
+
     const publicUser = await supabase
         .from('Users')
         .select('id')
@@ -61,7 +66,7 @@ export const createRoomAction = async (formData: FormData) => {
 
     const roomResponse = await supabase
         .from('Rooms')
-        .insert({ title, user_id: user.id, public_user_id: publicUser?.data?.id })
+        .insert({ title, type, user_id: user.id, public_user_id: publicUser?.data?.id })
         .select();
 
     if (roomResponse.error) {
@@ -76,6 +81,19 @@ export const createRoomAction = async (formData: FormData) => {
 
     return redirect(`/room/${id}`);
 };
+
+export const getRoomMetadata = async (roomId: string) => {
+    const supabase = await createClient();
+    const roomResponse = await supabase
+        .from('Rooms')
+        .select('title')
+        .eq('id', Number(roomId))
+        .single();
+
+    return {
+        title: roomResponse.data?.title,
+    };
+}
 
 export const joinRoomAction = async (roomId: string) => {
     const supabase = await createClient();

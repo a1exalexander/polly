@@ -20,6 +20,10 @@
     will-change: transform;
 }
 
+.button.boolean {
+    width: calc(50% - var(--grid-size));
+}
+
 .isDisabled {
     cursor: not-allowed;
     border-color: var(--grey-light);
@@ -32,37 +36,38 @@
 }
 
 @media (min-width: 375px) {
-    .button {
+    .button:not(.boolean) {
         width: calc(33.3% - var(--grid-size) * 4 / 3);
     }
 }
 
 @media (min-width: 375px) {
-    .button {
+    .button:not(.boolean) {
         width: calc(33.3% - var(--grid-size) * 4 / 3);
     }
 }
 
 @media (min-width: 414px) {
-    .button {
+    .button:not(.boolean) {
         height: 140px;
         width: calc(25% - var(--grid-size) * 3 / 2);
     }
 }
 
 @media (min-width: 768px) {
-    .button {
+    .button:not(.boolean) {
         height: 140px;
         width: calc(33.3% - var(--grid-size) * 4 / 3);
     }
 }
 
 @media (min-width: 1024px) {
-    .button {
+    .button:not(.boolean) {
         height: 140px;
         width: calc(20% - var(--grid-size) * 12 / 5);
     }
 }
+
 
 .isSelected {
     background-color: var(--primary-color);

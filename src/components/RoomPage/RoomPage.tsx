@@ -1,8 +1,9 @@
 'use client';
 
-import { Footer, Navbar, TimeGrid } from '@/components';
+import { Footer, Navbar, Tag, TimeGrid } from '@/components';
 import { MemberList } from '@/components/MemberList';
 import { RoomPageService } from '@/components/RoomPage/RoomPage.service';
+import { tagTypesByVoteType, VoteValues, VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { User } from '@/types';
 import { isNumber } from '@/utils/isNumber';
 import { createClient } from '@/utils/supabase/client';
@@ -17,13 +18,11 @@ import { ActionTypes, getters, reducer } from './RoomPage.store';
 export interface RoomPageProps {
     roomId: number;
     serverUser: User;
-    timeValues: number[];
 }
 
 export const RoomPage = ({
     roomId,
     serverUser,
-    timeValues,
 }: RoomPageProps) => {
     const router = useRouter();
     const posthog = usePostHog();
@@ -76,6 +75,8 @@ export const RoomPage = ({
     }, [state.usersOnStory, activeUsers, story]);
     const average = useMemo(() => getters.averageStoryValue(state), [state]);
     const isStoryFinished = useMemo(() => getters.isStoryFinished(state), [state]);
+    const roomType = (state.room?.type || VoteValuesTypes.days) as VoteValuesType;
+    const timeValues = VoteValues[roomType];
 
     const fetchPageData = useCallback(async () => {
         if (!roomPageService) {
@@ -172,21 +173,19 @@ export const RoomPage = ({
             roomTitle: state.room?.title,
             userName: serverUser.name,
             userId: serverUser.user_id,
-        })
+        });
     }, [posthog, roomId, state.room?.title, serverUser]);
+
+    useEffect(() => {
+        if (state.room && state.users.length && state.users.every(({ id }) => id !== serverUser.id)) {
+            router.push('/');
+        }
+    }, [router, state, serverUser]);
 
     useEffect(() => {
         const roomPageService = new RoomPageService(roomId);
         setRoomPageService(roomPageService);
     }, [roomId]);
-
-    useEffect(() => {
-        fetchPageData();
-    }, [fetchPageData]);
-
-    useEffect(() => {
-        fetchUsersOnStory();
-    }, [fetchUsersOnStory]);
 
     useEffect(() => {
         if (!roomPageService || !roomId) {
@@ -213,20 +212,28 @@ export const RoomPage = ({
     }, [allUsersVoted, stopStory]);
 
     useEffect(() => {
-        const onPageBack = () => {
+        const fetchAllData = async () => {
+            await fetchPageData();
+            await fetchUsersOnStory();
+        };
+        fetchAllData();
+        const onPageBack = async () => {
             if (document.visibilityState === 'visible') {
-                fetchPageData();
+                await fetchAllData();
             }
-        }
+        };
         document.addEventListener('visibilitychange', onPageBack);
         return () => {
             document.removeEventListener('visibilitychange', onPageBack);
-        }
-    }, [fetchPageData]);
+        };
+    }, [fetchPageData, fetchUsersOnStory]);
 
     return (
         <>
-            <div className={clsx(styles.page, { [styles.isHost]: isHost })}>
+            {!!state.room && <Tag
+                type={tagTypesByVoteType[roomType]}
+                className={styles.typeTag}>{roomType}</Tag>}
+            <div className={clsx(styles.page, { [styles.isHost]: isHost, [styles.isColumn]: roomType === VoteValuesTypes.boolean })}>
                 <Navbar
                     startTime={story?.started_at}
                     title={state?.room?.title}
@@ -240,16 +247,18 @@ export const RoomPage = ({
                     isUserActive={currentUser?.active}
                     story={story?.title}
                 />
-                <TimeGrid
+                {!!state.room && <TimeGrid
                     className={styles.timeGrid}
                     isDisabled={isVotingDisabled}
+                    type={roomType}
                     selectedTime={selectedTime}
                     onSelect={selectTime}
                     values={timeValues}
-                />
-                <MemberList
+                />}
+                {!!state.room && <MemberList
                     className={styles.memberList}
                     isHost={isHost}
+                    roomType={roomType}
                     inProgress={isVotingInProgress}
                     storyId={state?.story?.id}
                     roomId={roomId}
@@ -258,7 +267,7 @@ export const RoomPage = ({
                     average={average}
                     isFinished={isStoryFinished}
                     onRemoveUser={removeUserFromRoom}
-                />
+                />}
             </div>
             <Footer />
         </>

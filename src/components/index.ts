@@ -8,3 +8,4 @@ export * from './CreateRoomForm';
 export * from './RoomList';
 export * from './Footer';
 export * from './Loader';
+export * from './Tag';

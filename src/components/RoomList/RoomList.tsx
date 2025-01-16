@@ -58,7 +58,7 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                 {loading.value && <Loader isOverlay />}
                 {!loading.value && isRoomsEmpty && <div className={styles.empty}>No rooms yet</div>}
                 {!loading.value && !isRoomsEmpty && <ul id="room-list" className={clsx(styles.list, className)}>
-                    {state.rooms?.map(({ id, title }) => {
+                    {state.rooms?.map(({ id, title, type }) => {
                         const UsersOnRooms = getters.getUsersOnRoom(state, id);
                         return (
                             <li
@@ -68,6 +68,7 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                                 <RoomItem
                                     roomId={id}
                                     title={title}
+                                    type={type}
                                     membersAmount={UsersOnRooms?.length}
                                     onlineAmount={UsersOnRooms?.filter(({ active }) => !!active).length}
                                 />

@@ -1,21 +1,33 @@
 'use server';
 
-import { joinRoomAction } from '@/app/actions';
+import { getRoomMetadata, joinRoomAction } from '@/app/actions';
 import { RoomPage } from '@/components/RoomPage';
+import { Metadata } from 'next';
 
-const timeValues = [0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
 
-export default async function Home({ params }: {
+type Props = {
     params: Promise<{ slug: string }>
-}) {
+}
+
+export async function generateMetadata(
+    { params }: Props,
+): Promise<Metadata> {
+    const { slug } = await params;
+    const { title } = await getRoomMetadata(slug);
+
+    return {
+        title: `${title} | Polly` || `Room ${slug} | Polly`
+    }
+}
+
+export default async function Home({ params }: Props) {
     const { slug } = await params;
     const { serverUser } = await joinRoomAction(slug);
 
     return (
         <RoomPage
             roomId={Number(slug)}
-            serverUser={serverUser}
-            timeValues={timeValues} />
+            serverUser={serverUser} />
     );
 }
 

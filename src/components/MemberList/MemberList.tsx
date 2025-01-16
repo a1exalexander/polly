@@ -1,5 +1,6 @@
 'use client';
 
+import { VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { UserWithActivity, UserWithVote } from '@/types';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -12,6 +13,7 @@ export interface MemberListProps {
     className?: string;
     members: (UserWithVote & UserWithActivity)[];
     isHost: boolean;
+    roomType?: VoteValuesType;
     hostId?: number;
     inProgress?: boolean;
     roomId: number;
@@ -22,7 +24,7 @@ export interface MemberListProps {
 }
 
 export const MemberList = ({
-    members, className, isHost, hostId, inProgress, average, isFinished, onRemoveUser,
+    members, className, isHost, hostId, inProgress, average, isFinished, onRemoveUser, roomType,
 }: MemberListProps) => {
     const visibility = useBoolean(false);
 
@@ -44,6 +46,9 @@ export const MemberList = ({
         return `${voted / amount * 100}%`;
     }, [amount, voted]);
 
+    const yesAmount = members?.filter(({ active, value }) => value === 1 && active)?.length;
+    const noAmount = members?.filter(({ active, value }) => value === 0 && active)?.length;
+
     return (
         <div
             className={clsx(styles.list, {
@@ -62,7 +67,10 @@ export const MemberList = ({
                     className={styles.progress}
                 />
                 {inProgress && <span className={styles.progressValue}>{voted}/{amount}</span>}
-                {isFinished && <span className={styles.progressValue}>Average: {average}</span>}
+                {isFinished && roomType !== VoteValuesTypes.boolean &&
+                    <span className={styles.progressValue}>Average: {average}</span>}
+                {isFinished && roomType === VoteValuesTypes.boolean &&
+                    <span className={styles.progressValue}>Yes: {yesAmount} | No: {noAmount}</span>}
             </div>
 
             <div className={styles.container}>
@@ -92,7 +100,11 @@ export const MemberList = ({
                         isCurrentUserHost={isHost}
                         isMemberHost={hostId === id}
                         name={name}
-                        value={value}
+                        value={roomType === VoteValuesTypes.boolean && typeof value === 'number' ?
+                            (value
+                                    ? 'Yes'
+                                    : 'No'
+                            ) : value}
                     />
                 ))}
             </div>

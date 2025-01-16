@@ -4,6 +4,15 @@
     justify-content: flex-start;
     gap: calc(var(--grid-size) * 2);
     flex-basis: 680px;
+    flex-grow: 1;
+}
+
+.grid.boolean {
+    width: 100%;
+    flex-wrap: nowrap;
+    flex-basis: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (min-width: 1024px) {

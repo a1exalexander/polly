@@ -1,7 +1,4 @@
 .form {
-    display: flex;
-    gap: calc(var(--grid-size) * 2);
-    align-items: flex-end;
     border-radius: calc(var(--grid-size) * 2);
     background-color: var(--primary-color);
     padding: calc(var(--grid-size) * 3);
@@ -10,12 +7,42 @@
     flex-wrap: wrap;
 }
 
+.inner {
+    display: flex;
+    gap: calc(var(--grid-size) * 2);
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.typeDemo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: calc(var(--grid-size) * 2);
+    color: var(--secondary-color);
+}
+
+.dots {
+    font-size: 0.8rem;
+    display: inline-block;
+    margin: 0 var(--grid-size);
+}
+
+.tags {
+    height: calc(var(--grid-size) * 5);
+    display: flex;
+    gap: var(--grid-size);
+}
+
 .field {
-    flex-grow: 10;
-    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: var(--grid-size);
+}
+
+.inputField {
+    flex-grow: 10;
+    flex-shrink: 0;
 }
 
 .label {
@@ -51,3 +78,14 @@
     flex-shrink: 1;
 }
 
+.miniCard {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--grey-light);
+    color: var(--grey-light);
+    font-size: 0.8rem;
+    border-radius: var(--grid-size);
+    width: 40px;
+    height: 20px;
+}

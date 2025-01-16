@@ -6,25 +6,43 @@
     justify-content: center;
     flex-direction: column;
     align-items: flex-start;
-    gap: calc(var(--grid-size) * 4);
+    gap: calc(var(--grid-size) * 8);
 }
 
 .isHost {
     padding: calc(var(--grid-size) * 26) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
 }
 
+.page.isColumn {
+    width: 100%;
+    max-width: calc(var(--grid-size) * 70);
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--grid-size) * 8);
+}
+
 .timeGrid {
     margin-bottom: calc(var(--grid-size) * 6);
+}
+
+.page.isColumn .timeGrid {
+    align-self: stretch;
 }
 
 .memberList {
     align-self: stretch;
 }
 
+.typeTag {
+    position: absolute;
+    top: calc(var(--grid-size) * 3);
+    left: calc(var(--grid-size) * 3);
+}
 
 @media (min-width: 768px) {
     .page {
         flex-direction: row;
+        gap: calc(var(--grid-size) * 4);
     }
     .isHost .memberList {
         min-width: 400px;

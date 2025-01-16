@@ -15,6 +15,7 @@ export type Database = {
           id: number
           public_user_id: number | null
           title: string | null
+          type: string | null
           user_id: string | null
         }
         Insert: {
@@ -22,6 +23,7 @@ export type Database = {
           id?: number
           public_user_id?: number | null
           title?: string | null
+          type?: string | null
           user_id?: string | null
         }
         Update: {
@@ -29,6 +31,7 @@ export type Database = {
           id?: number
           public_user_id?: number | null
           title?: string | null
+          type?: string | null
           user_id?: string | null
         }
         Relationships: [
