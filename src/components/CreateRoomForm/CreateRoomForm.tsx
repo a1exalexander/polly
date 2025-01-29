@@ -14,7 +14,7 @@ export const CreateRoomForm = () => {
     const posthog = usePostHog();
     const onSubmit = useCallback((event: FormEvent) => {
         const formData = new FormData(event.target as HTMLFormElement);
-        posthog.capture('create_room', {
+        posthog?.capture?.('create_room', {
             title: formData.get('title'),
         });
     }, [posthog]);

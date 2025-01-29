@@ -168,7 +168,7 @@ export const RoomPage = ({
     }, [roomPageService, serverUser.id]);
 
     useEffect(() => {
-        posthog.capture('room_joined', {
+        posthog?.capture?.('room_joined', {
             roomId,
             roomTitle: state.room?.title,
             userName: serverUser.name,
