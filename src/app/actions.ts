@@ -105,7 +105,7 @@ export const joinRoomAction = async (roomId: string) => {
         return encodedRedirect('redirect_to', '/sign-in', `/room/${roomId}`);
     }
 
-    const [publicUserResponse, userOnRoomResponse, storiesResponse] = await Promise.all([
+    const [publicUserResponse, userOnRoomResponse, storiesResponse, roomResponse] = await Promise.all([
         supabase
             .from('Users')
             .select('*')
@@ -120,6 +120,11 @@ export const joinRoomAction = async (roomId: string) => {
             .select('*')
             .eq('room_id', Number(roomId))
             .order('created_at', { ascending: false })
+            .limit(1)
+            .single(),
+        supabase.from('Rooms')
+            .select('*')
+            .eq('id', Number(roomId))
             .limit(1)
             .single(),
     ]);
@@ -139,7 +144,7 @@ export const joinRoomAction = async (roomId: string) => {
                 public_user_id: publicUserResponse.data.id,
                 room_id: Number(roomId),
                 user_id: user.id,
-                active: true,
+                active: user.id !== roomResponse?.data?.user_id,
             })
             .select());
     }
