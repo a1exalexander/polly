@@ -269,9 +269,6 @@ export const RoomPage = ({
                     onRemoveUser={removeUserFromRoom}
                 />}
             </div>
-            <pre>
-                {JSON.stringify(state.usersOnStory)}
-            </pre>
             <Footer />
         </>
     );
