@@ -110,13 +110,30 @@
 .warning {
     background-color: var(--warning-color);
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--warning-color);
+}
+
+.warning.isBordered {
+    border-color: var(--primary-color);
+}
+
+.warning.isOnlyIcon {
+    color: var(--warning-color);
 }
 
 .danger {
     background-color: var(--danger-color);
     color: var(--secondary-color);
     border: 1px solid var(--danger-color);
+}
+
+.danger.isBordered {
+    border-color: var(--secondary-color);
+}
+
+.danger.isOnlyIcon {
+    color: var(--danger-color);
+    border-color: var(--danger-color);
 }
 
 .danger-inverted {

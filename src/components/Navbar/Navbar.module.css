@@ -72,6 +72,8 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    height: 24px;
+    padding: 0 calc(var(--grid-size) * 2);
 }
 
 .expanded .head {
@@ -140,7 +142,6 @@
 }
 
 .title {
-
     transform-origin: left;
 }
 
@@ -181,9 +182,7 @@
     display: flex;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.1rem;
 }
 .timeActive {
-    font-size: 1.1rem;
     font-weight: 700;
 }

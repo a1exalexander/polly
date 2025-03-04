@@ -1,10 +1,9 @@
+'use client';
+
 import { StoryStatusTypes } from '@/components/RoomPage/RoomPage.store';
 import { useEffect } from 'react';
 
 const getFaviconPath = (status: StoryStatusTypes) => {
-    if (typeof window === 'undefined') {
-        return '';
-    }
     const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
     const faviconHref = favicon.href;
     const faviconPath = faviconHref.split('/').slice(0, -1).join('/');
@@ -21,9 +20,6 @@ const getFaviconPath = (status: StoryStatusTypes) => {
 
 export const useFavicon = (status: StoryStatusTypes) => {
     const setFavicon = (status: StoryStatusTypes) => {
-        if (typeof window === 'undefined') {
-            return;
-        }
         const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
         favicon.href = getFaviconPath(status);
     }

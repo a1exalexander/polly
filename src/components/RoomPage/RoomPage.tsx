@@ -288,7 +288,7 @@ export const RoomPage = ({
                     onRemoveUser={removeUserFromRoom}
                 />}
             </div>
-            <Footer />
+            <Footer storyStatus={storyStatus} />
         </>
     );
 };

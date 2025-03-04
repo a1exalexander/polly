@@ -11,10 +11,17 @@
     background: transparent;
 }
 
+.row {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--grid-size) * 2);
+}
+
 .form {
     display: flex;
     justify-content: center;
     margin: 0 auto;
+    gap: calc(var(--grid-size) * 2);
 }
 
 .copy {

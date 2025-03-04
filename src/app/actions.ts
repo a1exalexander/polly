@@ -32,9 +32,9 @@ export const signOutAction = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
         const { data } = await supabase.from('Users').select('*').eq('user_id', user?.id).single();
-        await supabase.from('UsersOnRooms').delete().eq('public_user_id', Number(data?.id));
+        supabase.from('UsersOnRooms').delete().eq('public_user_id', Number(data?.id));
     }
-    await supabase.auth.signOut();
+    supabase.auth.signOut();
     return redirect('/sign-in');
 };
 

@@ -85,6 +85,7 @@ export const TimeGrid = ({
                         className={styles.button}
                         isLoading={activityLoading.value}
                         size="m"
+                        bordered
                         icon={<MdOutlineHowToVote />}
                         variant="warning"
                         onClick={handleParticipate}>Participate</Button>
