@@ -5,30 +5,16 @@ import { StoryStatusTypes } from '@/components/RoomPage/RoomPage.store';
 import { useEffect, useRef } from 'react';
 import { RiMusic2Fill } from 'react-icons/ri';
 import { TbMusicOff } from 'react-icons/tb';
-import { useBoolean, useEventListener, useLocalStorage } from 'usehooks-ts';
+import { useBoolean, useLocalStorage } from 'usehooks-ts';
 
 interface SoundProps {
     storyStatus: StoryStatusTypes;
 }
 
 export const Sound = ({ storyStatus }: SoundProps) => {
-    const ref = useRef<HTMLAudioElement>(null);
-    const interactionState = useBoolean(false);
     const [isSoundOn, setSound] = useLocalStorage('sound', true);
     const finishSoundOn = useBoolean(false);
     const previousStoryStatus = useRef<StoryStatusTypes>(storyStatus);
-
-    const isPlaying = isSoundOn && storyStatus === StoryStatusTypes.ACTIVE;
-
-    useEventListener('click', () => {
-        if (interactionState.value) {
-            return;
-        }
-        if (isPlaying) {
-            ref.current?.play();
-            interactionState.setTrue();
-        }
-    });
 
     useEffect(() => {
         if (isSoundOn && previousStoryStatus.current === StoryStatusTypes.ACTIVE && storyStatus === StoryStatusTypes.FINISHED) {
@@ -54,15 +40,6 @@ export const Sound = ({ storyStatus }: SoundProps) => {
                 onClick={() => setSound(false)}
                 bordered
                 icon={<RiMusic2Fill />}></Button>}
-            {isSoundOn && storyStatus === StoryStatusTypes.ACTIVE && <audio
-                ref={ref}
-                autoPlay
-                loop>
-                <source
-                    src="/clock.mp3"
-                    type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>}
             {finishSoundOn.value && <audio
                 autoPlay>
                 <source
