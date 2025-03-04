@@ -3,6 +3,7 @@
 import { Footer, Navbar, Tag, TimeGrid } from '@/components';
 import { MemberList } from '@/components/MemberList';
 import { RoomPageService } from '@/components/RoomPage/RoomPage.service';
+import { useFavicon } from '@/components/RoomPage/useFavicon';
 import { tagTypesByVoteType, VoteValues, VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { User } from '@/types';
 import { isNumber } from '@/utils/isNumber';
@@ -166,6 +167,10 @@ export const RoomPage = ({
         }
         return roomPageService.changeUserActivity(serverUser.id, active);
     }, [roomPageService, serverUser.id]);
+
+    const storyStatus = getters.storyStatus(state);
+
+    useFavicon(storyStatus);
 
     useEffect(() => {
         posthog?.capture?.('room_joined', {

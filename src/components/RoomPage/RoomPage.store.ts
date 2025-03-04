@@ -3,6 +3,8 @@ import { isNumber } from '@/utils/isNumber';
 import { round } from '@/utils/round';
 import { Reducer } from 'react';
 
+export type StoryStatus = 'idle' | 'active' | 'finished';
+
 export interface IState {
     users: UserWithActivity[];
     story: Story | null;
@@ -194,4 +196,13 @@ export const getters = {
     isStoryFinished: (state: IState): boolean => {
         return !!state.story?.finished_at;
     },
+    storyStatus: (state: IState): StoryStatus => {
+        if (!state.story?.finished_at && !state.story?.started_at) {
+            return 'idle';
+        }
+        if (state.story?.started_at && !state.story?.finished_at) {
+            return 'active';
+        }
+        return 'finished';
+    }
 };

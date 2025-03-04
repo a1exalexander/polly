@@ -6,6 +6,9 @@ import './globals.css';
 export const metadata: Metadata = {
     title: 'Polly',
     description: 'Real-Time Task Estimation and Voting Platform',
+    icons: {
+        icon: '/favicon.png',
+    },
 };
 
 export const viewport: Viewport = {

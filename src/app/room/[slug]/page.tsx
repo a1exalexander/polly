@@ -16,7 +16,7 @@ export async function generateMetadata(
     const { title } = await getRoomMetadata(slug);
 
     return {
-        title: `${title} | Polly` || `Room ${slug} | Polly`
+        title: `${title} | Polly` || `Room ${slug} | Polly`,
     }
 }
 
