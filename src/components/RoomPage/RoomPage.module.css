@@ -39,6 +39,10 @@
     left: calc(var(--grid-size) * 3);
 }
 
+/*.isFinished .memberList {*/
+/*    */
+/*}*/
+
 @media (min-width: 768px) {
     .page {
         flex-direction: row;

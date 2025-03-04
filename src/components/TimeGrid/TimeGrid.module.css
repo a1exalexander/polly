@@ -1,10 +1,12 @@
 .grid {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: calc(var(--grid-size) * 2);
     flex-basis: 680px;
     flex-grow: 1;
+    border-radius: var(--grid-size);
 }
 
 .grid.boolean {
@@ -19,4 +21,25 @@
     .grid {
         gap: calc(var(--grid-size) * 3);
     }
+}
+
+.buttonWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: var(--grid-size);
+}
+.button {
+    position: absolute;
+}
+
+.itemInactive {
+    opacity: 0.5;
 }

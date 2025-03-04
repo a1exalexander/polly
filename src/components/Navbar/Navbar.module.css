@@ -2,7 +2,7 @@
     left: 0;
     right: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     height: 0;
     top: calc(var(--grid-size) * 15);
     display: flex;
@@ -24,6 +24,7 @@
     --navbar-width-expanded: calc(var(--grid-size) * 100);
     --time-width: calc(var(--grid-size) * 12);
     --time-width-expanded: calc(var(--grid-size) * 12);
+    --time-width-everage: calc(var(--grid-size) * 20);
     border-radius: calc(var(--grid-size) * 4);
     background-color: var(--primary-color);
     color: var(--secondary-color);
@@ -116,11 +117,11 @@
 }
 
 .timeWrapper.isTimeVisible {
-    width: var(--time-width);
+    width: var(--time-width-expanded);
 }
 
-.timeWrapper.isTimeVisible {
-    width: var(--time-width-expanded);
+.timeWrapper.isAverageVisible {
+    width: var(--time-width-everage);
 }
 
 .text {
@@ -174,4 +175,15 @@
     border-radius: inherit;
     background-color: inherit;
     color: currentColor !important;
+}
+
+.averageWrapper {
+    display: flex;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.timeActive {
+    font-size: 1.1rem;
+    font-weight: 700;
 }

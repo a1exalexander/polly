@@ -16,7 +16,7 @@ export interface ButtonProps {
     isLoading?: boolean;
     isDisabled?: boolean;
     size?: 'xs' | 's' | 'm';
-    variant?: 'primary' | 'secondary' | 'inverted' | 'ghost' | 'ghost-inverted' | 'danger' | 'danger-inverted';
+    variant?: 'primary' | 'secondary' | 'inverted' | 'ghost' | 'ghost-inverted' | 'danger' | 'danger-inverted' | 'warning';
     formAction?: ButtonHTMLAttributes<HTMLButtonElement>['formAction'];
     type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
     bordered?: boolean;

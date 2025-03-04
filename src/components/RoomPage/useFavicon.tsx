@@ -1,7 +1,7 @@
-import { StoryStatus } from '@/components/RoomPage/RoomPage.store';
+import { StoryStatusTypes } from '@/components/RoomPage/RoomPage.store';
 import { useEffect } from 'react';
 
-const getFaviconPath = (status: StoryStatus) => {
+const getFaviconPath = (status: StoryStatusTypes) => {
     if (typeof window === 'undefined') {
         return '';
     }
@@ -10,17 +10,17 @@ const getFaviconPath = (status: StoryStatus) => {
     const faviconPath = faviconHref.split('/').slice(0, -1).join('/');
 
     switch (status) {
-        case 'idle':
+        case StoryStatusTypes.IDLE:
             return `${faviconPath}/favicon.png`;
-        case 'active':
+        case StoryStatusTypes.ACTIVE:
             return `${faviconPath}/favicon-2.png`;
-        case 'finished':
+        case StoryStatusTypes.FINISHED:
             return `${faviconPath}/favicon-3.png`;
     }
 }
 
-export const useFavicon = (status: StoryStatus) => {
-    const setFavicon = (status: StoryStatus) => {
+export const useFavicon = (status: StoryStatusTypes) => {
+    const setFavicon = (status: StoryStatusTypes) => {
         if (typeof window === 'undefined') {
             return;
         }

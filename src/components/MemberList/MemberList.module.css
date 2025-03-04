@@ -32,6 +32,11 @@
     }
 }
 
+.list.isFinished .container {
+    box-shadow: 0 0 2px 2px var(--success-color);
+    border-color: var(--success-color);
+}
+
 .list.visible .container {
     box-shadow: 0 0 2px 2px var(--warning-color);
     border-color: var(--warning-color);
@@ -40,6 +45,11 @@
 .list.isHost:hover .container {
     border-color: var(--warning-color);
 }
+
+.list.isFinished:hover .container {
+    border-color: var(--success-color);
+}
+
 
 .bluredOverlay {
     position: absolute;
@@ -93,7 +103,8 @@
     bottom: calc(100% - 12px);
     border: 2px solid var(--success-color);
     height: calc(var(--grid-size) * 6);
-    width: 100%;
+    width: calc(100% + 2px);
+    left: -1px;
     border-radius: calc(var(--grid-size) * 2) calc(var(--grid-size) * 2) 0 0;
     display: flex;
     justify-content: center;

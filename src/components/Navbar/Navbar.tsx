@@ -23,6 +23,7 @@ export interface NavbarProps {
     onStop?: () => void | Promise<unknown>;
     onExit?: () => void | Promise<unknown>;
     onChangeActivity?: (active: boolean) => void | Promise<unknown>;
+    average?: number | null;
 }
 
 export const Navbar = ({
@@ -37,6 +38,7 @@ export const Navbar = ({
     isUserActive,
     onExit,
     onChangeActivity,
+    average,
 }: NavbarProps) => {
     const [time, setTime] = useState<Date | null>(null);
     const activityState = useBoolean(false);
@@ -162,9 +164,10 @@ export const Navbar = ({
                 </div>}
                 <div className={styles.head}>
                     <span className={clsx(styles.text, styles.title)}>{title}</span>
-                    <div className={clsx(styles.timeWrapper, { [styles.isTimeVisible]: isTimeVisible })}>
+                    <div className={clsx(styles.timeWrapper, { [styles.isTimeVisible]: isTimeVisible, [styles.isAverageVisible]: isFinished })}>
                         <span className={styles.divider}></span>
-                        {!!time && <span className={styles.time}>{time ? format(time, 'mm:ss') : '00:00'}</span>}
+                        {!!time && !isFinished && <span className={clsx(styles.time, {[styles.timeActive]: isInProgress})}>{time ? format(time, 'mm:ss') : '00:00'}</span>}
+                        {isFinished && <span className={styles.averageWrapper}>Average: {String(average)}</span>}
                         <span className={styles.divider}></span>
                     </div>
                     <span className={clsx(styles.text, styles.story)}>{story}</span>

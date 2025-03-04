@@ -14,7 +14,7 @@ import { usePostHog } from 'posthog-js/react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
-import { ActionTypes, getters, reducer } from './RoomPage.store';
+import { ActionTypes, getters, reducer, StoryStatusTypes } from './RoomPage.store';
 
 export interface RoomPageProps {
     roomId: number;
@@ -150,7 +150,7 @@ export const RoomPage = ({
         if (!roomPageService || !serverUser.id) {
             return;
         }
-        await roomPageService.removeUserFromRoom(serverUser.id);
+        roomPageService.removeUserFromRoom(serverUser.id);
         router.push('/');
     }, [router, roomPageService, serverUser.id]);
 
@@ -238,7 +238,15 @@ export const RoomPage = ({
             {!!state.room && <Tag
                 type={tagTypesByVoteType[roomType]}
                 className={styles.typeTag}>{roomType}</Tag>}
-            <div className={clsx(styles.page, { [styles.isHost]: isHost, [styles.isColumn]: roomType === VoteValuesTypes.boolean })}>
+            <div
+                className={clsx(
+                    styles.page,
+                    {
+                        [styles.isHost]: isHost,
+                        [styles.isColumn]: roomType === VoteValuesTypes.boolean,
+                        [styles.isFinished]: storyStatus === StoryStatusTypes.FINISHED,
+                    },
+                )}>
                 <Navbar
                     startTime={story?.started_at}
                     title={state?.room?.title}
@@ -247,6 +255,7 @@ export const RoomPage = ({
                     onNext={nextStory}
                     onStop={stopStory}
                     onExit={exit}
+                    average={average}
                     isHost={isHost}
                     onChangeActivity={changeUserActivity}
                     isUserActive={currentUser?.active}
@@ -256,9 +265,14 @@ export const RoomPage = ({
                     className={styles.timeGrid}
                     isDisabled={isVotingDisabled}
                     type={roomType}
+                    storyStatus={storyStatus}
                     selectedTime={selectedTime}
                     onSelect={selectTime}
+                    onStartAction={startStory}
                     values={timeValues}
+                    isHost={isHost}
+                    isUserActive={currentUser?.active}
+                    onParticipateAction={() => changeUserActivity(true)}
                 />}
                 {!!state.room && <MemberList
                     className={styles.memberList}

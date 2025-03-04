@@ -55,12 +55,16 @@ export const MemberList = ({
             className={clsx(styles.list, {
                 [styles.visible]: isHostInProgress && visibility.value,
                 [styles.isHost]: isHost,
+                [styles.isFinished]: isFinished,
             }, className)}
         >
             <div
                 className={clsx(
                     styles.status,
-                    { [styles.isVisible]: inProgress || isFinished, [styles.result]: isFinished },
+                    {
+                        [styles.isVisible]: inProgress || isFinished,
+                        [styles.result]: isFinished,
+                    },
                 )}
             >
                 <div
