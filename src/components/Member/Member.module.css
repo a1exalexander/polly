@@ -86,4 +86,12 @@
     width: 48px;
 }
 
+.removeButton {
+    position: relative;
+}
+
+.removeButton.isInProgress {
+    z-index: 10;
+}
+
 

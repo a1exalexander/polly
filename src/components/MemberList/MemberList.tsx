@@ -99,9 +99,11 @@ export const MemberList = ({
                         id={id}
                         onRemoveUser={onRemoveUser}
                         isValueVisible={visibility.value || !inProgress}
+                        removeButtonClass={styles.removeButton}
                         className={styles.item}
                         key={id}
                         isDisabled={!active}
+                        isInProgress={inProgress}
                         isCurrentUserHost={isHost}
                         isMemberHost={hostId === id}
                         name={name}

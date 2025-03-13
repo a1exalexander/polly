@@ -42,7 +42,7 @@
     border-color: var(--warning-color);
 }
 
-.list.isHost:hover .container {
+.list.isHost:hover:not(:has(.removeButton:hover)) .container {
     border-color: var(--warning-color);
 }
 
