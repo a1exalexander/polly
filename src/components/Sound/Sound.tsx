@@ -12,7 +12,7 @@ interface SoundProps {
 }
 
 export const Sound = ({ storyStatus }: SoundProps) => {
-    const [isSoundOn, setSound] = useLocalStorage('sound', true);
+    const [isSoundOn, setSound] = useLocalStorage('sound-state', true);
     const finishSoundOn = useBoolean(false);
     const previousStoryStatus = useRef<StoryStatusTypes>(storyStatus);
 
