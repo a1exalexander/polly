@@ -69,7 +69,7 @@ export const RoomPage = ({
     );
     const isVotingInProgress = useMemo(() => !!story?.started_at && !story?.finished_at, [story]);
     const allUsersVoted = useMemo(() => {
-        if (!story || story?.finished_at || !activeUsers.length) {
+        if (!story || story?.finished_at || activeUsers.length <= 1) {
             return false;
         }
         return activeUsers.every(({ id }) => {
@@ -135,11 +135,11 @@ export const RoomPage = ({
     }, [roomPageService, story, state.storiesCount]);
 
     const stopStory = useCallback(async () => {
-        if (!roomPageService || !state?.story?.id) {
+        if (!roomPageService || !state?.story?.id || !state.story?.started_at) {
             return;
         }
         return roomPageService.stopStory(state.story.id);
-    }, [roomPageService, state?.story?.id]);
+    }, [roomPageService, state?.story?.id, state.story?.started_at]);
 
     const selectTime = useCallback(async (value: number) => {
         if (!roomPageService || !story?.id) {
