@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
 import { ActionTypes, getters, reducer, StoryStatusTypes } from './RoomPage.store';
+import { useBoolean } from 'usehooks-ts';
 
 export interface RoomPageProps {
     roomId: number;
@@ -25,6 +26,7 @@ export const RoomPage = ({
     roomId,
     serverUser,
 }: RoomPageProps) => {
+    const fetchState = useBoolean(false);
     const router = useRouter();
     const posthog = usePostHog();
     const [roomPageService, setRoomPageService] = useState<RoomPageService | null>(null);
@@ -211,15 +213,17 @@ export const RoomPage = ({
     }, [roomId, dispatch, storyId, roomPageService]);
 
     useEffect(() => {
-        if (allUsersVoted) {
+        if (allUsersVoted && fetchState.value) {
             stopStory();
         }
-    }, [allUsersVoted, stopStory]);
+    }, [allUsersVoted, stopStory, fetchState.value]);
 
     useEffect(() => {
+        fetchState.setFalse();
         const fetchAllData = async () => {
             await fetchPageData();
             await fetchUsersOnStory();
+            fetchState.setTrue();
         };
         fetchAllData();
         const onPageBack = async () => {
@@ -230,6 +234,7 @@ export const RoomPage = ({
         document.addEventListener('visibilitychange', onPageBack);
         return () => {
             document.removeEventListener('visibilitychange', onPageBack);
+            fetchState.setFalse();
         };
     }, [fetchPageData, fetchUsersOnStory]);
 
