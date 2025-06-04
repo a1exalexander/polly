@@ -156,7 +156,7 @@ export const RoomPage = ({
         router.push('/');
     }, [router, roomPageService, serverUser.id]);
 
-    const removeUserFromRoom = useCallback(async (userId: number) => {
+    const removeUserFromRoom = useCallback((userId: number) => {
         if (!roomPageService) {
             return;
         }

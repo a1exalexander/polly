@@ -69,10 +69,8 @@ export const Navbar = ({
 
     const handleExit = useCallback(async () => {
         exitLoading.setTrue();
-        await onStop?.();
-        await onExit?.();
-        exitLoading.setFalse();
-    }, [onExit, onStop, exitLoading]);
+        onExit?.();
+    }, [onExit, exitLoading]);
 
     const handleChangeActivity = useCallback(async () => {
         activityLoading.setTrue();
