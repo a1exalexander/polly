@@ -138,6 +138,8 @@ export const RoomPage = ({
         if (!roomPageService || !state?.story?.id || !state.story?.started_at) {
             return;
         }
+        console.log('stopStory called');
+        
         return roomPageService.stopStory(state.story.id);
     }, [roomPageService, state?.story?.id, state.story?.started_at]);
 
@@ -214,6 +216,10 @@ export const RoomPage = ({
 
     useEffect(() => {
         if (allUsersVoted && fetchState.value) {
+            console.log('stopStory => allUsersVoted', allUsersVoted);
+            console.log('stopStory => activeUsers', activeUsers);
+            console.log('stopStory => state', state);
+            
             stopStory();
         }
     }, [allUsersVoted, fetchState.value]);
