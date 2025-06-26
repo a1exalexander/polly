@@ -216,7 +216,7 @@ export const RoomPage = ({
         if (allUsersVoted && fetchState.value) {
             stopStory();
         }
-    }, [allUsersVoted, stopStory, fetchState.value]);
+    }, [allUsersVoted, fetchState.value]);
 
     useEffect(() => {
         fetchState.setFalse();
