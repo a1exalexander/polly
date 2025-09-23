@@ -3,7 +3,7 @@ import { tagTypesByVoteType, VoteValuesType, VoteValuesTypes } from '@/constants
 import clsx from 'clsx';
 import Link from 'next/link';
 import { HiStatusOnline } from 'react-icons/hi';
-import { LuUsers2 } from 'react-icons/lu';
+import { LuUsers } from 'react-icons/lu';
 import styles from './RoomItem.module.css';
 
 export interface RoomItemProps {
@@ -25,7 +25,7 @@ export const RoomItem = ({ className, title, roomId, membersAmount, onlineAmount
                 <Tag className={styles.tag} type={tagTypesByVoteType[type as VoteValuesType]}>{type || VoteValuesTypes.days}</Tag>
                 <div className={styles.info}>
                     <span className={styles.infoValue}>{membersAmount}</span>
-                    <LuUsers2 className={styles.infoIcon} />
+                    <LuUsers className={styles.infoIcon} />
                 </div>
                 <div className={clsx(styles.online, { [styles.offline]: !onlineAmount })}>
                     <span className={styles.onlineValue}>{onlineAmount}</span>
