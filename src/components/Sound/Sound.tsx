@@ -23,6 +23,7 @@ export const Sound = ({ storyStatus }: SoundProps) => {
             finishSoundOn.setFalse();
         }
         previousStoryStatus.current = storyStatus;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [storyStatus]);
 
     return (

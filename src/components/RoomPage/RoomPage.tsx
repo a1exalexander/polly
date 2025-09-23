@@ -252,6 +252,7 @@ export const RoomPage = ({
             document.removeEventListener('visibilitychange', onPageBack);
             fetchState.setFalse();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchPageData, fetchUsersOnStory]); // fetchState intentionally excluded to prevent infinite loop
 
     return (
