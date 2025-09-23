@@ -36,7 +36,7 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                 supabase.from('Rooms').select('*').eq('public_user_id', Number(serverUser?.id)),
                 supabase.from('UsersOnRooms').select('*'),
                 supabase
-                    .from('UsersOnRooms')
+                    .from('RecentlyVisitedRooms')
                     .select(`
                         last_visited_at,
                         room_id,
@@ -50,7 +50,6 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                         )
                     `)
                     .eq('public_user_id', Number(serverUser?.id))
-                    .neq('Rooms.public_user_id', Number(serverUser?.id)) // Exclude owned rooms
                     .order('last_visited_at', { ascending: false })
                     .limit(5),
             ]);
@@ -62,7 +61,6 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                 ...item.Rooms,
                 last_visited_at: item.last_visited_at,
             })) || [];
-            
             dispatch({ type: ActionTypes.RECENTLY_VISITED_ROOMS_FETCHED, payload: recentRoomsData });
             loading.setFalse();
         };

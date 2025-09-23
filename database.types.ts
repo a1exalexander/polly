@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      RecentlyVisitedRooms: {
+        Row: {
+          id: number
+          last_visited_at: string
+          public_user_id: number
+          room_id: number
+        }
+        Insert: {
+          id?: number
+          last_visited_at?: string
+          public_user_id: number
+          room_id: number
+        }
+        Update: {
+          id?: number
+          last_visited_at?: string
+          public_user_id?: number
+          room_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "RecentlyVisitedRooms_public_user_id_fkey"
+            columns: ["public_user_id"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "RecentlyVisitedRooms_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "Rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Rooms: {
         Row: {
           created_at: string
