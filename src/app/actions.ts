@@ -145,8 +145,20 @@ export const joinRoomAction = async (roomId: string) => {
                 room_id: Number(roomId),
                 user_id: user.id,
                 active: user.id !== roomResponse?.data?.user_id,
+                last_visited_at: new Date().toISOString(),
             })
             .select());
+    } else {
+        // Update the visit timestamp for existing room members
+        extraPromises.push(supabase
+            .from('UsersOnRooms')
+            .update({
+                active: true,
+                last_visited_at: new Date().toISOString(),
+            })
+            .eq('public_user_id', publicUserResponse.data.id)
+            .eq('room_id', Number(roomId))
+        );
     }
 
     if (!storiesResponse.data) {

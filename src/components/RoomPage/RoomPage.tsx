@@ -8,6 +8,7 @@ import { tagTypesByVoteType, VoteValues, VoteValuesType, VoteValuesTypes } from 
 import { User } from '@/types';
 import { isNumber } from '@/utils/isNumber';
 import { createClient } from '@/utils/supabase/client';
+import { updateRoomVisit } from '@/utils/updateRoomVisit';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { usePostHog } from 'posthog-js/react';
@@ -183,6 +184,16 @@ export const RoomPage = ({
             userId: serverUser.user_id,
         });
     }, [posthog, roomId, state.room?.title, serverUser]);
+
+    // Track room visit for recently visited rooms feature
+    useEffect(() => {
+        const trackVisit = async () => {            
+            await updateRoomVisit(roomId, serverUser.id);
+        };
+        
+        if (roomId && serverUser.id) trackVisit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [roomId]);
 
     useEffect(() => {
         if (state.room && state.users.length && state.users.every(({ id }) => id !== serverUser.id)) {

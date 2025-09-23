@@ -47,3 +47,11 @@
     color: var(--grey-darken);
     background-color: var(--secondary-color);
 }
+
+.section {
+    margin-bottom: calc(var(--grid-size) * 4);
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}

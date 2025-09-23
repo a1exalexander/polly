@@ -1,8 +1,13 @@
 import { Room, UserOnRoom } from '@/types';
 
+export interface RecentlyVisitedRoom extends Room {
+    last_visited_at: string | null;
+}
+
 export interface IState {
     rooms: Room[];
     usersOnRooms: UserOnRoom[];
+    recentlyVisitedRooms: RecentlyVisitedRoom[];
 }
 
 export enum ActionTypes {
@@ -14,6 +19,7 @@ export enum ActionTypes {
     USER_ON_ROOM_CREATED = 'USER_ON_ROOM_CREATED',
     USER_ON_ROOM_DELETED = 'USER_ON_ROOM_DELETED',
     USER_ON_ROOM_UPDATED = 'USER_ON_ROOM_UPDATED',
+    RECENTLY_VISITED_ROOMS_FETCHED = 'RECENTLY_VISITED_ROOMS_FETCHED',
 }
 
 export type IAction = {
@@ -40,6 +46,9 @@ export type IAction = {
 } | {
     type: ActionTypes.USER_ON_ROOM_UPDATED;
     payload: UserOnRoom;
+} | {
+    type: ActionTypes.RECENTLY_VISITED_ROOMS_FETCHED;
+    payload: RecentlyVisitedRoom[];
 }
 
 export type DispatchType = (args: IAction) => void;
@@ -87,6 +96,8 @@ export const reducer= (state: IState, action: IAction) => {
             }
             return { ...state, usersOnRooms: shallowCopy };
         }
+        case ActionTypes.RECENTLY_VISITED_ROOMS_FETCHED:
+            return { ...state, recentlyVisitedRooms: action.payload };
         default:
             return state;
     }
@@ -96,6 +107,7 @@ export const createInitialState = (initData: IState): IState => {
     return {
         rooms: initData.rooms,
         usersOnRooms: initData.usersOnRooms,
+        recentlyVisitedRooms: initData.recentlyVisitedRooms,
     }
 }
 
@@ -105,5 +117,8 @@ export const getters = {
     },
     getUsersOnRoom: (state: IState, roomId: number) => {
         return state.usersOnRooms.filter(({ room_id }) => room_id === roomId);
+    },
+    isRecentlyVisitedRoomsEmpty: (state: IState) => {
+        return state.recentlyVisitedRooms.length === 0;
     },
 }
