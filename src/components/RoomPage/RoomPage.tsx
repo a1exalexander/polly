@@ -138,7 +138,6 @@ export const RoomPage = ({
         if (!roomPageService || !state?.story?.id || !state.story?.started_at) {
             return;
         }
-        console.log('stopStory called');
         
         return roomPageService.stopStory(state.story.id);
     }, [roomPageService, state?.story?.id, state.story?.started_at]);
@@ -189,11 +188,15 @@ export const RoomPage = ({
         if (state.room && state.users.length && state.users.every(({ id }) => id !== serverUser.id)) {
             router.push('/');
         }
-    }, [router, state, serverUser]);
+    }, [router, state.room, state.users, serverUser.id]);
 
     useEffect(() => {
-        const roomPageService = new RoomPageService(roomId);
-        setRoomPageService(roomPageService);
+        const service = new RoomPageService(roomId);
+        setRoomPageService(service);
+        
+        return () => {
+            setRoomPageService(null);
+        };
     }, [roomId]);
 
     useEffect(() => {
@@ -216,13 +219,9 @@ export const RoomPage = ({
 
     useEffect(() => {
         if (allUsersVoted && fetchState.value) {
-            console.log('stopStory => allUsersVoted', allUsersVoted);
-            console.log('stopStory => activeUsers', activeUsers);
-            console.log('stopStory => state', state);
-            
             stopStory();
         }
-    }, [allUsersVoted, fetchState.value]);
+    }, [allUsersVoted, fetchState.value, stopStory]);
 
     useEffect(() => {
         fetchState.setFalse();
@@ -242,7 +241,7 @@ export const RoomPage = ({
             document.removeEventListener('visibilitychange', onPageBack);
             fetchState.setFalse();
         };
-    }, [fetchPageData, fetchUsersOnStory]);
+    }, [fetchPageData, fetchUsersOnStory]); // fetchState intentionally excluded to prevent infinite loop
 
     return (
         <>
