@@ -2,9 +2,6 @@ import { Room, Story, UserOnStory, UserWithActivity, UserWithVote } from '@/type
 import { isNumber } from '@/utils/isNumber';
 import { round } from '@/utils/round';
 import { Reducer } from 'react';
-import { createLightweightPostHogMiddleware } from '@/utils/posthogMiddleware';
-import { extractRoomPageMetrics } from '@/utils/sanitizeState';
-import type { PostHog } from 'posthog-js';
 
 export enum StoryStatusTypes {
     IDLE = 'idle',
@@ -213,32 +210,3 @@ export const getters = {
         return StoryStatusTypes.FINISHED;
     }
 };
-
-/**
- * Create enhanced reducer with PostHog logging
- * @param posthog - PostHog instance for logging
- * @param userId - Current user ID for context
- * @returns Enhanced reducer
- */
-export function createEnhancedReducer(
-    posthog: PostHog | undefined,
-    userId?: number
-): Reducer<IState, IAction> {
-    return createLightweightPostHogMiddleware(
-        reducer,
-        () => posthog,
-        {
-            eventPrefix: 'room_page',
-            extractMetrics: (state: IState) => {
-                const metrics = extractRoomPageMetrics(state);
-                // Add is_host information if userId is provided
-                if (userId) {
-                    metrics.is_host = state.room?.public_user_id === userId;
-                }
-                return metrics;
-            },
-            // Skip high-frequency fetch actions to reduce noise
-            skipActions: [],
-        }
-    );
-}

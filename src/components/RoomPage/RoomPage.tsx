@@ -15,7 +15,7 @@ import { usePostHog } from 'posthog-js/react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
-import { ActionTypes, getters, reducer, StoryStatusTypes, createEnhancedReducer } from './RoomPage.store';
+import { ActionTypes, getters, reducer, StoryStatusTypes } from './RoomPage.store';
 import { useBoolean } from 'usehooks-ts';
 
 export interface RoomPageProps {
@@ -31,18 +31,11 @@ export const RoomPage = ({
     const router = useRouter();
     const posthog = usePostHog();
     const [roomPageService, setRoomPageService] = useState<RoomPageService | null>(null);
-
-    // Use enhanced reducer with PostHog logging
-    const enhancedReducer = useMemo(
-        () => createEnhancedReducer(posthog, serverUser.id),
-        [posthog, serverUser.id]
-    );
-
     const [
         state,
         dispatch,
     ] = useReducer(
-        enhancedReducer,
+        reducer,
         {
             users: [],
             story: null,
