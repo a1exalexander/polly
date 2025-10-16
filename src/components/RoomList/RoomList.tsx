@@ -7,8 +7,9 @@ import { createClient } from '@/utils/supabase/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useReducer } from 'react';
 import { useBoolean } from 'usehooks-ts';
+import { usePostHog } from 'posthog-js/react';
 import styles from './RoomList.module.css';
-import { ActionTypes, createInitialState, getters, reducer } from './RoomList.store';
+import { ActionTypes, createInitialState, getters, reducer, createEnhancedReducer } from './RoomList.store';
 
 interface RoomListProps {
     className?: string;
@@ -17,8 +18,16 @@ interface RoomListProps {
 
 export const RoomList = ({ className, serverUser }: RoomListProps) => {
     const loading = useBoolean(true);
+    const posthog = usePostHog();
+
+    // Use enhanced reducer with PostHog logging
+    const enhancedReducer = useMemo(
+        () => createEnhancedReducer(posthog),
+        [posthog]
+    );
+
     const [state, dispatch] = useReducer(
-        reducer,
+        enhancedReducer,
         {
             usersOnRooms: [],
             rooms: [],

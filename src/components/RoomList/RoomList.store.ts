@@ -1,4 +1,8 @@
 import { Room, UserOnRoom } from '@/types';
+import { createLightweightPostHogMiddleware } from '@/utils/posthogMiddleware';
+import { extractRoomListMetrics } from '@/utils/sanitizeState';
+import type { PostHog } from 'posthog-js';
+import { Reducer } from 'react';
 
 export interface RecentlyVisitedRoom extends Room {
     last_visited_at: string | null;
@@ -121,4 +125,24 @@ export const getters = {
     isRecentlyVisitedRoomsEmpty: (state: IState) => {
         return state.recentlyVisitedRooms.length === 0;
     },
+}
+
+/**
+ * Create enhanced reducer with PostHog logging
+ * @param posthog - PostHog instance for logging
+ * @returns Enhanced reducer
+ */
+export function createEnhancedReducer(
+    posthog: PostHog | undefined
+): Reducer<IState, IAction> {
+    return createLightweightPostHogMiddleware(
+        reducer,
+        () => posthog,
+        {
+            eventPrefix: 'room_list',
+            extractMetrics: (state: IState) => extractRoomListMetrics(state),
+            // Skip high-frequency fetch actions to reduce noise
+            skipActions: [],
+        }
+    );
 }
