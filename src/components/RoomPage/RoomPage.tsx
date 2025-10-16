@@ -259,7 +259,7 @@ export const RoomPage = ({
     }, [roomId, dispatch, storyId, roomPageService]);
 
     useEffect(() => {
-        if (allUsersVoted && fetchState.value && state.usersOnStory.length > 0) {
+        if (allUsersVoted && fetchState.value) {
             stopStory();
         }
     }, [allUsersVoted, fetchState.value]);
