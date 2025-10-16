@@ -130,7 +130,7 @@ export const RoomPage = ({
             state: state,
         });
         return roomPageService.startStory(state?.story?.id);
-    }, [roomPageService, state?.story?.id]);
+    }, [roomPageService, state?.story?.id, posthog]);
 
     const nextStory = useCallback(async () => {
         if (!roomPageService || !story) {
@@ -142,7 +142,7 @@ export const RoomPage = ({
         });
         await roomPageService.nextStory(story, state.storiesCount + 1);
         dispatch({ type: ActionTypes.STORIES_COUNT_UPDATED, payload: state.storiesCount + 1 });
-    }, [roomPageService, story, state.storiesCount]);
+    }, [roomPageService, story, state.storiesCount, posthog]);
 
     const stopStory = useCallback(async () => {
         if (!roomPageService || !state?.story?.id || !state.story?.started_at) {
@@ -154,7 +154,7 @@ export const RoomPage = ({
         });
         
         return roomPageService.stopStory(state.story.id);
-    }, [roomPageService, state?.story?.id, state.story?.started_at]);
+    }, [roomPageService, state?.story?.id, state.story?.started_at, posthog]);
 
     const selectTime = useCallback(async (value: number) => {
         if (!roomPageService || !story?.id) {
@@ -259,7 +259,7 @@ export const RoomPage = ({
     }, [roomId, dispatch, storyId, roomPageService]);
 
     useEffect(() => {
-        if (allUsersVoted && fetchState.value) {
+        if (allUsersVoted && fetchState.value && state.usersOnStory.length > 0) {
             stopStory();
         }
     }, [allUsersVoted, fetchState.value]);
