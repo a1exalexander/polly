@@ -14,8 +14,9 @@ export const CreateRoomForm = () => {
     const posthog = usePostHog();
     const onSubmit = useCallback((event: FormEvent) => {
         const formData = new FormData(event.target as HTMLFormElement);
+        const serialized = Object.fromEntries(formData.entries());
         posthog?.capture?.('create_room', {
-            title: formData.get('title'),
+            formData: serialized,
         });
     }, [posthog]);
 

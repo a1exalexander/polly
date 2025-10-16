@@ -124,6 +124,10 @@ export const RoomPage = ({
         if (!roomPageService || !state?.story?.id) {
             return;
         }
+        posthog?.capture?.('story_started', {
+            userData: serverUser,
+            state: state,
+        });
         return roomPageService.startStory(state?.story?.id);
     }, [roomPageService, state?.story?.id]);
 
@@ -131,6 +135,10 @@ export const RoomPage = ({
         if (!roomPageService || !story) {
             return;
         }
+        posthog?.capture?.('story_next', {
+            userData: serverUser,
+            state: state,
+        });
         await roomPageService.nextStory(story, state.storiesCount + 1);
         dispatch({ type: ActionTypes.STORIES_COUNT_UPDATED, payload: state.storiesCount + 1 });
     }, [roomPageService, story, state.storiesCount]);
@@ -139,6 +147,10 @@ export const RoomPage = ({
         if (!roomPageService || !state?.story?.id || !state.story?.started_at) {
             return;
         }
+        posthog?.capture?.('story_stopped', {
+            userData: serverUser,
+            state: state,
+        });
         
         return roomPageService.stopStory(state.story.id);
     }, [roomPageService, state?.story?.id, state.story?.started_at]);
@@ -147,6 +159,10 @@ export const RoomPage = ({
         if (!roomPageService || !story?.id) {
             return;
         }
+        posthog?.capture?.('story_time_selected', {
+            userData: serverUser,
+            state: state,
+        });
         return roomPageService.selectTime(story?.id, serverUser.id, value);
     }, [roomPageService, story, serverUser.id]);
 
@@ -154,6 +170,10 @@ export const RoomPage = ({
         if (!roomPageService || !serverUser.id) {
             return;
         }
+        posthog?.capture?.('room_exit', {
+            userData: serverUser,
+            state: state,
+        });
         roomPageService.removeUserFromRoom(serverUser.id);
         router.push('/');
     }, [router, roomPageService, serverUser.id]);
@@ -162,6 +182,10 @@ export const RoomPage = ({
         if (!roomPageService) {
             return;
         }
+        posthog?.capture?.('room_user_removed', {
+            userData: serverUser,
+            state: state,
+        });
         return roomPageService.removeUserFromRoom(userId);
     }, [roomPageService]);
 
@@ -169,6 +193,10 @@ export const RoomPage = ({
         if (!roomPageService || !serverUser.id) {
             return;
         }
+        posthog?.capture?.('room_user_activity_changed', {
+            userData: serverUser,
+            state: state,
+        });
         return roomPageService.changeUserActivity(serverUser.id, active);
     }, [roomPageService, serverUser.id]);
 
@@ -177,13 +205,13 @@ export const RoomPage = ({
     useFavicon(storyStatus);
 
     useEffect(() => {
-        posthog?.capture?.('room_joined', {
-            roomId,
-            roomTitle: state.room?.title,
-            userName: serverUser.name,
-            userId: serverUser.user_id,
-        });
-    }, [posthog, roomId, state.room?.title, serverUser]);
+        if (posthog && roomId) {
+            posthog?.capture?.('room_joined', {
+                serverUserData: serverUser,
+                state: state,
+            });
+        }
+    }, [roomId]);
 
     // Track room visit for recently visited rooms feature
     useEffect(() => {
@@ -232,7 +260,7 @@ export const RoomPage = ({
         if (allUsersVoted && fetchState.value) {
             stopStory();
         }
-    }, [allUsersVoted, fetchState.value, stopStory]);
+    }, [allUsersVoted, fetchState.value]);
 
     useEffect(() => {
         fetchState.setFalse();
