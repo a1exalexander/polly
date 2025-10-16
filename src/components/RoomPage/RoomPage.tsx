@@ -30,6 +30,7 @@ export const RoomPage = ({
     const fetchState = useBoolean(false);
     const router = useRouter();
     const posthog = usePostHog();
+    const joinState = useBoolean(false);
     const [roomPageService, setRoomPageService] = useState<RoomPageService | null>(null);
     const [
         state,
@@ -205,13 +206,14 @@ export const RoomPage = ({
     useFavicon(storyStatus);
 
     useEffect(() => {
-        if (posthog && roomId) {
+        if (posthog && roomId && fetchState.value && state.room && !joinState.value) {
             posthog?.capture?.('room_joined', {
                 serverUserData: serverUser,
                 state: state,
             });
+            joinState.setTrue();
         }
-    }, [roomId]);
+    }, [roomId, fetchState.value, state.room]);
 
     // Track room visit for recently visited rooms feature
     useEffect(() => {
