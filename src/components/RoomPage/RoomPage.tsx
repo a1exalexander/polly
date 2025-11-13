@@ -71,7 +71,7 @@ export const RoomPage = ({
     );
     const isVotingInProgress = useMemo(() => !!story?.started_at && !story?.finished_at, [story]);
     const allUsersVoted = useMemo(() => {
-        if (!story || story?.finished_at || activeUsers.length <= 1 || state.usersOnStory.length !== activeUsers.length) {
+        if (!story || story?.finished_at || activeUsers.length <= 1 || state.usersOnStory.length < activeUsers.length) {
             return false;
         }
         return activeUsers.every(({ id }) => {
