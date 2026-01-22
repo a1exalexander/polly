@@ -10,3 +10,4 @@ export * from './Footer';
 export * from './Loader';
 export * from './Tag';
 export * from './Tooltip';
+export * from './ConfirmModal';

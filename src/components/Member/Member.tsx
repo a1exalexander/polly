@@ -1,4 +1,4 @@
-import { Button, Tooltip } from '@/components';
+import { Button, Tooltip, ConfirmModal } from '@/components';
 import clsx from 'clsx';
 import { useCallback, useMemo } from 'react';
 import { BsFillPatchCheckFill } from 'react-icons/bs';
@@ -35,12 +35,14 @@ export const Member = ({
     removeButtonClass,
 }: MemberProps) => {
     const removingLoading = useBoolean(false);
+    const confirmModalOpen = useBoolean(false);
 
     const handleRemoveUser = useCallback(async () => {
         removingLoading.setTrue();
         await onRemoveUser?.(id);
         removingLoading.setFalse();
-    }, [onRemoveUser, id, removingLoading]);
+        confirmModalOpen.setFalse();
+    }, [onRemoveUser, id, removingLoading, confirmModalOpen]);
 
     const valueContent = useMemo(() => {
         switch (true) {
@@ -71,8 +73,7 @@ export const Member = ({
                             className={clsx(styles.removeButton, { [styles.isInProgress]: isInProgress }, removeButtonClass)}
                             variant="danger-inverted"
                             ariaLabel='remove user'
-                            onClick={handleRemoveUser}
-                            isLoading={removingLoading.value}
+                            onClick={confirmModalOpen.setTrue}
                             size="xs"
                             icon={<HiUserRemove />}
                         />
@@ -82,6 +83,17 @@ export const Member = ({
                     {valueContent}
                 </div>
             </div>
+            <ConfirmModal
+                isOpen={confirmModalOpen.value}
+                title="Remove user"
+                message={<>Are you sure you want to remove <strong>{name}</strong> from this room?</>}
+                confirmText="Remove"
+                cancelText="Cancel"
+                variant="danger"
+                isLoading={removingLoading.value}
+                onConfirm={handleRemoveUser}
+                onCancel={confirmModalOpen.setFalse}
+            />
         </div>
     );
 };

@@ -1,6 +1,6 @@
 .wrapper {
     left: 0;
-    right: 0;
+    right: var(--scrollbar-compensation, 0);
     position: fixed;
     z-index: 3;
     height: 0;
