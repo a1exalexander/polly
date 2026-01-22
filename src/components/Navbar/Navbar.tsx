@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Loader } from '@/components';
+import { Button, Loader, Tooltip } from '@/components';
 import clsx from 'clsx';
 import { differenceInMilliseconds, format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
@@ -171,19 +171,24 @@ export const Navbar = ({
                     <span className={clsx(styles.text, styles.story)}>{story}</span>
                 </div>
                 <div className={styles.footer}>
-                    <Button
-                        id="change-activity"
-                        onClick={handleChangeActivity}
-                        icon={activityState.value ? <LuCoffee /> : <MdOutlineHowToVote />}
-                        size="xs"
-                        isLoading={activityLoading.value}
-                        isDisabled={isDisabled}
-                        variant={isIdle ? 'ghost-inverted' : 'ghost'}
-                        bordered
-                        className={styles.button}
+                    <Tooltip
+                        text={activityState.value ? 'Switch to observer mode' : 'Switch to voting mode'}
+                        position="top"
                     >
-                        {activityState.value ? 'Just watch' : 'Participate'}
-                    </Button>
+                        <Button
+                            id="change-activity"
+                            onClick={handleChangeActivity}
+                            icon={activityState.value ? <LuCoffee /> : <MdOutlineHowToVote />}
+                            size="xs"
+                            isLoading={activityLoading.value}
+                            isDisabled={isDisabled}
+                            variant={isIdle ? 'ghost-inverted' : 'ghost'}
+                            bordered
+                            className={styles.button}
+                        >
+                            {activityState.value ? 'Just watch' : 'Participate'}
+                        </Button>
+                    </Tooltip>
                     <Button
                         id="exit-room"
                         onClick={handleExit}

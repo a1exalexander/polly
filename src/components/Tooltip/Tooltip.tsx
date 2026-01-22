@@ -73,9 +73,12 @@ export const Tooltip = ({
 
     useEffect(() => {
         if (isVisible) {
-            calculatePosition();
+            // Use requestAnimationFrame to ensure DOM has updated with new text
+            requestAnimationFrame(() => {
+                calculatePosition();
+            });
         }
-    }, [isVisible, calculatePosition]);
+    }, [isVisible, calculatePosition, text]);
 
     const tooltip = (
         <span
