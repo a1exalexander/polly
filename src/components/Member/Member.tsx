@@ -72,7 +72,7 @@ export const Member = ({
                     isLoading={removingLoading.value}
                     size="xs"
                     icon={<HiUserRemove />}
-                >Remove</Button>}
+                />}
                 <div className={styles.valueSlot}>
                     {valueContent}
                 </div>
