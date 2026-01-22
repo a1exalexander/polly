@@ -9,3 +9,4 @@ export * from './RoomList';
 export * from './Footer';
 export * from './Loader';
 export * from './Tag';
+export * from './Tooltip';

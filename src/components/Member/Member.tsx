@@ -1,4 +1,4 @@
-import { Button } from '@/components';
+import { Button, Tooltip } from '@/components';
 import clsx from 'clsx';
 import { useCallback, useMemo } from 'react';
 import { BsFillPatchCheckFill } from 'react-icons/bs';
@@ -64,15 +64,20 @@ export const Member = ({
                 {isMemberHost && <FaStar className={styles.star} />}
             </div>
             <div className={styles.tail}>
-                {isCurrentUserHost && <Button
-                    data-ph="remove-user"
-                    className={clsx(styles.removeButton, { [styles.isInProgress]: isInProgress }, removeButtonClass)}
-                    variant="danger-inverted"
-                    onClick={handleRemoveUser}
-                    isLoading={removingLoading.value}
-                    size="xs"
-                    icon={<HiUserRemove />}
-                />}
+                {isCurrentUserHost && (
+                    <Tooltip text="Remove user" position="top">
+                        <Button
+                            data-ph="remove-user"
+                            className={clsx(styles.removeButton, { [styles.isInProgress]: isInProgress }, removeButtonClass)}
+                            variant="danger-inverted"
+                            ariaLabel='remove user'
+                            onClick={handleRemoveUser}
+                            isLoading={removingLoading.value}
+                            size="xs"
+                            icon={<HiUserRemove />}
+                        />
+                    </Tooltip>
+                )}
                 <div className={styles.valueSlot}>
                     {valueContent}
                 </div>
