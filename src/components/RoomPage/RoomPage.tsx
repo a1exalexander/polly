@@ -151,10 +151,12 @@ export const RoomPage = ({
         posthog?.capture?.('story_stopped', {
             userData: serverUser,
             state: state,
+            activeUsers: activeUsers,
+            allUsersVoted
         });
         
         return roomPageService.stopStory(state.story.id);
-    }, [roomPageService, state?.story?.id, state.story?.started_at, posthog]);
+    }, [roomPageService, state?.story?.id, state.story?.started_at, posthog, activeUsers, allUsersVoted]);
 
     const selectTime = useCallback(async (value: number) => {
         if (!roomPageService || !story?.id) {
