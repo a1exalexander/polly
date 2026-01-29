@@ -12,7 +12,7 @@ import { updateRoomVisit } from '@/utils/updateRoomVisit';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { usePostHog } from 'posthog-js/react';
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
 import { ActionTypes, getters, reducer, StoryStatusTypes } from './RoomPage.store';
@@ -260,11 +260,49 @@ export const RoomPage = ({
         };
     }, [roomId, dispatch, storyId, roomPageService]);
 
+    // Auto-complete story when all active users have voted
+    // Only host triggers this to prevent race conditions from multiple clients
+    // Server verification ensures we don't stop prematurely due to stale local state
+    const autoCompleteInProgressRef = useRef(false);
     useEffect(() => {
-        if (allUsersVoted && fetchState.value) {
-            stopStory();
+        if (!allUsersVoted || !fetchState.value || !isHost || !roomPageService || !state.story?.id) {
+            return;
         }
-    }, [allUsersVoted, fetchState.value]);
+
+        // Prevent multiple concurrent auto-complete attempts
+        if (autoCompleteInProgressRef.current) {
+            return;
+        }
+
+        const verifyAndStopStory = async () => {
+            autoCompleteInProgressRef.current = true;
+            try {
+                // Fetch fresh data from server to verify all active users actually voted
+                const [freshUsers, freshUsersOnStory] = await Promise.all([
+                    roomPageService.getUsers(),
+                    roomPageService.getUsersOnStory(state.story!.id)
+                ]);
+
+                const freshActiveUsers = freshUsers.filter(u => u.active);
+
+                // Re-verify with fresh server data
+                const allActuallyVoted = freshActiveUsers.length > 1 && freshActiveUsers.every(({ id }) =>
+                    freshUsersOnStory.some(({ public_user_id, value }) =>
+                        public_user_id === id && isNumber(value)
+                    )
+                );
+
+                if (allActuallyVoted) {
+                    await stopStory();
+                }
+            } finally {
+                autoCompleteInProgressRef.current = false;
+            }
+        };
+
+        verifyAndStopStory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [allUsersVoted, fetchState.value, isHost, roomPageService, state.story?.id, stopStory]); // state.story?.id is intentional - we only need to re-run when story ID changes
 
     useEffect(() => {
         fetchState.setFalse();

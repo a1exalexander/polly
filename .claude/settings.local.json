@@ -2,9 +2,21 @@
   "permissions": {
     "allow": [
       "Bash(cat:*)",
-      "Bash(npm run lint:*)"
+      "Bash(npm run lint:*)",
+      "Bash(python3:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "mcp__supabase__execute_sql",
+      "mcp__posthog__query-run",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__get_logs",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }
