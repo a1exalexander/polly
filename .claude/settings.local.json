@@ -13,7 +13,8 @@
       "Bash(npm run build:*)",
       "mcp__plugin_serena_serena__list_dir",
       "Skill(web-design-guidelines)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []
