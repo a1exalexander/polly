@@ -65,8 +65,8 @@ export async function POST(request: Request) {
 
         const activeUsers = usersResult.data || [];
 
-        // Need more than 1 active user for auto-complete
-        if (activeUsers.length <= 1) {
+        // Need at least 1 active user for auto-complete
+        if (activeUsers.length < 1) {
             return NextResponse.json({
                 autoCompleted: false,
                 reason: 'not_enough_active_users'

@@ -33,12 +33,12 @@
 }
 
 .list.isFinished .container {
-    box-shadow: 0 0 2px 2px var(--success-color);
+    /* box-shadow: 0 0 0 2px var(--success-color); */
     border-color: var(--success-color);
 }
 
 .list.visible .container {
-    box-shadow: 0 0 2px 2px var(--warning-color);
+    /* box-shadow: 0 0 0 2px var(--warning-color); */
     border-color: var(--warning-color);
 }
 
@@ -100,11 +100,11 @@
 
 .status {
     position: absolute;
-    bottom: calc(100% - 12px);
+    bottom: calc(100% - 14px);
     border: 2px solid var(--success-color);
-    height: calc(var(--grid-size) * 6);
-    width: calc(100% + 2px);
-    left: -1px;
+    height: calc(var(--grid-size) * 6.1);
+    width: 100%;
+    left: 0px;
     border-radius: calc(var(--grid-size) * 2) calc(var(--grid-size) * 2) 0 0;
     display: flex;
     justify-content: center;

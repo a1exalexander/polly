@@ -1,4 +1,5 @@
 :root {
+    /* Base colors - light theme */
     --primary-color: black;
     --secondary-color: white;
     --success-color: #4caf50;
@@ -9,6 +10,8 @@
     --hot-pink: hotpink;
     --danger-color: #f44336;
     --danger-color-opacity: #ffeae7;
+
+    /* Grey scale - light theme */
     --grey-ligheness: #f5f5f5;
     --grey-lighen: #eeeeee;
     --grey-light: #d3d3d3;
@@ -16,12 +19,65 @@
     --grey-dark: #757575;
     --grey-darken: #4f4f4f;
     --grey-darkness: #2f2f2f;
+
+    /* Background colors */
+    --bg-primary: #ebebf8;
+    --bg-pattern: #e5e5f7;
+    --bg-pattern-dot: #3443ab;
+
+    /* Form-specific colors (for inverted card pattern) */
+    --form-border-color: #4a4a4a;
+    --input-bg-color: #2a2a2a;
+    --input-border-color: #555555;
+    --input-placeholder-color: #888888;
+    --minicard-border-color: #666666;
+    --minicard-color: #999999;
+
+    /* Layout & Animation */
     --grid-size: 8px;
     --container: 1140px;
     --transition-time: 0.2s;
     --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     --shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     color-scheme: light;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --primary-color: #f0f0f0;
+    --secondary-color: #1a1a2e;
+    --success-color: #66bb6a;
+    --warning-color: #ffb74d;
+    --warning-color-opacity: #3d2e1a;
+    --info-color: #64b5f6;
+    --info-color-opacity: #1a2a3d;
+    --danger-color: #ef5350;
+    --danger-color-opacity: #3d1a1a;
+
+    /* Grey scale - dark theme (inverted) */
+    --grey-ligheness: #2f2f2f;
+    --grey-lighen: #3a3a3a;
+    --grey-light: #4f4f4f;
+    --grey: #757575;
+    --grey-dark: #9e9e9e;
+    --grey-darken: #bdbdbd;
+    --grey-darkness: #e0e0e0;
+
+    /* Background colors - dark */
+    --bg-primary: #0d0d1a;
+    --bg-pattern: #121220;
+    --bg-pattern-dot: #4a5ac7;
+
+    /* Form-specific colors - dark theme (inverted card on light bg) */
+    --form-border-color: #c0c0c0;
+    --input-bg-color: #e8e8e8;
+    --input-border-color: #b0b0b0;
+    --input-placeholder-color: #777777;
+    --minicard-border-color: #888888;
+    --minicard-color: #666666;
+
+    --shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
 }
 
 *, *::before, *::after {
@@ -33,8 +89,8 @@
 }
 
 html {
-    background-color: #ebebf8 !important;
-
+    background-color: var(--bg-primary) !important;
+    transition: background-color var(--transition-time) ease;
 }
 
 html, body {
@@ -75,10 +131,11 @@ body {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(#3443ab 0.75px, transparent 0.75px), radial-gradient(#3443ab 0.75px, #e5e5f7 0.75px);
+    background-image: radial-gradient(var(--bg-pattern-dot) 0.75px, transparent 0.75px), radial-gradient(var(--bg-pattern-dot) 0.75px, var(--bg-pattern) 0.75px);
     background-size: 30px 30px;
     background-position: 0 0, 15px 15px;
     z-index: 0;
+    transition: background-image var(--transition-time) ease;
 }
 
 img, picture, video, canvas, svg {
@@ -97,4 +154,11 @@ p, h1, h2, h3, h4, h5, h6 {
 #root, #__next {
     height: 100%;
     isolation: isolate;
+}
+
+.theme-switch-container {
+    position: fixed;
+    top: calc(var(--grid-size) * 3);
+    right: calc(var(--grid-size) * 3);
+    z-index: 1000;
 }

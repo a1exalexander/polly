@@ -2,9 +2,13 @@
     border-radius: calc(var(--grid-size) * 2);
     background-color: var(--primary-color);
     padding: calc(var(--grid-size) * 3);
-    border: 2px solid var(--grey);
+    border: 2px solid var(--form-border-color, var(--grey));
     box-shadow: var(--shadow);
     flex-wrap: wrap;
+}
+
+:global([data-theme="dark"]) .form {
+    background-color: var(--secondary-color);
 }
 
 .inner {
@@ -55,16 +59,20 @@
 
 .input {
     flex-grow: 1;
-    border: 1px solid var(--grey-dark);
+    border: 1px solid var(--input-border-color, var(--grey-dark));
     border-radius: var(--grid-size);
     padding: 0 calc(var(--grid-size) * 2);
-    background-color: var(--grey-darkness);
+    background-color: var(--input-bg-color, var(--grey-darkness));
     color: var(--secondary-color);
     height: calc(var(--grid-size) * 5);
     box-shadow: none;
     font-size: 1rem;
     transition: border-color var(--transition-time) ease;
     outline: none;
+}
+
+.input::placeholder {
+    color: var(--input-placeholder-color, var(--grey));
 }
 
 .input:focus, .input:focus-visible {
@@ -82,10 +90,39 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--grey-light);
-    color: var(--grey-light);
+    border: 1px solid var(--minicard-border-color, var(--grey-light));
+    color: var(--minicard-color, var(--grey-light));
     font-size: 0.8rem;
     border-radius: var(--grid-size);
     width: 40px;
     height: 20px;
+}
+
+/* Dark mode overrides */
+:global([data-theme="dark"]) .typeDemo {
+    color: var(--primary-color);
+}
+
+:global([data-theme="dark"]) .label {
+    color: var(--primary-color);
+}
+
+:global([data-theme="dark"]) .input {
+    background-color: var(--grey-ligheness);
+    color: var(--primary-color);
+    border-color: var(--grey-light);
+}
+
+:global([data-theme="dark"]) .input::placeholder {
+    color: var(--grey);
+}
+
+:global([data-theme="dark"]) .input:focus,
+:global([data-theme="dark"]) .input:focus-visible {
+    border-color: var(--primary-color);
+}
+
+:global([data-theme="dark"]) .miniCard {
+    border-color: var(--grey-dark);
+    color: var(--grey-dark);
 }

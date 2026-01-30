@@ -1,4 +1,6 @@
 import { CSPostHogProvider } from '@/app/providers';
+import { ThemeProvider, ThemeSwitch } from '@/components';
+import { getThemeCookie } from '@/components/ThemeProvider';
 import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/montserrat';
 import './globals.css';
@@ -13,21 +15,28 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
     themeColor: 'light',
-    colorScheme: 'light',
+    colorScheme: 'light dark',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const theme = await getThemeCookie();
+
     return (
-        <html lang="en">
+        <html lang="en" data-theme={theme}>
         <CSPostHogProvider>
             <body>
-            <div className="layout">
-                {children}
-            </div>
+            <ThemeProvider initialTheme={theme}>
+                <div className="layout">
+                    {children}
+                    <div className="theme-switch-container">
+                        <ThemeSwitch />
+                    </div>
+                </div>
+            </ThemeProvider>
             </body>
         </CSPostHogProvider>
         </html>

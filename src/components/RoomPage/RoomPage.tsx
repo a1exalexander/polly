@@ -72,7 +72,7 @@ export const RoomPage = ({
     );
     const isVotingInProgress = useMemo(() => !!story?.started_at && !story?.finished_at, [story]);
     const allUsersVoted = useMemo(() => {
-        if (!story || story?.finished_at || activeUsers.length <= 1 || state.usersOnStory.length < activeUsers.length) {
+        if (!story || story?.finished_at || activeUsers.length < 1 || state.usersOnStory.length < activeUsers.length) {
             return false;
         }
         return activeUsers.every(({ id }) => {
@@ -195,11 +195,26 @@ export const RoomPage = ({
             userData: serverUser,
             state: state,
         });
-        roomPageService.removeUserFromRoom(serverUser.id);
-        router.push('/');
-    }, [router, roomPageService, serverUser.id]);
+        await roomPageService.removeUserFromRoom(serverUser.id);
 
-    const removeUserFromRoom = useCallback((userId: number) => {
+        // Fire-and-forget auto-complete check before navigating away
+        if (story?.id && story?.started_at && !story?.finished_at) {
+            storiesService.checkAutoComplete(story.id, roomId).then((result) => {
+                if (result?.autoCompleted) {
+                    posthog?.capture?.('story_auto_completed', {
+                        storyId: story.id,
+                        roomId,
+                        userData: serverUser,
+                        trigger: 'user_exit',
+                    });
+                }
+            });
+        }
+
+        router.push('/');
+    }, [router, roomPageService, serverUser.id, story, roomId, posthog, state]);
+
+    const removeUserFromRoom = useCallback(async (userId: number) => {
         if (!roomPageService) {
             return;
         }
@@ -207,8 +222,21 @@ export const RoomPage = ({
             userData: serverUser,
             state: state,
         });
-        return roomPageService.removeUserFromRoom(userId);
-    }, [roomPageService]);
+        await roomPageService.removeUserFromRoom(userId);
+
+        // Check if story should auto-complete after removing a user
+        if (story?.id && story?.started_at && !story?.finished_at) {
+            const result = await storiesService.checkAutoComplete(story.id, roomId);
+            if (result?.autoCompleted) {
+                posthog?.capture?.('story_auto_completed', {
+                    storyId: story.id,
+                    roomId,
+                    userData: serverUser,
+                    trigger: 'user_removed',
+                });
+            }
+        }
+    }, [roomPageService, story, roomId, posthog, serverUser, state]);
 
     const changeUserActivity = useCallback(async (active: boolean) => {
         if (!roomPageService || !serverUser.id) {
@@ -217,9 +245,23 @@ export const RoomPage = ({
         posthog?.capture?.('room_user_activity_changed', {
             userData: serverUser,
             state: state,
+            active,
         });
-        return roomPageService.changeUserActivity(serverUser.id, active);
-    }, [roomPageService, serverUser.id]);
+        await roomPageService.changeUserActivity(serverUser.id, active);
+
+        // Check if story should auto-complete when user becomes inactive
+        if (!active && story?.id && story?.started_at && !story?.finished_at) {
+            const result = await storiesService.checkAutoComplete(story.id, roomId);
+            if (result?.autoCompleted) {
+                posthog?.capture?.('story_auto_completed', {
+                    storyId: story.id,
+                    roomId,
+                    userData: serverUser,
+                    trigger: 'user_became_inactive',
+                });
+            }
+        }
+    }, [roomPageService, serverUser.id, story, roomId, posthog, state]);
 
     const storyStatus = getters.storyStatus(state);
 

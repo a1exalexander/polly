@@ -81,6 +81,12 @@
     text-wrap: balance;
 }
 
+:global([data-theme="dark"]) .logo {
+    background: linear-gradient(135deg, #8b9aff 0%, #b4bfff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
 .tagline {
     font-size: 1.35rem;
     font-weight: 500;
@@ -109,7 +115,12 @@
     border-radius: calc(var(--grid-size) * 3);
     border: 1px solid var(--grey-light);
     transition: transform var(--transition-time) var(--bounce),
-                box-shadow var(--transition-time) ease;
+                box-shadow var(--transition-time) ease,
+                background var(--transition-time) ease;
+}
+
+:global([data-theme="dark"]) .feature {
+    background: rgba(30, 30, 50, 0.8);
 }
 
 .feature:hover {
@@ -197,6 +208,14 @@
     border-radius: calc(var(--grid-size) * 3);
     border: 1px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 8px 32px rgba(52, 67, 171, 0.1);
+    transition: background var(--transition-time) ease,
+                border-color var(--transition-time) ease;
+}
+
+:global([data-theme="dark"]) .illustration {
+    background: rgba(26, 26, 46, 0.6);
+    border: 1px solid rgba(100, 100, 150, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .cardsContainer {
@@ -223,6 +242,15 @@
     border: 2px solid var(--grey-light);
     position: relative;
     transform-style: preserve-3d;
+    transition: background var(--transition-time) ease;
+}
+
+:global([data-theme="dark"]) .card {
+    background: linear-gradient(145deg, #2a2a4a 0%, #1a1a2e 100%);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .cardValue {
@@ -230,6 +258,11 @@
     font-weight: 700;
     color: #3443ab;
     font-variant-numeric: tabular-nums;
+    transition: color var(--transition-time) ease;
+}
+
+:global([data-theme="dark"]) .cardValue {
+    color: #8b9aff;
 }
 
 /* Card animations */
@@ -304,6 +337,11 @@
     padding: calc(var(--grid-size) * 1) calc(var(--grid-size) * 2);
     background: rgba(52, 67, 171, 0.05);
     border-radius: calc(var(--grid-size) * 2);
+    transition: background var(--transition-time) ease;
+}
+
+:global([data-theme="dark"]) .votingLabel {
+    background: rgba(139, 154, 255, 0.1);
 }
 
 .dots {

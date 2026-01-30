@@ -87,6 +87,16 @@
     border-color: var(--primary-color);
 }
 
+:global([data-theme="dark"]) .inverted {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-color: var(--primary-color);
+}
+
+:global([data-theme="dark"]) .inverted.isBordered {
+    border-color: var(--secondary-color);
+}
+
 .ghost {
     background-color: transparent;
     color: var(--primary-color);
@@ -97,6 +107,14 @@
     border: 1px solid var(--primary-color);
 }
 
+:global([data-theme="dark"]) .ghost {
+    color: #1a1a2e;
+}
+
+:global([data-theme="dark"]) .ghost.isBordered {
+    border-color: #1a1a2e;
+}
+
 .ghost-inverted {
     background-color: transparent;
     color: var(--secondary-color);
@@ -105,6 +123,14 @@
 
 .ghost-inverted.isBordered {
     border: 1px solid var(--secondary-color);
+}
+
+:global([data-theme="dark"]) .ghost-inverted {
+    color: #1a1a2e;
+}
+
+:global([data-theme="dark"]) .ghost-inverted.isBordered {
+    border-color: #1a1a2e;
 }
 
 .warning {
@@ -119,6 +145,14 @@
 
 .warning.isOnlyIcon {
     color: var(--warning-color);
+}
+
+:global([data-theme="dark"]) .warning {
+    color: #1a1a2e;
+}
+
+:global([data-theme="dark"]) .warning.isBordered {
+    border-color: #1a1a2e;
 }
 
 .danger {

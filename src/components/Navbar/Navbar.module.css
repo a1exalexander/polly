@@ -48,12 +48,12 @@
 
 .container.isInProgress {
     background-color: var(--warning-color);
-    color: var(--primary-color);
+    color: #1a1a2e;
 }
 
 .container.isFinished {
     background-color: var(--success-color);
-    color: var(--primary-color);
+    color: #1a1a2e;
 }
 
 .expanded .container {
