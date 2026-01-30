@@ -23,7 +23,7 @@ export const signInAction = async () => {
     }
 
     if (error) {
-        return encodedRedirect('error', '/sign-in', error.message);
+        return encodedRedirect('error', '/start', error.message);
     }
 };
 
@@ -35,7 +35,7 @@ export const signOutAction = async () => {
         supabase.from('UsersOnRooms').delete().eq('public_user_id', Number(data?.id));
     }
     supabase.auth.signOut();
-    return redirect('/sign-in');
+    return redirect('/start');
 };
 
 export const createRoomAction = async (formData: FormData) => {
@@ -47,7 +47,7 @@ export const createRoomAction = async (formData: FormData) => {
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/sign-in');
+        return redirect('/start');
     }
 
     if (!title) {
@@ -102,7 +102,7 @@ export const joinRoomAction = async (roomId: string) => {
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return encodedRedirect('redirect_to', '/sign-in', `/room/${roomId}`);
+        return encodedRedirect('redirect_to', '/start', `/room/${roomId}`);
     }
 
     const [publicUserResponse, userOnRoomResponse, storiesResponse, roomResponse] = await Promise.all([
@@ -132,7 +132,7 @@ export const joinRoomAction = async (roomId: string) => {
     const extraPromises = [];
 
     if (publicUserResponse.error) {
-        return encodedRedirect('error', '/sign-in', publicUserResponse.error.message);
+        return encodedRedirect('error', '/start', publicUserResponse.error.message);
     }
 
     const isCurrentUserInRoom = userOnRoomResponse.data;

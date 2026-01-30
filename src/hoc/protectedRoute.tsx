@@ -10,7 +10,7 @@ export async function protectedRoute<T extends object>(Component: FC<T>) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/sign-in');
+        return redirect('/start');
     }
 
     return async function ProtectedComponent(props: T) {
@@ -26,7 +26,7 @@ export async function protectedRouteAsync<T extends object>(Component: FC<T>) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/sign-in');
+        return redirect('/start');
     }
 
     return async function ProtectedComponent(props: T) {

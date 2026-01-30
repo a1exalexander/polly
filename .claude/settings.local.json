@@ -10,7 +10,10 @@
       "mcp__posthog__query-run",
       "mcp__supabase__list_tables",
       "mcp__supabase__get_logs",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "mcp__plugin_serena_serena__list_dir",
+      "Skill(web-design-guidelines)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "ask": []
