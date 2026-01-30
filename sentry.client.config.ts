@@ -17,7 +17,7 @@ Sentry.init({
       organization: 'polly-nc',
       projectId: 4508488039333968,
     })
-  ],
+  ].filter(Boolean),
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
