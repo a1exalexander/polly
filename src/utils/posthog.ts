@@ -9,6 +9,10 @@ export function initPostHog() {
             person_profiles: 'identified_only',
             capture_pageview: true,
             capture_pageleave: true,
+            // Disable the PostHog toolbar to prevent KEA store errors
+            // The toolbar is meant for PostHog's own UI and includes navigation-3000 components
+            // that require KEA state management which is not available in external apps
+            opt_in_site_apps: false,
         });
 
         posthogClient = posthog;
