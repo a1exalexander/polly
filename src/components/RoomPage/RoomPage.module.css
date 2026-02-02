@@ -34,7 +34,7 @@
 }
 
 .typeTag {
-    position: absolute;
+    position: absolute !important;
     top: calc(var(--grid-size) * 3);
     left: calc(var(--grid-size) * 3);
 }
