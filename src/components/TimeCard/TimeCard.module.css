@@ -1,5 +1,56 @@
-.button {
+.card {
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: calc(50% - var(--grid-size));
+    will-change: transform;
+    height: 110px;
     border-radius: var(--grid-size);
+}
+
+.card.boolean {
+    width: calc(50% - var(--grid-size));
+}
+
+.card.hasSubValues {
+    border-radius: var(--grid-size);
+    border: 2px solid var(--primary-color);
+    overflow: hidden;
+    /* transition-property: border-color, transform, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out; */
+}
+
+.card.hasSubValues:hover {
+    /* transform: translateY(-2px); */
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card.hasSubValues.isCardSelected {
+    border-color: var(--primary-color);
+}
+
+.card.hasSubValues .button {
+    border: none;
+    border-radius: 0;
+    flex: 1;
+    min-width: 0;
+    width: auto;
+}
+
+.card.hasSubValues .button:not(.isDisabled, .isSelected):hover {
+    transform: none;
+    box-shadow: none;
+    background-color: var(--info-color-opacity);
+    /* color: var(--secondary-color); */
+}
+
+.card.hasSubValues .button.isActive:not(.isDisabled, .isSelected):hover {
+    color: var(--grey-light);
+}
+
+.button {
+    border-radius: var(--grid-size) 0 0 var(--grid-size);
     padding: 0 calc(var(--grid-size) * 3);
     font-size: 1.8rem;
     font-weight: 500;
@@ -7,21 +58,17 @@
     color: var(--primary-color);
     cursor: pointer;
     border: 2px solid var(--primary-color);
-    height: 110px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition-property: color, background-color, transform, box-shadow, border-color;
+    /* transition-property: color, background-color, transform, box-shadow, border-color;
     transition-duration: 0.2s;
-    transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out; */
     flex-grow: 0;
     flex-shrink: 0;
-    width: calc(50% - var(--grid-size));
+    width: 100%;
     will-change: transform;
-}
-
-.button.boolean {
-    width: calc(50% - var(--grid-size));
 }
 
 .isDisabled {
@@ -30,46 +77,103 @@
     color: var(--grey-light);
 }
 
+.card.hasSubValues .isDisabled:not(.subButton, .isSelected) {
+    border-color: transparent;
+}
+
 .button:not(.isDisabled):hover {
-    transform: translateY(-2px);
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 375px) {
-    .button:not(.boolean) {
-        width: calc(33.3% - var(--grid-size) * 4 / 3);
-    }
+.isSelected, .isActive {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
 }
 
+/* Sub-values panel */
+.subValues {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.subButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 calc(var(--grid-size) * 1.5);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: none;
+    border-left: 2px solid var(--primary-color);
+    cursor: pointer;
+    /* transition-property: color, background-color;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-in-out; */
+    white-space: nowrap;
+}
+
+.subButton:not(:last-child) {
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.subButton:first-child {
+    border-radius: 0 inherit 0 0;
+}
+
+.subButton:last-child {
+    border-radius: 0 0 inherit 0;
+}
+
+.subButton:not(:first-child) {
+    border-top: 1px solid var(--primary-color);
+}
+
+.subButton:not(.isDisabled, .isSelected):hover {
+    background-color: var(--info-color-opacity);
+    /* color: var(--secondary-color); */
+}
+
+.subButton.isSelected {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.subButton.isDisabled {
+    cursor: not-allowed;
+    color: var(--grey-light);
+}
+
+/* Responsive: card widths (applied to .card wrapper) */
 @media (min-width: 375px) {
-    .button:not(.boolean) {
-        width: calc(33.3% - var(--grid-size) * 4 / 3);
+    .card:not(.boolean) {
+        width: calc((100% / 3) - var(--grid-size) * 4 / 3);
     }
 }
 
 @media (min-width: 414px) {
-    .button:not(.boolean) {
+    .card:not(.boolean) {
+        width: calc((100% / 3) - var(--grid-size) * 3 / 2);
+    }
+    .card {
         height: 140px;
-        width: calc(25% - var(--grid-size) * 3 / 2);
     }
 }
 
 @media (min-width: 768px) {
-    .button:not(.boolean) {
-        height: 140px;
-        width: calc(33.3% - var(--grid-size) * 4 / 3);
+    .card:not(.boolean) {
+        width: calc((100% / 3) - var(--grid-size) * 4 / 3);
     }
 }
 
 @media (min-width: 1024px) {
-    .button:not(.boolean) {
-        height: 140px;
-        width: calc(20% - var(--grid-size) * 12 / 5);
+    .card:not(.boolean) {
+        width: calc((100% / 3) - var(--grid-size) * 12 / 5);
     }
-}
-
-
-.isSelected {
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
+    .subButton {
+        font-size: 0.9rem;
+    }
 }

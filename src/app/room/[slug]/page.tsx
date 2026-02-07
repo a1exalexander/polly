@@ -1,5 +1,3 @@
-'use server';
-
 import { getRoomMetadata, joinRoomAction } from '@/app/actions';
 import { RoomPage } from '@/components/RoomPage';
 import { Metadata } from 'next';

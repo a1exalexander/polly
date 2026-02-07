@@ -92,16 +92,24 @@ export const TimeGrid = ({
                 </div>
             )
         }
-        {values.map((value) => (
-            <TimeCard
-                isSelected={selected === value}
-                className={clsx(styles.item, { [styles.itemInactive]: storyStatus === StoryStatusTypes.FINISHED && selected !== value })}
-                key={value}
-                type={type}
-                displayValue={type === VoteValuesTypes.boolean ? (value ? 'Yes' : 'No') : undefined}
-                isDisabled={isDisabled}
-                value={value}
-                onSelect={handleSelect} />
-        ))}
+        {values.map((value) => {
+            const isCardSelected = selected !== null && (
+                type === VoteValuesTypes.days ? Math.floor(selected) === value : selected === value
+            );
+            const isCardInactive = storyStatus === StoryStatusTypes.FINISHED && !isCardSelected;
+            return (
+                <TimeCard
+                    isSelected={selected === value}
+                    isCardActive={isCardSelected}
+                    selectedValue={selected}
+                    className={clsx(styles.item, { [styles.itemInactive]: isCardInactive })}
+                    key={value}
+                    type={type}
+                    displayValue={type === VoteValuesTypes.boolean ? (value ? 'Yes' : 'No') : undefined}
+                    isDisabled={isDisabled}
+                    value={value}
+                    onSelect={handleSelect} />
+            );
+        })}
     </div>;
 };

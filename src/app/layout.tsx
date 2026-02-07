@@ -1,6 +1,6 @@
 import { CSPostHogProvider } from '@/app/providers';
 import { ThemeProvider, ThemeSwitch } from '@/components';
-import { getThemeCookie } from '@/components/ThemeProvider';
+import { getThemeCookie } from '@/components/ThemeProvider/actions';
 import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/montserrat';
 import './globals.css';

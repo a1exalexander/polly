@@ -16,7 +16,10 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(npx tsc:*)",
       "mcp__plugin_serena_serena__read_file",
-      "Bash(npm run types:*)"
+      "Bash(npm run types:*)",
+      "Bash(npx next lint:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ],
     "deny": [],
     "ask": []

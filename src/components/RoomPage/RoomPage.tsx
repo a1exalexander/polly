@@ -18,6 +18,7 @@ import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
 import { ActionTypes, getters, reducer, StoryStatusTypes } from './RoomPage.store';
 import { useBoolean } from 'usehooks-ts';
+import { Animation } from '../Animation';
 
 export interface RoomPageProps {
     roomId: number;
@@ -369,6 +370,7 @@ export const RoomPage = ({
                     isUserActive={currentUser?.active}
                     story={story?.title}
                 />
+                { !state.room && <Animation text="Room is loading..." /> }
                 {!!state.room && <TimeGrid
                     className={styles.timeGrid}
                     isDisabled={isVotingDisabled}

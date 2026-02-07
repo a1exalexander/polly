@@ -21,7 +21,7 @@ export interface MemberProps {
     onRemoveUser?: (userId: number) => void | Promise<unknown>;
 }
 
-export const Member = ({
+export function Member({
     id,
     className,
     name,
@@ -33,7 +33,7 @@ export const Member = ({
     onRemoveUser,
     isInProgress,
     removeButtonClass,
-}: MemberProps) => {
+}: MemberProps) {
     const removingLoading = useBoolean(false);
     const confirmModalOpen = useBoolean(false);
 

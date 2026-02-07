@@ -38,7 +38,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    flex-shrink: 0;
+    flex-shrink: 1;
     flex-grow: 0;
 }
 
@@ -50,12 +50,17 @@
     gap: var(--grid-size);
 }
 
+
 .name {
+    display: inline-flex;
+    max-width: 100%;
+    overflow: hidden;
+    flex-shrink: 1;
+    flex-grow: 0;
     font-weight: 500;
     font-size: 1rem;
     line-height: 1.2;
-    flex-grow: 0;
-    flex-shrink: 1;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 

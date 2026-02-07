@@ -1,5 +1,3 @@
-'use server';
-
 import { CreateRoomForm, Footer, RoomList } from '@/components';
 import { createClient } from '@/utils/supabase/server';
 import styles from './page.module.css';
