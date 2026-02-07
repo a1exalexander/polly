@@ -132,7 +132,7 @@ export const RoomPage = ({
             state: state,
         });
         return roomPageService.startStory(state?.story?.id);
-    }, [roomPageService, state?.story?.id, posthog]);
+    }, [roomPageService, posthog, serverUser, state]);
 
     const nextStory = useCallback(async () => {
         if (!roomPageService || !story) {
@@ -144,7 +144,7 @@ export const RoomPage = ({
         });
         await roomPageService.nextStory(story, state.storiesCount + 1);
         dispatch({ type: ActionTypes.STORIES_COUNT_UPDATED, payload: state.storiesCount + 1 });
-    }, [roomPageService, story, state.storiesCount, posthog]);
+    }, [roomPageService, story, posthog, serverUser, state]);
 
     const stopStory = useCallback(async () => {
         if (!roomPageService || !state?.story?.id || !state.story?.started_at) {
@@ -158,7 +158,7 @@ export const RoomPage = ({
         });
         
         return roomPageService.stopStory(state.story.id);
-    }, [roomPageService, state?.story?.id, state.story?.started_at, posthog, activeUsers, allUsersVoted]);
+    }, [roomPageService, state, serverUser, posthog, activeUsers, allUsersVoted]);
 
     const selectTime = useCallback(async (value: number) => {
         if (!roomPageService || !story?.id) {
@@ -186,7 +186,7 @@ export const RoomPage = ({
                 userData: serverUser,
             });
         }
-    }, [roomPageService, story, serverUser.id, roomId, posthog]);
+    }, [roomPageService, story, serverUser, roomId, posthog, state]);
 
     const exit = useCallback(async () => {
         if (!roomPageService || !serverUser.id) {
@@ -213,7 +213,7 @@ export const RoomPage = ({
         }
 
         router.push('/');
-    }, [router, roomPageService, serverUser.id, story, roomId, posthog, state]);
+    }, [router, roomPageService, serverUser, story, roomId, posthog, state]);
 
     const removeUserFromRoom = useCallback(async (userId: number) => {
         if (!roomPageService) {
@@ -262,7 +262,7 @@ export const RoomPage = ({
                 });
             }
         }
-    }, [roomPageService, serverUser.id, story, roomId, posthog, state]);
+    }, [roomPageService, serverUser, story, roomId, posthog, state]);
 
     const storyStatus = getters.storyStatus(state);
 
