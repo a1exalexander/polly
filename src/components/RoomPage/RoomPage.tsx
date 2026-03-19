@@ -3,7 +3,7 @@
 import { Footer, Navbar, Tag, TimeGrid } from '@/components';
 import { MemberList } from '@/components/MemberList';
 import { RoomPageService } from '@/components/RoomPage/RoomPage.service';
-import { useFavicon } from '@/components/RoomPage/useFavicon';
+import { useFavicon } from '@/hooks/useFavicon';
 import { tagTypesByVoteType, VoteValues, VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { storiesService } from '@/services';
 import { User } from '@/types';
