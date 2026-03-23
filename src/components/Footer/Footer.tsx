@@ -1,8 +1,12 @@
+'use client';
+
 import { signOutAction } from '@/app/actions';
 import { Button } from '@/components';
 import { StoryStatusTypes } from '@/components/RoomPage/RoomPage.store';
-import { Sound } from '@/components/Sound';
+import dynamic from 'next/dynamic';
 import styles from './Footer.module.css';
+
+const Sound = dynamic(() => import('@/components/Sound').then(m => m.Sound), { ssr: false });
 
 export interface FooterProps {
     storyStatus?: StoryStatusTypes;

@@ -276,6 +276,7 @@ export const RoomPage = ({
             });
             joinState.setTrue();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomId, fetchState.value, state.room]);
 
     // Track room visit for recently visited rooms feature
