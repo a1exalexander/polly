@@ -8,13 +8,13 @@ import { getPostHogClient, initPostHog } from '@/utils/posthog';
 initPostHog();
 
 Sentry.init({
-  dsn: "https://66f8c67aaeedf9095fdc1fb85e4fc90d@o4508488037171200.ingest.de.sentry.io/4508488039333968",
+  dsn: "https://66f8c67aaeedf9095fdc1fb85e4fc90d@o4511093149794304.ingest.de.sentry.io/4508488039333968",
 
   // Add optional integrations for additional features
   integrations: [
     Sentry.replayIntegration(),
     getPostHogClient()?.sentryIntegration({
-      organization: 'polly-nc',
+      organization: 'koty-dz',
       projectId: 4508488039333968,
     })
   ].filter(Boolean),
