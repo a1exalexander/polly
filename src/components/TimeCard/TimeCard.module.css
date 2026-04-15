@@ -156,7 +156,7 @@
 
 @media (min-width: 414px) {
     .card:not(.boolean) {
-        width: calc((100% / 3) - var(--grid-size) * 3 / 2);
+        width: calc((100% / 3) - var(--grid-size) * 4 / 3);
     }
     .card {
         height: 140px;
@@ -171,7 +171,7 @@
 
 @media (min-width: 1024px) {
     .card:not(.boolean) {
-        width: calc((100% / 3) - var(--grid-size) * 12 / 5);
+        width: calc((100% / 3) - var(--grid-size) * 12 / 6);
     }
     .subButton {
         font-size: 0.9rem;

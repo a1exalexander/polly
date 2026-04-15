@@ -47,7 +47,12 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--grid-size);
+    gap: calc(var(--grid-size) + 4px);
+}
+
+.tail.noMenu {
+    /* Keep value column aligned with rows that show the menu trigger. */
+    padding-right: calc(var(--grid-size) + 2rem);
 }
 
 
@@ -91,12 +96,19 @@
     width: 48px;
 }
 
-.removeButton {
+.menuTrigger {
     position: relative;
 }
 
-.removeButton.isInProgress {
+.menuTrigger.isInProgress {
     z-index: 10;
+}
+
+.adminBadge {
+    flex-shrink: 0;
+    fill: var(--info-color);
+    font-size: 1.2rem;
+    margin-left: var(--grid-size);
 }
 
 

@@ -187,6 +187,7 @@ export type Database = {
         Row: {
           active: boolean | null
           created_at: string
+          is_admin: boolean
           last_visited_at: string | null
           public_user_id: number
           room_id: number
@@ -195,6 +196,7 @@ export type Database = {
         Insert: {
           active?: boolean | null
           created_at?: string
+          is_admin?: boolean
           last_visited_at?: string | null
           public_user_id: number
           room_id: number
@@ -203,6 +205,7 @@ export type Database = {
         Update: {
           active?: boolean | null
           created_at?: string
+          is_admin?: boolean
           last_visited_at?: string | null
           public_user_id?: number
           room_id?: number

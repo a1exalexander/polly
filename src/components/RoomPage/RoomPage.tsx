@@ -59,6 +59,8 @@ export const RoomPage = ({
     const storyId = useMemo(() => state.story?.id || null, [state]);
     const story = useMemo(() => state?.story, [state]);
     const currentUser = useMemo(() => state.users.find(({ id }) => id === serverUser.id), [state, serverUser.id]);
+    const isCurrentUserAdmin = useMemo(() => !!currentUser?.isAdmin, [currentUser]);
+    const canManageRoom = useMemo(() => isHost || isCurrentUserAdmin, [isHost, isCurrentUserAdmin]);
     const selectedTime = useMemo(() => {
         const userOnStory = state.usersOnStory.find(
             ({ public_user_id, story_id }) => {
@@ -239,6 +241,18 @@ export const RoomPage = ({
         }
     }, [roomPageService, story, roomId, posthog, serverUser, state]);
 
+    const toggleUserAdmin = useCallback(async (userId: number, nextIsAdmin: boolean) => {
+        if (!roomPageService) {
+            return;
+        }
+        posthog?.capture?.('room_user_admin_toggled', {
+            userData: serverUser,
+            targetUserId: userId,
+            nextIsAdmin,
+        });
+        await roomPageService.setUserAdmin(userId, nextIsAdmin);
+    }, [roomPageService, posthog, serverUser]);
+
     const changeUserActivity = useCallback(async (active: boolean) => {
         if (!roomPageService || !serverUser.id) {
             return;
@@ -352,7 +366,7 @@ export const RoomPage = ({
                 className={clsx(
                     styles.page,
                     {
-                        [styles.isHost]: isHost,
+                        [styles.isHost]: canManageRoom,
                         [styles.isColumn]: roomType === VoteValuesTypes.boolean,
                         [styles.isFinished]: storyStatus === StoryStatusTypes.FINISHED,
                     },
@@ -366,7 +380,7 @@ export const RoomPage = ({
                     onStop={stopStory}
                     onExit={exit}
                     average={average}
-                    isHost={isHost}
+                    isHost={canManageRoom}
                     onChangeActivity={changeUserActivity}
                     isUserActive={currentUser?.active}
                     story={story?.title}
@@ -381,13 +395,15 @@ export const RoomPage = ({
                     onSelect={selectTime}
                     onStartAction={startStory}
                     values={timeValues}
-                    isHost={isHost}
+                    isHost={canManageRoom}
                     isUserActive={currentUser?.active}
                     onParticipateAction={() => changeUserActivity(true)}
                 />}
                 {!!state.room && <MemberList
                     className={styles.memberList}
                     isHost={isHost}
+                    currentUserId={serverUser.id}
+                    isCurrentUserAdmin={isCurrentUserAdmin}
                     roomType={roomType}
                     inProgress={isVotingInProgress}
                     storyId={state?.story?.id}
@@ -397,6 +413,7 @@ export const RoomPage = ({
                     average={average}
                     isFinished={isStoryFinished}
                     onRemoveUser={removeUserFromRoom}
+                    onToggleAdmin={isHost ? toggleUserAdmin : undefined}
                 />}
             </div>
             <Footer storyStatus={storyStatus} />

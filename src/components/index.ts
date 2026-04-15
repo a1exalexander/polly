@@ -11,5 +11,6 @@ export * from './Loader';
 export * from './Tag';
 export * from './Tooltip';
 export * from './ConfirmModal';
+export * from './DropdownMenu';
 export * from './ThemeProvider';
 export * from './ThemeSwitch';

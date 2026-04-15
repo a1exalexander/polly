@@ -14,6 +14,8 @@ export interface MemberListProps {
     className?: string;
     members: (UserWithVote & UserWithActivity)[];
     isHost: boolean;
+    currentUserId?: number;
+    isCurrentUserAdmin?: boolean;
     roomType?: VoteValuesType;
     hostId?: number;
     inProgress?: boolean;
@@ -22,14 +24,27 @@ export interface MemberListProps {
     average?: number | null;
     isFinished?: boolean;
     onRemoveUser?: (userId: number) => void | Promise<unknown>;
+    onToggleAdmin?: (userId: number, nextIsAdmin: boolean) => void | Promise<unknown>;
 }
 
 export const MemberList = ({
-    members, className, isHost, hostId, inProgress, average, isFinished, onRemoveUser, roomType,
+    members,
+    className,
+    isHost,
+    hostId,
+    inProgress,
+    average,
+    isFinished,
+    onRemoveUser,
+    onToggleAdmin,
+    roomType,
+    currentUserId,
+    isCurrentUserAdmin,
 }: MemberListProps) => {
     const visibility = useBoolean(false);
 
-    const isHostInProgress = isHost && inProgress;
+    const canManage = isHost || !!isCurrentUserAdmin;
+    const isHostInProgress = canManage && inProgress;
 
     const voted = useMemo(
         () => members?.filter(({ value, active }) => active && value !== null).length || 0,
@@ -47,6 +62,22 @@ export const MemberList = ({
         return `${voted / amount * 100}%`;
     }, [amount, voted]);
 
+    const sortedMembers = useMemo(
+        () => [...(members ?? [])].sort((a, b) => {
+            // Owners, admins, and active voters stay on top; inactive spectators
+            // (who are neither owner nor admin) sink to the bottom.
+            const aIsTop = a.id === hostId || a.isAdmin || a.active;
+            const bIsTop = b.id === hostId || b.isAdmin || b.active;
+            if (aIsTop !== bIsTop) {
+                return aIsTop ? -1 : 1;
+            }
+            const nameA = (a.name ?? '').toLocaleLowerCase();
+            const nameB = (b.name ?? '').toLocaleLowerCase();
+            return nameA.localeCompare(nameB);
+        }),
+        [members, hostId],
+    );
+
     const yesAmount = members?.filter(({ active, value }) => value === 1 && active)?.length;
     const noAmount = members?.filter(({ active, value }) => value === 0 && active)?.length;
 
@@ -54,7 +85,7 @@ export const MemberList = ({
         <div
             className={clsx(styles.list, {
                 [styles.visible]: isHostInProgress && visibility.value,
-                [styles.isHost]: isHost,
+                [styles.isHost]: canManage,
                 [styles.isFinished]: isFinished,
             }, className)}
         >
@@ -94,18 +125,22 @@ export const MemberList = ({
                         <div className={styles.bluredOverlay} />
                     </>
                 )}
-                {members?.map(({ id, name, value, active }) => (
+                {sortedMembers.map(({ id, name, value, active, isAdmin }) => (
                     <Member
                         id={id}
                         onRemoveUser={onRemoveUser}
+                        onToggleAdmin={onToggleAdmin}
                         isValueVisible={visibility.value || !inProgress}
-                        removeButtonClass={styles.removeButton}
+                        menuClass={styles.memberMenu}
                         className={styles.item}
                         key={id}
                         isDisabled={!active}
                         isInProgress={inProgress}
                         isCurrentUserHost={isHost}
+                        isCurrentUserAdmin={isCurrentUserAdmin}
                         isMemberHost={hostId === id}
+                        isMemberAdmin={!!isAdmin}
+                        isSelf={currentUserId === id}
                         name={name}
                         value={roomType === VoteValuesTypes.boolean && isNumber(value) ?
                             (value

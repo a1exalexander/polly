@@ -108,6 +108,7 @@ export const realtime = ({
                     type: ActionTypes.USER_UPDATED, payload: {
                         id: userOnRoom.public_user_id,
                         active: !!userOnRoom.active,
+                        isAdmin: !!userOnRoom.is_admin,
                     },
                 });
             },

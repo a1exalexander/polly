@@ -20,4 +20,4 @@ export type UserOnStoryUpdate = Database['public']['Tables']['UsersOnStories']['
 export type Story = Database['public']['Tables']['Stories']['Row'] & { users?: UserOnStory[] };
 
 export type UserWithVote = User & { value: number | null };
-export type UserWithActivity = User & { active: boolean };
+export type UserWithActivity = User & { active: boolean; isAdmin: boolean };

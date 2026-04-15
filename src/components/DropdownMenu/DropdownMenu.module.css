@@ -1,0 +1,113 @@
+.wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    border-radius: 50vmax;
+    background-color: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: background-color var(--transition-time) ease, transform var(--transition-time) ease;
+}
+
+.trigger:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.trigger:focus-visible {
+    outline: 2px solid var(--info-color);
+    outline-offset: 2px;
+}
+
+.trigger > svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.menu {
+    position: fixed;
+    z-index: 1000;
+    min-width: 180px;
+    padding: calc(var(--grid-size) * 0.5) 0;
+    border-radius: calc(var(--grid-size) * 1);
+    background-color: var(--secondary-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: scale(0.95);
+    transform-origin: top right;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.menu.open {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--grid-size) * 1);
+    width: 100%;
+    padding: calc(var(--grid-size) * 1) calc(var(--grid-size) * 2);
+    border: none;
+    background-color: transparent;
+    color: var(--primary-color);
+    text-align: left;
+    font: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+}
+
+.item:hover:not(:disabled),
+.item:focus-visible:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
+.item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.item.danger {
+    color: var(--danger-color);
+}
+
+.item.danger:hover:not(:disabled),
+.item.danger:focus-visible:not(:disabled) {
+    background-color: rgba(220, 53, 69, 0.08);
+}
+
+.itemIcon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.itemIcon > * {
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes dropdownItemSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.itemIconLoading > * {
+    animation: dropdownItemSpin 1s var(--bounce, linear) infinite;
+}

@@ -41,7 +41,7 @@ export class RoomPageService {
         }
 
         return users
-            .map(({ user, active }) => ({ ...user, active }))
+            .map(({ user, active, is_admin }) => ({ ...user, active, isAdmin: !!is_admin }))
             .filter(user => user) as UserWithActivity[];
     }
 
@@ -109,7 +109,7 @@ export class RoomPageService {
             return null;
         }
 
-        return { ...data.user, active: !!data.active } as UserWithActivity;
+        return { ...data.user, active: !!data.active, isAdmin: !!data.is_admin } as UserWithActivity;
     }
 
     async startStory(storyId: number) {
@@ -167,6 +167,14 @@ export class RoomPageService {
         return this.supabase
             .from('UsersOnRooms')
             .update({ active })
+            .eq('room_id', this.roomId)
+            .eq('public_user_id', userId);
+    }
+
+    async setUserAdmin(userId: number, isAdmin: boolean) {
+        return this.supabase
+            .from('UsersOnRooms')
+            .update({ is_admin: isAdmin })
             .eq('room_id', this.roomId)
             .eq('public_user_id', userId);
     }
