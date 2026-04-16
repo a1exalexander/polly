@@ -74,7 +74,7 @@ export function Member({
     // Admins can only remove other non-host members.
     // Every member can remove themselves from the room.
     const canManageOthers = !isSelf && !isMemberHost && (isCurrentUserHost || isCurrentUserAdmin);
-    const canOpenMenu = !!isSelf || canManageOthers;
+    const canOpenMenu = (isCurrentUserHost || !!isCurrentUserAdmin) && (!!isSelf || canManageOthers);
 
     const menuItems = useMemo<DropdownMenuItem[]>(() => {
         const items: DropdownMenuItem[] = [];
