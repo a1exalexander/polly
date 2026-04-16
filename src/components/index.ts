@@ -14,3 +14,5 @@ export * from './ConfirmModal';
 export * from './DropdownMenu';
 export * from './ThemeProvider';
 export * from './ThemeSwitch';
+export * from './PostCard';
+export * from './MdxContent';

@@ -19,7 +19,19 @@
       "Bash(npm run types:*)",
       "Bash(npx next lint:*)",
       "mcp__context7__resolve-library-id",
-      "mcp__context7__query-docs"
+      "mcp__context7__query-docs",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_screenshot",
+      "Bash(npm ls *)",
+      "Bash(npm uninstall *)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/updates)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/updates/admin-rights-and-room-management)",
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__click"
     ],
     "deny": [],
     "ask": []

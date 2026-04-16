@@ -1,0 +1,113 @@
+.article {
+    max-width: 720px;
+    width: 100%;
+    color: var(--primary-color);
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: calc(var(--grid-size) * 5);
+    margin-bottom: calc(var(--grid-size) * 2);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--primary-color);
+}
+
+.h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: calc(var(--grid-size) * 5);
+    margin-bottom: calc(var(--grid-size) * 2);
+    line-height: 1.3;
+    color: var(--primary-color);
+}
+
+.h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: calc(var(--grid-size) * 4);
+    margin-bottom: calc(var(--grid-size) * 1.5);
+    color: var(--primary-color);
+}
+
+.p {
+    margin-bottom: calc(var(--grid-size) * 2);
+    color: var(--grey-darken);
+}
+
+.a {
+    color: var(--info-color);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-time) ease;
+}
+
+.a:hover {
+    color: var(--hot-pink);
+}
+
+.ul,
+.ol {
+    margin-bottom: calc(var(--grid-size) * 2);
+    padding-left: calc(var(--grid-size) * 4);
+}
+
+.li {
+    margin-bottom: calc(var(--grid-size) * 1);
+    color: var(--grey-darken);
+}
+
+.li::marker {
+    color: var(--grey);
+}
+
+.code {
+    font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+    background-color: var(--grey-ligheness);
+    padding: 2px calc(var(--grid-size) * 0.75);
+    border-radius: calc(var(--grid-size) / 2);
+    font-size: 0.9em;
+}
+
+.pre {
+    background-color: var(--grey-ligheness);
+    padding: calc(var(--grid-size) * 2) calc(var(--grid-size) * 3);
+    border-radius: calc(var(--grid-size) * 1.5);
+    overflow-x: auto;
+    margin-bottom: calc(var(--grid-size) * 3);
+}
+
+.pre .code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.blockquote {
+    border-left: 3px solid var(--info-color);
+    padding-left: calc(var(--grid-size) * 3);
+    margin: calc(var(--grid-size) * 3) 0;
+    color: var(--grey-dark);
+    font-style: italic;
+}
+
+.hr {
+    border: none;
+    border-top: 1px solid var(--grey-light);
+    margin: calc(var(--grid-size) * 4) 0;
+}
+
+.strong {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.img {
+    border-radius: calc(var(--grid-size) * 1.5);
+    margin: calc(var(--grid-size) * 3) 0;
+    max-width: 100%;
+    height: auto;
+}
