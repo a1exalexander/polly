@@ -57,6 +57,11 @@
     border-color: color-mix(in oklab, var(--warm) 18%, transparent);
 }
 
+.bannerTagIcon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
 .bannerTitle {
     font-weight: 700;
     font-size: 1.05rem;
@@ -94,7 +99,7 @@
 .revealRow {
     display: grid;
     grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr;
-    align-items: center;
+    align-items: start;
     gap: calc(var(--grid-size) * 1.5);
 }
 
@@ -119,6 +124,13 @@
     color: var(--ink);
 }
 
+/* Spread shows two values joined by an arrow ("2.25 → 9.75") which is much
+   wider than the other stats — use a smaller font so it doesn't wrap. */
+.revealBig.revealBigSpread {
+    font-size: 1.5rem;
+    white-space: nowrap;
+}
+
 .revealUnit {
     font-size: 1rem;
     color: var(--ink-3);
@@ -131,6 +143,7 @@
     height: 36px;
     background: var(--line);
     justify-self: center;
+    align-self: center;
 }
 
 .revealFoot {

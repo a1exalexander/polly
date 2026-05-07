@@ -36,6 +36,22 @@
     box-shadow: var(--shadow-md);
 }
 
+/* When voting is locked (e.g. observer mode) the overlay only covers the grid
+   bounds, so the lifted/rotated selected card would peek above the blur.
+   Keep the card flush in disabled state. */
+.card.isCardSelected.isCardDisabled {
+    transform: none;
+}
+
+.card.isCardDisabled:hover {
+    transform: none;
+    background-color: var(--surface);
+}
+
+.card.isCardSelected.isCardDisabled:hover {
+    background-color: var(--ink);
+}
+
 /* Main numeric button fills the full card */
 .button {
     width: 100%;
@@ -169,5 +185,12 @@
     }
     .subButton {
         font-size: 0.7rem;
+    }
+}
+
+/* Narrow desktop range: 6 cards per row become too thin, drop to 4 per row */
+@media (min-width: 1024px) and (max-width: 1179.98px) {
+    .card:not(.boolean) {
+        width: calc((100% / 4) - var(--grid-size) * 6 / 4);
     }
 }

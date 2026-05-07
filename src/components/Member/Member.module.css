@@ -72,10 +72,6 @@ img.avatar {
     gap: calc(var(--grid-size) * 1);
 }
 
-.tail.noMenu {
-    padding-right: 24px;
-}
-
 /* Vote pill — empty / voted / revealed */
 .value {
     min-width: 38px;

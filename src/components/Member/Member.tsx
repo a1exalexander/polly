@@ -157,7 +157,7 @@ export function Member({
                     )}
                 </div>
             </div>
-            <div className={clsx(styles.tail, { [styles.noMenu]: !canOpenMenu })}>
+            <div className={styles.tail}>
                 <div className={styles.valueSlot}>{valueContent}</div>
                 {canOpenMenu && (
                     <DropdownMenu

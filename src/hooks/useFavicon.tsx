@@ -3,28 +3,33 @@
 import { StoryStatusTypes } from '@/components/RoomPage/RoomPage.store';
 import { useEffect } from 'react';
 
-const getFaviconPath = (status: StoryStatusTypes, href: string) => {
-    const faviconPath = href.split('/').slice(0, -1).join('/');
+const STATUS_OVERRIDES: Partial<Record<StoryStatusTypes, string>> = {
+    [StoryStatusTypes.ACTIVE]: '/favicon-2.png',
+    [StoryStatusTypes.FINISHED]: '/favicon-3.png',
+};
 
-    switch (status) {
-        case StoryStatusTypes.IDLE:
-            return `${faviconPath}/favicon.png`;
-        case StoryStatusTypes.ACTIVE:
-            return `${faviconPath}/favicon-2.png`;
-        case StoryStatusTypes.FINISHED:
-            return `${faviconPath}/favicon-3.png`;
-    }
-}
+// Remember each <link rel="icon">'s original href (the one Next.js injected
+// from the file-based metadata convention) so IDLE can restore the new primary
+// favicon after a status override has rewritten it.
+const originalHrefs = new WeakMap<HTMLLinkElement, string>();
 
 export const useFavicon = (status: StoryStatusTypes) => {
-    const setFavicon = (status: StoryStatusTypes) => {
-        const favicons = document.querySelectorAll('link[rel="icon"]') as NodeListOf<HTMLLinkElement>;
-        favicons.forEach(favicon => {
-            favicon.href = getFaviconPath(status, favicon.href);
-        });
-    }
-
     useEffect(() => {
-        setFavicon(status);
+        const favicons = document.querySelectorAll('link[rel="icon"]') as NodeListOf<HTMLLinkElement>;
+        const override = STATUS_OVERRIDES[status];
+
+        favicons.forEach(favicon => {
+            if (override) {
+                if (!originalHrefs.has(favicon)) {
+                    originalHrefs.set(favicon, favicon.href);
+                }
+                favicon.href = override;
+                return;
+            }
+            const original = originalHrefs.get(favicon);
+            if (original) {
+                favicon.href = original;
+            }
+        });
     }, [status]);
-}
+};

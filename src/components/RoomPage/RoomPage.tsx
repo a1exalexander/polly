@@ -4,6 +4,7 @@ import { Button, Footer, Navbar, RoomPageSkeleton, Tag, TimeGrid } from '@/compo
 import { MemberList } from '@/components/MemberList';
 import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { MdOutlineRemoveRedEye, MdOutlineSchedule } from 'react-icons/md';
 import { TbPlayerTrackNext } from 'react-icons/tb';
 
 const Sound = dynamic(() => import('@/components/Sound').then(m => m.Sound), { ssr: false });
@@ -440,7 +441,7 @@ export const RoomPage = ({
                                     exit={{ opacity: 0, y: -8 }}
                                     transition={{ duration: 0.22, ease: 'easeOut' }}
                                 >
-                                    <Tag type="info">Idle</Tag>
+                                    <Tag type="info"><MdOutlineSchedule className={styles.bannerTagIcon} aria-label="Idle" /></Tag>
                                     <div>
                                         <div className={styles.bannerTitle}>Waiting for the host to start</div>
                                         <div className={styles.bannerCopy}>Once they hit start, your cards will light up.</div>
@@ -456,7 +457,7 @@ export const RoomPage = ({
                                     exit={{ opacity: 0, y: -8 }}
                                     transition={{ duration: 0.22, ease: 'easeOut' }}
                                 >
-                                    <Tag type="warning">Observer</Tag>
+                                    <Tag type="warning"><MdOutlineRemoveRedEye className={styles.bannerTagIcon} aria-label="Observer" /></Tag>
                                     <div>
                                         <div className={styles.bannerTitle}>You&apos;re watching this round</div>
                                         <div className={styles.bannerCopy}>Switch to participate to cast a vote.</div>
@@ -500,7 +501,7 @@ export const RoomPage = ({
                                     <div className={styles.revealDivider} />
                                     <div className={styles.revealStat}>
                                         <div className={styles.revealLabel}>Spread</div>
-                                        <div className={styles.revealBig}>
+                                        <div className={clsx(styles.revealBig, styles.revealBigSpread)}>
                                             {minVote != null && maxVote != null ? `${minVote} → ${maxVote}` : '—'}
                                         </div>
                                     </div>

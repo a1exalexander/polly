@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Polly",
+  "short_name": "Polly",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
