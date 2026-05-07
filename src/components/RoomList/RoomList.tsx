@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader, RoomItem } from '@/components';
+import { RoomItem, RoomListSkeleton } from '@/components';
 import { realtime } from '@/components/RoomList/RoomList.realtime';
 import { Room, User, UserOnRoom } from '@/types';
 import { createClient } from '@/utils/supabase/client';
@@ -77,9 +77,18 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
     const isRoomsEmpty = useMemo(() => getters.isRoomsEmpty(state), [state]);
     const isRecentlyVisitedEmpty = useMemo(() => getters.isRecentlyVisitedRoomsEmpty(state), [state]);
 
+    if (loading.value) {
+        return (
+            <>
+                <RoomListSkeleton headingWidth={160} rows={3} />
+                <RoomListSkeleton headingWidth={120} rows={4} />
+            </>
+        );
+    }
+
     return (
         <>
-            {!loading.value && !isRecentlyVisitedEmpty && (
+            {!isRecentlyVisitedEmpty && (
                 <div className={styles.section}>
                     <div className={styles.head}>
                         <h3 className={styles.label}>Recently visited</h3>
@@ -113,14 +122,14 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
             <div className={styles.section}>
                 <div className={styles.head}>
                     <h3 className={styles.label}>My rooms</h3>
-                    {!loading.value && !isRoomsEmpty && (
+                    {!isRoomsEmpty && (
                         <span className={styles.headMeta}>{state.rooms?.length} owned</span>
                     )}
                 </div>
                 <div className={styles.content}>
-                    {loading.value && <Loader isOverlay />}
-                    {!loading.value && isRoomsEmpty && <div className={styles.empty}>No rooms yet</div>}
-                    {!loading.value && !isRoomsEmpty && (
+                    {isRoomsEmpty ? (
+                        <div className={styles.empty}>No rooms yet</div>
+                    ) : (
                         <ul id="room-list" className={clsx(styles.list, className)}>
                             {state.rooms?.map(({ id, title, type }) => {
                                 const UsersOnRooms = getters.getUsersOnRoom(state, id);

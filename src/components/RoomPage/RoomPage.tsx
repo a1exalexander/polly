@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Footer, Navbar, Tag, TimeGrid } from '@/components';
+import { Button, Footer, Navbar, RoomPageSkeleton, Tag, TimeGrid } from '@/components';
 import { MemberList } from '@/components/MemberList';
 import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -23,7 +23,6 @@ import styles from './RoomPage.module.css';
 import { realtime } from './RoomPage.realtime';
 import { ActionTypes, getters, reducer, StoryStatusTypes } from './RoomPage.store';
 import { useBoolean } from 'usehooks-ts';
-import { Animation } from '../Animation';
 
 export interface RoomPageProps {
     roomId: number;
@@ -195,31 +194,35 @@ export const RoomPage = ({
         }
     }, [roomPageService, story, serverUser, roomId, posthog, state]);
 
-    const exit = useCallback(async () => {
+    const exit = useCallback(() => {
         if (!roomPageService || !serverUser.id) {
             return;
         }
+        // Navigate first so the user never sees the room re-rendered without them.
+        router.push('/');
+
         posthog?.capture?.('room_exit', {
             userData: serverUser,
             state: state,
         });
-        await roomPageService.removeUserFromRoom(serverUser.id);
 
-        // Fire-and-forget auto-complete check before navigating away
+        // Fire-and-forget DB delete + auto-complete check.
+        roomPageService.removeUserFromRoom(serverUser.id).catch(() => {});
+
         if (story?.id && story?.started_at && !story?.finished_at) {
-            storiesService.checkAutoComplete(story.id, roomId).then((result) => {
-                if (result?.autoCompleted) {
-                    posthog?.capture?.('story_auto_completed', {
-                        storyId: story.id,
-                        roomId,
-                        userData: serverUser,
-                        trigger: 'user_exit',
-                    });
-                }
-            });
+            storiesService.checkAutoComplete(story.id, roomId)
+                .then((result) => {
+                    if (result?.autoCompleted) {
+                        posthog?.capture?.('story_auto_completed', {
+                            storyId: story.id,
+                            roomId,
+                            userData: serverUser,
+                            trigger: 'user_exit',
+                        });
+                    }
+                })
+                .catch(() => {});
         }
-
-        router.push('/');
     }, [router, roomPageService, serverUser, story, roomId, posthog, state]);
 
     const removeUserFromRoom = useCallback(async (userId: number) => {
@@ -393,6 +396,15 @@ export const RoomPage = ({
     })();
     const unit = roomType === VoteValuesTypes.weeks ? 'w' : 'd';
 
+    if (!state.room) {
+        return (
+            <div className={styles.shell}>
+                <RoomPageSkeleton />
+                <Footer />
+            </div>
+        );
+    }
+
     return (
         <div className={styles.shell}>
             <Navbar
@@ -414,24 +426,10 @@ export const RoomPage = ({
             <div
                 className={clsx(styles.body, {
                     [styles.isColumn]: roomType === VoteValuesTypes.boolean,
-                    [styles.isLoading]: !state.room,
                 })}
             >
                 <main className={styles.voteArea}>
                     <div className={styles.voteAreaInner}>
-                        <AnimatePresence mode="wait">
-                            {!state.room && (
-                                <motion.div
-                                    key="loading"
-                                    initial={{ opacity: 0, y: 12 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -8 }}
-                                    transition={{ duration: 0.25, ease: 'easeOut' }}
-                                >
-                                    <Animation text="Room is loading..." />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
                         <AnimatePresence>
                             {storyStatus === StoryStatusTypes.IDLE && !canManageRoom && (
                                 <motion.div
@@ -557,6 +555,7 @@ export const RoomPage = ({
                             average={average}
                             isFinished={isStoryFinished}
                             onRemoveUser={removeUserFromRoom}
+                            onSelfLeave={exit}
                             onToggleAdmin={isHost ? toggleUserAdmin : undefined}
                         />
                     </aside>

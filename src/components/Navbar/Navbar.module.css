@@ -273,17 +273,6 @@
     border-color: var(--cool);
 }
 
-/* Loader anchor */
-.loaderHost {
-    position: absolute;
-    inset: 0;
-    background: var(--surface);
-    border-radius: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 @media (max-width: 720px) {
     .header {
         padding: calc(var(--grid-size) * 2);

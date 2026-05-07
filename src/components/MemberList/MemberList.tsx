@@ -25,6 +25,7 @@ export interface MemberListProps {
     average?: number | null;
     isFinished?: boolean;
     onRemoveUser?: (userId: number) => void | Promise<unknown>;
+    onSelfLeave?: () => void;
     onToggleAdmin?: (userId: number, nextIsAdmin: boolean) => void | Promise<unknown>;
 }
 
@@ -37,6 +38,7 @@ export const MemberList = ({
     average,
     isFinished,
     onRemoveUser,
+    onSelfLeave,
     onToggleAdmin,
     roomType,
     currentUserId,
@@ -135,6 +137,7 @@ export const MemberList = ({
                             <Member
                                 id={id}
                                 onRemoveUser={onRemoveUser}
+                                onSelfLeave={onSelfLeave}
                                 onToggleAdmin={onToggleAdmin}
                                 isValueVisible={visibility.value || !inProgress}
                                 menuClass={styles.memberMenu}

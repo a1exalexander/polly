@@ -1,5 +1,8 @@
 export * from './Button';
 export * from './Logo';
+export * from './RoomListSkeleton';
+export * from './RoomPageSkeleton';
+export * from './Shimmer';
 export * from './SoundToggle';
 export * from './ThemeToggle';
 export * from './TimeCard';
@@ -10,7 +13,6 @@ export * from './RoomItem';
 export * from './CreateRoomForm';
 export * from './RoomList';
 export * from './Footer';
-export * from './Loader';
 export * from './Tag';
 export * from './Tooltip';
 export * from './ConfirmModal';

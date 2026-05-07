@@ -10,7 +10,7 @@
 .body {
     flex: 1 1 auto;
     display: grid;
-    grid-template-columns: 1fr 360px;
+    grid-template-columns: 1fr 380px;
     gap: calc(var(--grid-size) * 3);
     padding: calc(var(--grid-size) * 4) calc(var(--grid-size) * 4);
     max-width: 1480px;
@@ -19,14 +19,8 @@
     align-items: start;
 }
 
-.body.isColumn,
-.body.isLoading {
+.body.isColumn {
     grid-template-columns: 1fr;
-}
-
-.body.isLoading .voteArea {
-    min-height: 60vh;
-    align-items: center;
 }
 
 .voteArea {

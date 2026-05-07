@@ -58,19 +58,12 @@ img.avatar {
     color: var(--ink);
 }
 
-.nameText {
+.name .nameTooltip {
+    display: block;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    min-width: 0;
-}
-
-.observerLabel {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: var(--ink-3);
-    text-transform: uppercase;
 }
 
 .tail {

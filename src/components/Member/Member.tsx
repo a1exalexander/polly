@@ -25,6 +25,7 @@ export interface MemberProps {
     isInProgress?: boolean;
     menuClass?: string;
     onRemoveUser?: (userId: number) => void | Promise<unknown>;
+    onSelfLeave?: () => void;
     onToggleAdmin?: (userId: number, nextIsAdmin: boolean) => void | Promise<unknown>;
 }
 
@@ -42,6 +43,7 @@ export function Member({
     isSelf,
     isDisabled,
     onRemoveUser,
+    onSelfLeave,
     onToggleAdmin,
     isInProgress,
     menuClass,
@@ -50,11 +52,18 @@ export function Member({
     const confirmModalOpen = useBoolean(false);
 
     const handleRemoveUser = useCallback(async () => {
+        // Self-leave is fire-and-forget so the route can change before any
+        // post-delete state lands and re-renders the room without us.
+        if (isSelf) {
+            confirmModalOpen.setFalse();
+            onSelfLeave?.();
+            return;
+        }
         removingLoading.setTrue();
         await onRemoveUser?.(id);
         removingLoading.setFalse();
         confirmModalOpen.setFalse();
-    }, [onRemoveUser, id, removingLoading, confirmModalOpen]);
+    }, [isSelf, onSelfLeave, onRemoveUser, id, removingLoading, confirmModalOpen]);
 
     const handleToggleAdmin = useCallback(async () => {
         await onToggleAdmin?.(id, !isMemberAdmin);
@@ -129,7 +138,9 @@ export function Member({
             )}
             <div className={styles.head}>
                 <div className={styles.name}>
-                    <span className={styles.nameText}>{name}</span>
+                    <Tooltip text={name ?? ''} position="top" className={styles.nameTooltip}>
+                        {name}
+                    </Tooltip>
                     {isMemberHost && (
                         <Tooltip text="Room owner" position="top">
                             <span className={clsx(styles.badge, styles.badgeOwner)} aria-label="Room owner">
@@ -144,7 +155,6 @@ export function Member({
                             </span>
                         </Tooltip>
                     )}
-                    {isDisabled && <span className={styles.observerLabel}>Observer</span>}
                 </div>
             </div>
             <div className={clsx(styles.tail, { [styles.noMenu]: !canOpenMenu })}>

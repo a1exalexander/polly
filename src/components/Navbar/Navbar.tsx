@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Loader, Logo, Tag, Tooltip } from '@/components';
+import { Button, Logo, Tag, Tooltip } from '@/components';
 import clsx from 'clsx';
 import { differenceInMilliseconds, format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
@@ -129,7 +129,6 @@ export const Navbar = ({
         startTime && !finishTime ? 1000 : null,
     );
 
-    const isHeaderReady = !!title;
     const isInProgress = !!startTime && !finishTime;
     const isFinished = !!finishTime;
     const isIdle = !isInProgress && !isFinished;
@@ -146,14 +145,7 @@ export const Navbar = ({
                 [styles.isFinished]: isFinished,
             })}
         >
-            {!isHeaderReady && (
-                <div className={styles.loaderHost}>
-                    <Loader size="large" />
-                </div>
-            )}
-            {isHeaderReady && (
-                <>
-                    <div className={styles.left}>
+            <div className={styles.left}>
                         <div className={styles.brand} aria-label="Polly">
                             <Logo size={24} aria-hidden />
                             <span>Polly</span>
@@ -279,8 +271,6 @@ export const Navbar = ({
                             </button>
                         </Tooltip>
                     </div>
-                </>
-            )}
         </header>
     );
 };
