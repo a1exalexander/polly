@@ -1,136 +1,153 @@
-@keyframes fadeIn {
-    from {
-        transform: scale(0.8);
-    }
-    to {
-        transform: scale(1);
-    }
-}
-
-.container {
-    overflow: hidden;
-    height: 100%;
-    position: relative;
-    z-index: 1;
-    border-radius: calc(var(--grid-size) * 2);
-    border: 2px solid var(--primary-color);
-    transition-property: border-color, box-shadow;
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
-    background-color: var(--secondary-color);
-    min-height: calc(var(--grid-size) * 7 * 3);
-}
-
+/* === Polly v2 — Member panel === */
 .list {
-    position: relative;
-    flex-grow: 1;
-}
-
-@media (min-width: 375px) {
-    .list {
-        min-width: 325px;
-    }
-}
-
-.list.isFinished .container {
-    /* box-shadow: 0 0 0 2px var(--success-color); */
-    border-color: var(--success-color);
-}
-
-.list.visible .container {
-    /* box-shadow: 0 0 0 2px var(--warning-color); */
-    border-color: var(--warning-color);
-}
-
-.list.isHost:hover:not(:has(.memberMenu:hover)) .container {
-    border-color: var(--warning-color);
-}
-
-.list.isFinished:hover .container {
-    border-color: var(--success-color);
-}
-
-
-.bluredOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transition: backdrop-filter 0.2s ease;
-}
-
-.list.visible .bluredOverlay {
-    backdrop-filter: blur(0px);
-}
-
-.item {
-    border-bottom: 1px solid var(--primary-color);
-}
-
-.button {
-    cursor: pointer;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: calc(var(--grid-size) * 2.5);
     display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 1.5);
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-time) ease, box-shadow var(--transition-time) ease;
+}
+
+.list.isFinished {
+    border-color: color-mix(in oklab, var(--ok) 30%, var(--line));
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--ok) 22%, transparent), var(--shadow-sm);
+}
+
+.list.visible {
+    border-color: color-mix(in oklab, var(--warm) 50%, var(--line));
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--warm) 28%, transparent), var(--shadow-sm);
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--grid-size);
+}
+
+.title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.summary {
+    margin-top: 4px;
+    font-size: 1.1rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+.summaryAvg {
+    color: var(--ok);
+}
+
+.summarySplit {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Peek toggle */
+.peekBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: none;
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.2);
-    z-index: 2;
-    transition-property: background-color;
-
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background var(--transition-time) ease,
+                color var(--transition-time) ease,
+                border-color var(--transition-time) ease;
+    padding: 0;
+    flex-shrink: 0;
 }
 
-.list.visible .button {
-    background-color: rgba(255, 152, 0, 0.2);
+.peekBtn:hover {
+    background: var(--bg-2);
+    color: var(--ink);
 }
 
-.button:hover {
-    transform: scale(1.2);
+.peekBtn.peekOn {
+    background: var(--cool);
+    color: white;
+    border-color: var(--cool);
 }
 
-.buttonIcon {
-    animation: fadeIn 0.2s ease both;
-    font-size: 1.5rem;
+.peekBtn svg {
+    width: 16px;
+    height: 16px;
 }
 
-.status {
-    position: absolute;
-    bottom: calc(100% - 14px);
-    border: 2px solid var(--success-color);
-    height: calc(var(--grid-size) * 6.1);
-    width: 100%;
-    left: 0px;
-    border-radius: calc(var(--grid-size) * 2) calc(var(--grid-size) * 2) 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 6px;
-    font-weight: 700;
+/* Progress */
+.progressTrack {
+    height: 8px;
+    background: var(--bg-2);
+    border-radius: 999px;
     overflow: hidden;
-    transition: transform 0.2s var(--bounce), box-shadow 0.2s ease;
-    transform: translateY(100%);
-    background-color: var(--secondary-color);
-}
-
-.status.isVisible {
-    transform: translateY(0);
+    position: relative;
 }
 
 .progress {
-    background-color: var(--success-color);
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: calc(100% + 2px);
-    transition: width var(--transition-time) ease;
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cool), var(--warm));
+    border-radius: 999px;
+    transition: width 400ms ease, background 400ms ease;
 }
 
-.progressValue {
-    position: relative;
-    z-index: 2;
+.list.isFinished .progress {
+    background: linear-gradient(90deg, var(--ok), color-mix(in oklab, var(--ok) 60%, var(--cool)));
+}
+
+/* Member list */
+.members {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 2px;
+    margin: 0 calc(var(--grid-size) * -0.5);
+    padding-left: calc(var(--grid-size) * 0.5);
+    padding-right: calc(var(--grid-size) * 0.5);
+}
+
+.members::-webkit-scrollbar {
+    width: 8px;
+}
+
+.members::-webkit-scrollbar-thumb {
+    background: var(--line-2);
+    border-radius: 999px;
+}
+
+/* Blurred overlay during voting (covers vote pills until host peeks) */
+.bluredOverlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    pointer-events: none;
+    transition: backdrop-filter var(--transition-time) ease;
+}
+
+/* (kept for backward compat / not visually shown anymore) */
+.button,
+.buttonIcon {
+    display: none;
+}
+
+.memberMenu {
+    /* Marker class — referenced by container hover selectors */
 }

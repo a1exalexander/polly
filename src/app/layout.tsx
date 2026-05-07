@@ -1,5 +1,5 @@
 import { CSPostHogProvider } from '@/app/providers';
-import { ThemeProvider, ThemeSwitch } from '@/components';
+import { ThemeProvider } from '@/components';
 import { getThemeCookie } from '@/components/ThemeProvider/actions';
 import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/montserrat';
@@ -32,9 +32,6 @@ export default async function RootLayout({
             <ThemeProvider initialTheme={theme}>
                 <div className="layout">
                     {children}
-                    <div className="theme-switch-container">
-                        <ThemeSwitch />
-                    </div>
                 </div>
             </ThemeProvider>
             </body>

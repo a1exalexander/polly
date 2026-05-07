@@ -1,41 +1,44 @@
+/* === Polly v2 — Create room card === */
 .form {
-    border-radius: calc(var(--grid-size) * 2);
-    background-color: var(--primary-color);
-    padding: calc(var(--grid-size) * 3);
-    border: 2px solid var(--form-border-color, var(--grey));
-    box-shadow: var(--shadow);
-    flex-wrap: wrap;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: calc(var(--grid-size) * 4);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: calc(var(--grid-size) * 3);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 2);
 }
 
-:global([data-theme="dark"]) .form {
-    background-color: var(--secondary-color);
+.eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.heading {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+}
+
+.tagline {
+    color: var(--ink-2);
+    font-size: 0.92rem;
+    line-height: 1.5;
 }
 
 .inner {
     display: flex;
+    flex-direction: column;
     gap: calc(var(--grid-size) * 2);
-    align-items: flex-end;
-    flex-wrap: wrap;
-}
-
-.typeDemo {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: calc(var(--grid-size) * 2);
-    color: var(--secondary-color);
-}
-
-.dots {
-    font-size: 0.8rem;
-    display: inline-block;
-    margin: 0 var(--grid-size);
-}
-
-.tags {
-    height: calc(var(--grid-size) * 5);
-    display: flex;
-    gap: var(--grid-size);
 }
 
 .field {
@@ -44,85 +47,87 @@
     gap: var(--grid-size);
 }
 
-.inputField {
-    flex-grow: 10;
-    flex-shrink: 0;
-}
-
 .label {
-    font-weight: 500;
-    align-self: flex-start;
-    display: inline-block;
-    color: var(--secondary-color);
-    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .input {
-    flex-grow: 1;
-    border: 1px solid var(--input-border-color, var(--grey-dark));
-    border-radius: var(--grid-size);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-md);
     padding: 0 calc(var(--grid-size) * 2);
-    background-color: var(--input-bg-color, var(--grey-darkness));
-    color: var(--secondary-color);
-    height: calc(var(--grid-size) * 5);
-    box-shadow: none;
+    background: var(--surface-2);
+    color: var(--ink);
+    height: calc(var(--grid-size) * 6);
     font-size: 1rem;
-    transition: border-color var(--transition-time) ease;
+    transition: border-color var(--transition-time) ease, background var(--transition-time) ease;
     outline: none;
+    width: 100%;
 }
 
 .input::placeholder {
-    color: var(--input-placeholder-color, var(--grey));
+    color: var(--ink-3);
 }
 
-.input:focus, .input:focus-visible {
-    border-color: var(--secondary-color);
+.input:focus,
+.input:focus-visible {
+    border-color: var(--cool);
+    background: var(--surface);
     outline: none;
 }
 
+.tags {
+    display: flex;
+    gap: var(--grid-size);
+    flex-wrap: wrap;
+}
+
 .button {
-    flex-basis: auto;
-    flex-grow: 1;
-    flex-shrink: 1;
+    width: 100%;
+    margin-top: calc(var(--grid-size) * 1);
+}
+
+.typeDemo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    padding: calc(var(--grid-size) * 1.5);
+    border-radius: var(--radius-md);
+    background: var(--bg-2);
+    border: 1px dashed var(--line-2);
+    color: var(--ink-3);
+    font-size: 0.85rem;
 }
 
 .miniCard {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--minicard-border-color, var(--grey-light));
-    color: var(--minicard-color, var(--grey-light));
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    font-size: 0.78rem;
+    font-weight: 600;
+    border-radius: var(--radius-xs);
+    background: var(--surface);
+    padding: 0 8px;
+    min-width: 36px;
+    height: 22px;
+}
+
+.dots {
     font-size: 0.8rem;
-    border-radius: var(--grid-size);
-    width: 40px;
-    height: 20px;
+    color: var(--ink-4);
 }
 
-/* Dark mode overrides */
-:global([data-theme="dark"]) .typeDemo {
-    color: var(--primary-color);
-}
-
-:global([data-theme="dark"]) .label {
-    color: var(--primary-color);
-}
-
-:global([data-theme="dark"]) .input {
-    background-color: var(--grey-ligheness);
-    color: var(--primary-color);
-    border-color: var(--grey-light);
-}
-
-:global([data-theme="dark"]) .input::placeholder {
-    color: var(--grey);
-}
-
-:global([data-theme="dark"]) .input:focus,
-:global([data-theme="dark"]) .input:focus-visible {
-    border-color: var(--primary-color);
-}
-
-:global([data-theme="dark"]) .miniCard {
-    border-color: var(--grey-dark);
-    color: var(--grey-dark);
+.previewLabel {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-right: 4px;
 }

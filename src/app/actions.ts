@@ -135,6 +135,24 @@ export const joinRoomAction = async (roomId: string) => {
         return encodedRedirect('error', '/start', publicUserResponse.error.message);
     }
 
+    // Backfill avatar_url for users who signed in before this column existed
+    // or whose Google profile picture changed since their last sign-in.
+    // Fire-and-forget — failure must not block joining a room (e.g. before the
+    // avatar_url migration has been applied to the DB).
+    const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+    const incomingAvatarUrl = (meta.avatar_url ?? meta.picture) as string | null | undefined;
+    if (incomingAvatarUrl && publicUserResponse.data?.avatar_url !== incomingAvatarUrl) {
+        supabase
+            .from('Users')
+            .update({ avatar_url: incomingAvatarUrl })
+            .eq('id', publicUserResponse.data.id)
+            .then(({ error }) => {
+                if (error && process.env.NODE_ENV !== 'production') {
+                    console.warn('[avatar backfill skipped]', error.message);
+                }
+            });
+    }
+
     const isCurrentUserInRoom = userOnRoomResponse.data;
 
     if (!isCurrentUserInRoom) {

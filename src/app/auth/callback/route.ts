@@ -17,8 +17,20 @@ export async function GET(request: Request) {
         const { data: { user } } = await supabase.auth.getUser();
 
         if (user?.id) {
-            await supabase.from('Users')
-                .upsert({ user_id: user.id, name: getUserName(user), email: user.email }, { onConflict: 'user_id' });
+            const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+            const avatarUrl = (meta.avatar_url ?? meta.picture) as string | null | undefined;
+            const baseRow = {
+                user_id: user.id,
+                name: getUserName(user),
+                email: user.email,
+            };
+            // Try with avatar_url first. If the column doesn't exist yet (migration
+            // not applied), retry without it so sign-in still works.
+            const { error } = await supabase.from('Users')
+                .upsert({ ...baseRow, avatar_url: avatarUrl ?? null }, { onConflict: 'user_id' });
+            if (error && /avatar_url/i.test(error.message)) {
+                await supabase.from('Users').upsert(baseRow, { onConflict: 'user_id' });
+            }
         }
     }
 

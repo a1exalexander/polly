@@ -1,0 +1,26 @@
+.btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition-time) ease,
+                background-color var(--transition-time) ease,
+                border-color var(--transition-time) ease;
+}
+
+.btn:hover {
+    color: var(--ink);
+    background: var(--bg-2);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--cool);
+    outline-offset: 2px;
+}

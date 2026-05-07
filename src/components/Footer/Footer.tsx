@@ -1,33 +1,30 @@
 'use client';
 
 import { signOutAction } from '@/app/actions';
-import { Button } from '@/components';
-import { StoryStatusTypes } from '@/components/RoomPage/RoomPage.store';
-import dynamic from 'next/dynamic';
+import { Button, SoundToggle, ThemeToggle } from '@/components';
 import styles from './Footer.module.css';
 
-const Sound = dynamic(() => import('@/components/Sound').then(m => m.Sound), { ssr: false });
-
 export interface FooterProps {
-    storyStatus?: StoryStatusTypes;
+    /** Hide the sound toggle on pages where sound playback is irrelevant. */
+    showSound?: boolean;
 }
 
-export const Footer = ({storyStatus}: FooterProps) => {
+export const Footer = ({ showSound = true }: FooterProps) => {
     return (
         <footer className={styles.footer}>
-            <p className={styles.copy}>© 2024 Polly – Real-Time Task Estimation and Voting Platform</p>
+            <span className={styles.copy}>© {new Date().getFullYear()} Polly</span>
             <div className={styles.row}>
-                <form className={styles.form}>
+                <ThemeToggle />
+                {showSound && <SoundToggle />}
+                <form>
                     <Button
-                        className={styles.button}
-                        variant="secondary"
+                        variant="ghost"
                         size="s"
                         formAction={signOutAction}>
-                        Sign Out
+                        Sign out
                     </Button>
                 </form>
-                {storyStatus && <Sound storyStatus={storyStatus} />}
             </div>
         </footer>
-    )
-}
+    );
+};

@@ -78,11 +78,13 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
     const isRecentlyVisitedEmpty = useMemo(() => getters.isRecentlyVisitedRoomsEmpty(state), [state]);
 
     return (
-        <div>
-            {/* Recently Visited Rooms Section */}
+        <>
             {!loading.value && !isRecentlyVisitedEmpty && (
                 <div className={styles.section}>
-                    <p className={styles.label}>Recently Visited</p>
+                    <div className={styles.head}>
+                        <h3 className={styles.label}>Recently visited</h3>
+                        <span className={styles.headMeta}>Last 5</span>
+                    </div>
                     <div className={styles.content}>
                         <ul id="recent-rooms-list" className={clsx(styles.list, className)}>
                             {state.recentlyVisitedRooms?.map(({ id, title, type, last_visited_at }) => {
@@ -108,33 +110,39 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                 </div>
             )}
 
-            {/* Owned Rooms Section */}
             <div className={styles.section}>
-                <p className={styles.label}>My Rooms</p>
+                <div className={styles.head}>
+                    <h3 className={styles.label}>My rooms</h3>
+                    {!loading.value && !isRoomsEmpty && (
+                        <span className={styles.headMeta}>{state.rooms?.length} owned</span>
+                    )}
+                </div>
                 <div className={styles.content}>
                     {loading.value && <Loader isOverlay />}
                     {!loading.value && isRoomsEmpty && <div className={styles.empty}>No rooms yet</div>}
-                    {!loading.value && !isRoomsEmpty && <ul id="room-list" className={clsx(styles.list, className)}>
-                        {state.rooms?.map(({ id, title, type }) => {
-                            const UsersOnRooms = getters.getUsersOnRoom(state, id);
-                            return (
-                                <li
-                                    className={styles.item}
-                                    key={id}
-                                >
-                                    <RoomItem
-                                        roomId={id}
-                                        title={title}
-                                        type={type}
-                                        membersAmount={UsersOnRooms?.length}
-                                        onlineAmount={UsersOnRooms?.filter(({ active }) => !!active).length}
-                                    />
-                                </li>
-                            );
-                        })}
-                    </ul>}
+                    {!loading.value && !isRoomsEmpty && (
+                        <ul id="room-list" className={clsx(styles.list, className)}>
+                            {state.rooms?.map(({ id, title, type }) => {
+                                const UsersOnRooms = getters.getUsersOnRoom(state, id);
+                                return (
+                                    <li
+                                        className={styles.item}
+                                        key={id}
+                                    >
+                                        <RoomItem
+                                            roomId={id}
+                                            title={title}
+                                            type={type}
+                                            membersAmount={UsersOnRooms?.length}
+                                            onlineAmount={UsersOnRooms?.filter(({ active }) => !!active).length}
+                                        />
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    )}
                 </div>
             </div>
-        </div>
+        </>
     );
 };

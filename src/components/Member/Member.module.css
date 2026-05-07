@@ -1,114 +1,189 @@
+/* === Polly v2 — Member row === */
 .container {
     position: relative;
-    height: calc(var(--grid-size) * 7);
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 calc(var(--grid-size) * 2) 0 calc(var(--grid-size) * 2.5);
-    gap: calc(var(--grid-size) * 1);
-    transition: opacity var(--transition-time) ease-in-out;
+    gap: calc(var(--grid-size) * 1.5);
+    padding: calc(var(--grid-size) * 1) calc(var(--grid-size) * 1);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-time) ease, opacity var(--transition-time) ease;
+    min-height: calc(var(--grid-size) * 6);
 }
 
-.container::after {
-    opacity: 1;
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background-color: var(--success-color);
-    position: absolute;
-    left: 7px;
+.container:hover {
+    background-color: var(--bg-2);
 }
 
 .isDisabled {
-    background-color: var(--grey-lighen);
+    opacity: 0.55;
 }
 
-.isDisabled > *:not(.tail) {
-    opacity: 0.4;
+.avatar {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: -0.01em;
+    color: white;
+    text-transform: uppercase;
+    object-fit: cover;
 }
 
-.isDisabled::after {
-    background-color: var(--danger-color);
+img.avatar {
+    border: 1px solid var(--line);
+    background: var(--bg-2);
 }
 
 .head {
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.name {
+    display: flex;
     align-items: center;
-    flex-shrink: 1;
-    flex-grow: 0;
+    gap: 6px;
+    min-width: 0;
+    font-weight: 500;
+    font-size: 0.92rem;
+    line-height: 1.2;
+    color: var(--ink);
+}
+
+.nameText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.observerLabel {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ink-3);
+    text-transform: uppercase;
 }
 
 .tail {
-    flex-grow: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: calc(var(--grid-size) + 4px);
+    gap: calc(var(--grid-size) * 1);
 }
 
 .tail.noMenu {
-    /* Keep value column aligned with rows that show the menu trigger. */
-    padding-right: calc(var(--grid-size) + 2rem);
+    padding-right: 24px;
 }
 
-
-.name {
-    display: inline-flex;
-    max-width: 100%;
-    overflow: hidden;
-    flex-shrink: 1;
-    flex-grow: 0;
-    font-weight: 500;
-    font-size: 1rem;
-    line-height: 1.2;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
+/* Vote pill — empty / voted / revealed */
 .value {
+    min-width: 38px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 0.85rem;
+    background: var(--bg-2);
+    color: var(--ink-3);
+    transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+}
+
+.valueVoted {
+    background: var(--cool-soft);
+    color: var(--cool-ink);
+}
+
+.valueRevealed {
+    background: var(--cool);
+    color: white;
+}
+
+.valueEmpty {
+    background: transparent;
+    border: 1.5px dashed var(--line-2);
 }
 
 .icon {
-    fill: var(--success-color);
-    font-size: 1.1rem;
-    position: relative;
-    right: -3px;
+    fill: var(--cool-ink);
+    font-size: 0.95rem;
     flex-shrink: 0;
+}
+
+/* Owner / admin badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+}
+
+.badgeOwner {
+    background: var(--warm-soft);
+    color: var(--warm-ink);
+}
+
+.badgeAdmin {
+    background: var(--cool-soft);
+    color: var(--cool-ink);
 }
 
 .star {
     flex-shrink: 0;
-    fill: var(--warning-color);
-    font-size: 1.1rem;
-    margin-left: var(--grid-size);
+    fill: currentColor;
+    font-size: 0.85rem;
 }
 
-.valueSlot {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    width: 48px;
+.adminBadge {
+    flex-shrink: 0;
+    fill: currentColor;
+    font-size: 0.95rem;
 }
 
 .menuTrigger {
     position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    color: var(--ink-3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity var(--transition-time) ease, background-color var(--transition-time) ease;
+}
+
+.container:hover .menuTrigger,
+.menuTrigger.isInProgress {
+    opacity: 1;
+}
+
+.menuTrigger:hover {
+    background-color: var(--bg-3);
+    color: var(--ink);
 }
 
 .menuTrigger.isInProgress {
     z-index: 10;
 }
 
-.adminBadge {
-    flex-shrink: 0;
-    fill: var(--info-color);
-    font-size: 1.2rem;
-    margin-left: var(--grid-size);
+.valueSlot {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
-
-

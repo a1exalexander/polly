@@ -1,10 +1,15 @@
 'use client';
 
-import { Footer, Navbar, Tag, TimeGrid } from '@/components';
+import { Button, Footer, Navbar, Tag, TimeGrid } from '@/components';
 import { MemberList } from '@/components/MemberList';
+import { AnimatePresence, motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { TbPlayerTrackNext } from 'react-icons/tb';
+
+const Sound = dynamic(() => import('@/components/Sound').then(m => m.Sound), { ssr: false });
 import { RoomPageService } from '@/components/RoomPage/RoomPage.service';
 import { useFavicon } from '@/hooks/useFavicon';
-import { tagTypesByVoteType, VoteValues, VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
+import { VoteValues, VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { storiesService } from '@/services';
 import { User } from '@/types';
 import { isNumber } from '@/utils/isNumber';
@@ -282,6 +287,15 @@ export const RoomPage = ({
 
     useFavicon(storyStatus);
 
+    // Reflect story state on <body> so the warm-tinted gradient
+    // (idle → active → finished) covers the full viewport.
+    useEffect(() => {
+        document.body.dataset.storyState = storyStatus;
+        return () => {
+            delete document.body.dataset.storyState;
+        };
+    }, [storyStatus]);
+
     useEffect(() => {
         if (posthog && roomId && fetchState.value && state.room && !joinState.value) {
             posthog?.capture?.('room_joined', {
@@ -357,67 +371,200 @@ export const RoomPage = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchPageData, fetchUsersOnStory]); // fetchState intentionally excluded to prevent infinite loop
 
+    const showRevealSummary = storyStatus === StoryStatusTypes.FINISHED && roomType !== VoteValuesTypes.boolean;
+    const numericVotes = state.usersOnStory
+        .filter(({ public_user_id, value }) => isNumber(value) && activeUsers.some(u => u.id === public_user_id))
+        .map(u => u.value as number);
+    const minVote = numericVotes.length ? Math.min(...numericVotes) : null;
+    const maxVote = numericVotes.length ? Math.max(...numericVotes) : null;
+    const modeVote = (() => {
+        if (!numericVotes.length) return null;
+        const tally = numericVotes.reduce<Record<string, number>>((acc, v) => {
+            acc[v] = (acc[v] ?? 0) + 1;
+            return acc;
+        }, {});
+        return Object.entries(tally).sort((a, b) => b[1] - a[1] || Number(b[0]) - Number(a[0]))[0]?.[0] ?? null;
+    })();
+    const consensusRate = (() => {
+        if (!numericVotes.length || average == null) return null;
+        const tolerance = roomType === VoteValuesTypes.weeks ? 0.5 : 0.25;
+        const inside = numericVotes.filter(v => Math.abs(v - Number(average)) <= tolerance).length;
+        return Math.round((inside / numericVotes.length) * 100);
+    })();
+    const unit = roomType === VoteValuesTypes.weeks ? 'w' : 'd';
+
     return (
-        <>
-            {!!state.room && <Tag
-                type={tagTypesByVoteType[roomType]}
-                className={styles.typeTag}>{roomType}</Tag>}
+        <div className={styles.shell}>
+            <Navbar
+                startTime={story?.started_at}
+                title={state?.room?.title}
+                story={story?.title}
+                storyType={state.room?.type ?? null}
+                finishTime={story?.finished_at}
+                onStart={startStory}
+                onNext={nextStory}
+                onStop={stopStory}
+                onExit={exit}
+                average={average}
+                isHost={canManageRoom}
+                onChangeActivity={changeUserActivity}
+                isUserActive={currentUser?.active}
+                roomLinkPath={`/room/${roomId}`}
+            />
             <div
-                className={clsx(
-                    styles.page,
-                    {
-                        [styles.isHost]: canManageRoom,
-                        [styles.isColumn]: roomType === VoteValuesTypes.boolean,
-                        [styles.isFinished]: storyStatus === StoryStatusTypes.FINISHED,
-                    },
-                )}>
-                <Navbar
-                    startTime={story?.started_at}
-                    title={state?.room?.title}
-                    finishTime={story?.finished_at}
-                    onStart={startStory}
-                    onNext={nextStory}
-                    onStop={stopStory}
-                    onExit={exit}
-                    average={average}
-                    isHost={canManageRoom}
-                    onChangeActivity={changeUserActivity}
-                    isUserActive={currentUser?.active}
-                    story={story?.title}
-                />
-                { !state.room && <Animation text="Room is loading..." /> }
-                {!!state.room && <TimeGrid
-                    className={styles.timeGrid}
-                    isDisabled={isVotingDisabled}
-                    type={roomType}
-                    storyStatus={storyStatus}
-                    selectedTime={selectedTime}
-                    onSelect={selectTime}
-                    onStartAction={startStory}
-                    values={timeValues}
-                    isHost={canManageRoom}
-                    isUserActive={currentUser?.active}
-                    onParticipateAction={() => changeUserActivity(true)}
-                />}
-                {!!state.room && <MemberList
-                    className={styles.memberList}
-                    isHost={isHost}
-                    currentUserId={serverUser.id}
-                    isCurrentUserAdmin={isCurrentUserAdmin}
-                    roomType={roomType}
-                    inProgress={isVotingInProgress}
-                    storyId={state?.story?.id}
-                    roomId={roomId}
-                    members={usersWithVotes}
-                    hostId={host?.id}
-                    average={average}
-                    isFinished={isStoryFinished}
-                    onRemoveUser={removeUserFromRoom}
-                    onToggleAdmin={isHost ? toggleUserAdmin : undefined}
-                />}
+                className={clsx(styles.body, {
+                    [styles.isColumn]: roomType === VoteValuesTypes.boolean,
+                    [styles.isLoading]: !state.room,
+                })}
+            >
+                <main className={styles.voteArea}>
+                    <div className={styles.voteAreaInner}>
+                        <AnimatePresence mode="wait">
+                            {!state.room && (
+                                <motion.div
+                                    key="loading"
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -8 }}
+                                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                                >
+                                    <Animation text="Room is loading..." />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        <AnimatePresence>
+                            {storyStatus === StoryStatusTypes.IDLE && !canManageRoom && (
+                                <motion.div
+                                    key="banner-idle"
+                                    className={styles.banner}
+                                    initial={{ opacity: 0, y: -8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -8 }}
+                                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                                >
+                                    <Tag type="info">Idle</Tag>
+                                    <div>
+                                        <div className={styles.bannerTitle}>Waiting for the host to start</div>
+                                        <div className={styles.bannerCopy}>Once they hit start, your cards will light up.</div>
+                                    </div>
+                                </motion.div>
+                            )}
+                            {!!state.room && currentUser && !currentUser.active && storyStatus !== StoryStatusTypes.IDLE && (
+                                <motion.div
+                                    key="banner-observer"
+                                    className={clsx(styles.banner, styles.warm)}
+                                    initial={{ opacity: 0, y: -8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -8 }}
+                                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                                >
+                                    <Tag type="warning">Observer</Tag>
+                                    <div>
+                                        <div className={styles.bannerTitle}>You&apos;re watching this round</div>
+                                        <div className={styles.bannerCopy}>Switch to participate to cast a vote.</div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        {!!state.room && (
+                            <TimeGrid
+                                className={styles.timeGrid}
+                                isDisabled={isVotingDisabled}
+                                type={roomType}
+                                storyStatus={storyStatus}
+                                selectedTime={selectedTime}
+                                onSelect={selectTime}
+                                onStartAction={startStory}
+                                values={timeValues}
+                                isHost={canManageRoom}
+                                isUserActive={currentUser?.active}
+                                onParticipateAction={() => changeUserActivity(true)}
+                            />
+                        )}
+                        <AnimatePresence>
+                        {showRevealSummary && (
+                            <motion.div
+                                key="reveal"
+                                className={styles.revealCard}
+                                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                                transition={{ duration: 0.32, ease: [0.2, 0.8, 0.2, 1] }}
+                            >
+                                <div className={styles.revealRow}>
+                                    <div className={styles.revealStat}>
+                                        <div className={styles.revealLabel}>Average</div>
+                                        <div className={styles.revealBig}>
+                                            {average ?? '—'}
+                                            {average != null && <span className={styles.revealUnit}>{unit}</span>}
+                                        </div>
+                                    </div>
+                                    <div className={styles.revealDivider} />
+                                    <div className={styles.revealStat}>
+                                        <div className={styles.revealLabel}>Spread</div>
+                                        <div className={styles.revealBig}>
+                                            {minVote != null && maxVote != null ? `${minVote} → ${maxVote}` : '—'}
+                                        </div>
+                                    </div>
+                                    <div className={styles.revealDivider} />
+                                    <div className={styles.revealStat}>
+                                        <div className={styles.revealLabel}>Most common</div>
+                                        <div className={styles.revealBig}>
+                                            {modeVote ?? '—'}
+                                            {modeVote != null && <span className={styles.revealUnit}>{unit}</span>}
+                                        </div>
+                                    </div>
+                                    <div className={styles.revealDivider} />
+                                    <div className={styles.revealStat}>
+                                        <div className={styles.revealLabel}>Consensus</div>
+                                        <div className={styles.revealBig}>
+                                            {consensusRate != null ? `${consensusRate}%` : '—'}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles.revealFoot}>
+                                    <span className={styles.revealHint}>
+                                        Discuss the outliers, then move on to the next story.
+                                    </span>
+                                    {canManageRoom && (
+                                        <Button
+                                            size="s"
+                                            icon={<TbPlayerTrackNext />}
+                                            variant="warning"
+                                            onClick={nextStory}
+                                        >
+                                            Next story
+                                        </Button>
+                                    )}
+                                </div>
+                            </motion.div>
+                        )}
+                        </AnimatePresence>
+                    </div>
+                </main>
+                {!!state.room && (
+                    <aside className={styles.members}>
+                        <MemberList
+                            isHost={isHost}
+                            currentUserId={serverUser.id}
+                            isCurrentUserAdmin={isCurrentUserAdmin}
+                            roomType={roomType}
+                            inProgress={isVotingInProgress}
+                            storyId={state?.story?.id}
+                            roomId={roomId}
+                            members={usersWithVotes}
+                            hostId={host?.id}
+                            average={average}
+                            isFinished={isStoryFinished}
+                            onRemoveUser={removeUserFromRoom}
+                            onToggleAdmin={isHost ? toggleUserAdmin : undefined}
+                        />
+                    </aside>
+                )}
             </div>
-            <Footer storyStatus={storyStatus} />
-        </>
+            <Footer />
+            <Sound storyStatus={storyStatus} />
+        </div>
     );
 };
 

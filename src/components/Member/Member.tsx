@@ -1,4 +1,5 @@
 import { ConfirmModal, DropdownMenu, Tooltip, type DropdownMenuItem } from '@/components';
+import { getAvatarColor, getInitials } from '@/utils/avatar';
 import clsx from 'clsx';
 import { useCallback, useMemo } from 'react';
 import { BsFillPatchCheckFill } from 'react-icons/bs';
@@ -13,6 +14,7 @@ export interface MemberProps {
     id: number;
     isValueVisible?: boolean;
     name: string | null;
+    avatarUrl?: string | null;
     value: number | string | null;
     isCurrentUserHost?: boolean;
     isCurrentUserAdmin?: boolean;
@@ -30,6 +32,7 @@ export function Member({
     id,
     className,
     name,
+    avatarUrl,
     value,
     isValueVisible,
     isCurrentUserHost,
@@ -57,22 +60,28 @@ export function Member({
         await onToggleAdmin?.(id, !isMemberAdmin);
     }, [onToggleAdmin, id, isMemberAdmin]);
 
-    const valueContent = useMemo(() => {
-        switch (true) {
-            case !isValueVisible && !!value && !isDisabled:
-                return <BsFillPatchCheckFill className={styles.icon} />;
-            case !isValueVisible && !value && !isDisabled:
-                return null;
-            case isDisabled:
-                return <span className={styles.value} />;
-            default:
-                return <span className={styles.value}>{value}</span>;
-        }
-    }, [isDisabled, isValueVisible, value]);
+    const hasVote = value !== null && value !== undefined && value !== '';
 
-    // The room owner can grant/revoke admin rights and remove anyone (except the host).
-    // Admins can only remove other non-host members.
-    // Every member can remove themselves from the room.
+    const valueContent = useMemo(() => {
+        if (isDisabled) {
+            return <span className={styles.value}>—</span>;
+        }
+        if (!isValueVisible && hasVote) {
+            return (
+                <span className={clsx(styles.value, styles.valueVoted)}>
+                    <BsFillPatchCheckFill className={styles.icon} />
+                </span>
+            );
+        }
+        if (!isValueVisible && !hasVote) {
+            return <span className={clsx(styles.value, styles.valueEmpty)} />;
+        }
+        if (hasVote) {
+            return <span className={clsx(styles.value, styles.valueRevealed)}>{value}</span>;
+        }
+        return <span className={clsx(styles.value, styles.valueEmpty)} />;
+    }, [isDisabled, isValueVisible, value, hasVote]);
+
     const canManageOthers = !isSelf && !isMemberHost && (isCurrentUserHost || isCurrentUserAdmin);
     const canOpenMenu = (isCurrentUserHost || !!isCurrentUserAdmin) && (!!isSelf || canManageOthers);
 
@@ -99,24 +108,47 @@ export function Member({
     return (
         <div
             data-ph="member"
-            className={clsx(styles.container, { [styles.isDisabled]: isDisabled }, className)}>
+            className={clsx(styles.container, { [styles.isDisabled]: isDisabled }, className)}
+        >
+            {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                    src={avatarUrl}
+                    alt=""
+                    className={styles.avatar}
+                    referrerPolicy="no-referrer"
+                />
+            ) : (
+                <span
+                    className={styles.avatar}
+                    style={{ backgroundColor: getAvatarColor(id) }}
+                    aria-hidden="true"
+                >
+                    {getInitials(name)}
+                </span>
+            )}
             <div className={styles.head}>
-                <span className={styles.name}>{name}</span>
-                {isMemberHost && (
-                    <Tooltip text="Room owner" position="top">
-                        <FaStar className={styles.star} aria-label="Room owner" />
-                    </Tooltip>
-                )}
-                {!isMemberHost && isMemberAdmin && (
-                    <Tooltip text="Admin — can manage the session" position="top">
-                        <MdOutlineAdminPanelSettings className={styles.adminBadge} aria-label="Admin" />
-                    </Tooltip>
-                )}
+                <div className={styles.name}>
+                    <span className={styles.nameText}>{name}</span>
+                    {isMemberHost && (
+                        <Tooltip text="Room owner" position="top">
+                            <span className={clsx(styles.badge, styles.badgeOwner)} aria-label="Room owner">
+                                <FaStar className={styles.star} />
+                            </span>
+                        </Tooltip>
+                    )}
+                    {!isMemberHost && isMemberAdmin && (
+                        <Tooltip text="Admin — can manage the session" position="top">
+                            <span className={clsx(styles.badge, styles.badgeAdmin)} aria-label="Admin">
+                                <MdOutlineAdminPanelSettings className={styles.adminBadge} />
+                            </span>
+                        </Tooltip>
+                    )}
+                    {isDisabled && <span className={styles.observerLabel}>Observer</span>}
+                </div>
             </div>
             <div className={clsx(styles.tail, { [styles.noMenu]: !canOpenMenu })}>
-                <div className={styles.valueSlot}>
-                    {valueContent}
-                </div>
+                <div className={styles.valueSlot}>{valueContent}</div>
                 {canOpenMenu && (
                     <DropdownMenu
                         ariaLabel={`Manage ${name ?? 'member'}`}

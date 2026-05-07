@@ -4,6 +4,7 @@ import { VoteValuesType, VoteValuesTypes } from '@/constants/VoteValues';
 import { UserWithActivity, UserWithVote } from '@/types';
 import { isNumber } from '@/utils/isNumber';
 import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useBoolean } from 'usehooks-ts';
@@ -55,17 +56,13 @@ export const MemberList = ({
         [members],
     );
 
-    const progress = useMemo(() => {
-        if (!amount) {
-            return '0%';
-        }
-        return `${voted / amount * 100}%`;
+    const progressPct = useMemo(() => {
+        if (!amount) return 0;
+        return Math.min(100, Math.round((voted / amount) * 100));
     }, [amount, voted]);
 
     const sortedMembers = useMemo(
         () => [...(members ?? [])].sort((a, b) => {
-            // Owners, admins, and active voters stay on top; inactive spectators
-            // (who are neither owner nor admin) sink to the bottom.
             const aIsTop = a.id === hostId || a.isAdmin || a.active;
             const bIsTop = b.id === hostId || b.isAdmin || b.active;
             if (aIsTop !== bIsTop) {
@@ -78,8 +75,10 @@ export const MemberList = ({
         [members, hostId],
     );
 
-    const yesAmount = members?.filter(({ active, value }) => value === 1 && active)?.length;
-    const noAmount = members?.filter(({ active, value }) => value === 0 && active)?.length;
+    const yesAmount = members?.filter(({ active, value }) => value === 1 && active)?.length ?? 0;
+    const noAmount = members?.filter(({ active, value }) => value === 0 && active)?.length ?? 0;
+
+    const isBoolean = roomType === VoteValuesTypes.boolean;
 
     return (
         <div
@@ -89,66 +88,70 @@ export const MemberList = ({
                 [styles.isFinished]: isFinished,
             }, className)}
         >
-            <div
-                className={clsx(
-                    styles.status,
-                    {
-                        [styles.isVisible]: inProgress || isFinished,
-                        [styles.result]: isFinished,
-                    },
+            <div className={styles.head}>
+                <div>
+                    <div className={styles.title}>{isFinished ? 'Result' : 'Voting now'}</div>
+                    <div className={styles.summary}>
+                        {isFinished && !isBoolean && (
+                            <>Average: <span className={styles.summaryAvg}>{average ?? '—'}</span></>
+                        )}
+                        {isFinished && isBoolean && (
+                            <span className={styles.summarySplit}>
+                                Yes: {yesAmount} <span style={{ color: 'var(--ink-4)' }}>·</span> No: {noAmount}
+                            </span>
+                        )}
+                        {!isFinished && <>{voted}/{amount} voted</>}
+                    </div>
+                </div>
+                {isHostInProgress && (
+                    <button
+                        id="toggle-visibility"
+                        type="button"
+                        aria-label={visibility.value ? 'Hide votes' : 'Peek at votes'}
+                        title={visibility.value ? 'Hide votes' : 'Peek at votes'}
+                        onClick={visibility.toggle}
+                        className={clsx(styles.peekBtn, { [styles.peekOn]: visibility.value })}
+                    >
+                        {visibility.value ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}
+                    </button>
                 )}
-            >
-                <div
-                    style={{ width: progress }}
-                    className={styles.progress}
-                />
-                {inProgress && <span className={styles.progressValue}>{voted}/{amount}</span>}
-                {isFinished && roomType !== VoteValuesTypes.boolean &&
-                    <span className={styles.progressValue}>Average: {average}</span>}
-                {isFinished && roomType === VoteValuesTypes.boolean &&
-                    <span className={styles.progressValue}>Yes: {yesAmount} | No: {noAmount}</span>}
             </div>
 
-            <div className={styles.container}>
-                {isHostInProgress && (
-                    <>
-                        <button
-                            id="toggle-visibility"
-                            onClick={visibility.toggle}
-                            className={styles.button}
+            <div className={styles.progressTrack}>
+                <span className={styles.progress} style={{ width: `${progressPct}%` }} />
+            </div>
+
+            <div className={styles.members}>
+                <AnimatePresence initial={false}>
+                    {sortedMembers.map(({ id, name, value, active, isAdmin, avatar_url }) => (
+                        <motion.div
+                            key={id}
+                            layout
+                            initial={{ opacity: 0, y: -6, height: 0 }}
+                            animate={{ opacity: 1, y: 0, height: 'auto' }}
+                            exit={{ opacity: 0, y: -6, height: 0 }}
+                            transition={{ duration: 0.2, ease: 'easeOut' }}
                         >
-                            {visibility.value
-                                ? <BsFillEyeFill className={styles.buttonIcon} />
-                                : <BsFillEyeSlashFill className={styles.buttonIcon} />
-                            }
-                        </button>
-                        <div className={styles.bluredOverlay} />
-                    </>
-                )}
-                {sortedMembers.map(({ id, name, value, active, isAdmin }) => (
-                    <Member
-                        id={id}
-                        onRemoveUser={onRemoveUser}
-                        onToggleAdmin={onToggleAdmin}
-                        isValueVisible={visibility.value || !inProgress}
-                        menuClass={styles.memberMenu}
-                        className={styles.item}
-                        key={id}
-                        isDisabled={!active}
-                        isInProgress={inProgress}
-                        isCurrentUserHost={isHost}
-                        isCurrentUserAdmin={isCurrentUserAdmin}
-                        isMemberHost={hostId === id}
-                        isMemberAdmin={!!isAdmin}
-                        isSelf={currentUserId === id}
-                        name={name}
-                        value={roomType === VoteValuesTypes.boolean && isNumber(value) ?
-                            (value
-                                    ? 'Yes'
-                                    : 'No'
-                            ) : value}
-                    />
-                ))}
+                            <Member
+                                id={id}
+                                onRemoveUser={onRemoveUser}
+                                onToggleAdmin={onToggleAdmin}
+                                isValueVisible={visibility.value || !inProgress}
+                                menuClass={styles.memberMenu}
+                                isDisabled={!active}
+                                isInProgress={inProgress}
+                                isCurrentUserHost={isHost}
+                                isCurrentUserAdmin={isCurrentUserAdmin}
+                                isMemberHost={hostId === id}
+                                isMemberAdmin={!!isAdmin}
+                                isSelf={currentUserId === id}
+                                name={name}
+                                avatarUrl={avatar_url}
+                                value={isBoolean && isNumber(value) ? (value ? 'Yes' : 'No') : value}
+                            />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             </div>
         </div>
     );

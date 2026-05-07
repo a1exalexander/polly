@@ -1,4 +1,7 @@
 export * from './Button';
+export * from './Logo';
+export * from './SoundToggle';
+export * from './ThemeToggle';
 export * from './TimeCard';
 export * from './TimeGrid';
 export * from './Navbar';
