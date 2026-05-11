@@ -1,31 +1,73 @@
 :root {
-    /* Base colors - light theme */
-    --primary-color: black;
-    --secondary-color: white;
-    --success-color: #4caf50;
-    --warning-color: #ff9800;
-    --warning-color-opacity: #fff5e9;
-    --info-color: #2196f3;
-    --info-color-opacity: #e5f2ff;
-    --hot-pink: hotpink;
-    --danger-color: #f44336;
-    --danger-color-opacity: #ffeae7;
+    /* === Polly v2 design tokens === */
+    /* Brand accents — Periwinkle + Peach */
+    --cool: #6b7cff;
+    --cool-soft: #e3e7ff;
+    --cool-ink: #2c3aa8;
+    --warm: #ff8a5c;
+    --warm-soft: #ffe2d3;
+    --warm-ink: #b14a1f;
 
-    /* Grey scale - light theme */
-    --grey-ligheness: #f5f5f5;
-    --grey-lighen: #eeeeee;
-    --grey-light: #d3d3d3;
-    --grey: #9e9e9e;
-    --grey-dark: #757575;
+    /* Status colors */
+    --ok: #4fa872;
+    --ok-soft: #d8eedf;
+    --warn: #d9a441;
+    --warn-soft: #f6e7c7;
+    --danger: #d05a5a;
+    --danger-soft: #f5dcdc;
+
+    /* Warm-tinted neutrals */
+    --bg: #faf7f2;
+    --bg-2: #f3eee5;
+    --bg-3: #ece5d6;
+    --surface: #ffffff;
+    --surface-2: #fbf8f2;
+    --ink: #1d1a17;
+    --ink-2: #4a443c;
+    --ink-3: #8a8275;
+    --ink-4: #c4baa8;
+    --line: #e7dfd0;
+    --line-2: #d8cdb6;
+
+    /* Radii */
+    --radius-xs: 6px;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+    --radius-pill: 999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(40, 30, 15, 0.04), 0 2px 6px rgba(40, 30, 15, 0.04);
+    --shadow-md: 0 2px 8px rgba(40, 30, 15, 0.05), 0 8px 24px rgba(40, 30, 15, 0.06);
+    --shadow-lg: 0 8px 32px rgba(40, 30, 15, 0.08), 0 24px 60px rgba(40, 30, 15, 0.08);
+    --shadow-pop: 0 14px 40px rgba(107, 124, 255, 0.18);
+
+    /* === Legacy variable names (re-mapped to new palette so existing components inherit the new look) === */
+    --primary-color: var(--ink);
+    --secondary-color: var(--surface);
+
+    --success-color: var(--ok);
+    --warning-color: var(--warm);
+    --warning-color-opacity: var(--warm-soft);
+    --info-color: var(--cool);
+    --info-color-opacity: var(--cool-soft);
+    --hot-pink: hotpink;
+    --danger-color: var(--danger);
+    --danger-color-opacity: var(--danger-soft);
+
+    --grey-ligheness: var(--bg-2);
+    --grey-lighen: var(--bg-3);
+    --grey-light: var(--line-2);
+    --grey: var(--ink-3);
+    --grey-dark: var(--ink-2);
     --grey-darken: #4f4f4f;
     --grey-darkness: #2f2f2f;
 
-    /* Background colors */
-    --bg-primary: #ebebf8;
-    --bg-pattern: #e5e5f7;
-    --bg-pattern-dot: #3443ab;
+    --bg-primary: var(--bg);
+    --bg-pattern: var(--bg-2);
+    --bg-pattern-dot: rgba(40, 30, 15, 0.08);
 
-    /* Form-specific colors (for inverted card pattern) */
     --form-border-color: #4a4a4a;
     --input-bg-color: #2a2a2a;
     --input-border-color: #555555;
@@ -33,42 +75,46 @@
     --minicard-border-color: #666666;
     --minicard-color: #999999;
 
-    /* Layout & Animation */
     --grid-size: 8px;
     --container: 1140px;
     --transition-time: 0.2s;
     --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    --shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    --shadow: 0 0 12px rgba(40, 30, 15, 0.08);
     color-scheme: light;
 }
 
-/* Dark theme */
+/* Dark theme — invert neutrals, keep accents */
 [data-theme="dark"] {
-    --primary-color: #f0f0f0;
-    --secondary-color: #1a1a2e;
-    --success-color: #66bb6a;
-    --warning-color: #ffb74d;
-    --warning-color-opacity: #3d2e1a;
-    --info-color: #64b5f6;
-    --info-color-opacity: #1a2a3d;
-    --danger-color: #ef5350;
-    --danger-color-opacity: #3d1a1a;
+    --bg: #15130f;
+    --bg-2: #1d1a15;
+    --bg-3: #28231b;
+    --surface: #1d1a15;
+    --surface-2: #221e18;
+    --ink: #f3ece0;
+    --ink-2: #cfc6b4;
+    --ink-3: #8a8275;
+    --ink-4: #5e564a;
+    --line: #2f2a22;
+    --line-2: #3c352b;
 
-    /* Grey scale - dark theme (inverted) */
-    --grey-ligheness: #2f2f2f;
-    --grey-lighen: #3a3a3a;
-    --grey-light: #4f4f4f;
-    --grey: #757575;
-    --grey-dark: #9e9e9e;
-    --grey-darken: #bdbdbd;
-    --grey-darkness: #e0e0e0;
+    --cool-soft: #2a2f57;
+    --cool-ink: #c4cbff;
+    --warm-soft: #4a2d20;
+    --warm-ink: #ffd1ba;
+    --ok-soft: #1f3328;
 
-    /* Background colors - dark */
-    --bg-primary: #0d0d1a;
-    --bg-pattern: #121220;
-    --bg-pattern-dot: #4a5ac7;
+    --primary-color: var(--ink);
+    --secondary-color: var(--surface);
+    --bg-primary: var(--bg);
+    --bg-pattern: var(--bg-2);
+    --bg-pattern-dot: rgba(255, 240, 220, 0.06);
 
-    /* Form-specific colors - dark theme (inverted card on light bg) */
+    --grey-ligheness: var(--bg-2);
+    --grey-lighen: var(--bg-3);
+    --grey-light: var(--line-2);
+    --grey: var(--ink-3);
+    --grey-dark: var(--ink-2);
+
     --form-border-color: #c0c0c0;
     --input-bg-color: #e8e8e8;
     --input-border-color: #b0b0b0;
@@ -89,7 +135,7 @@
 }
 
 html {
-    background-color: var(--bg-primary) !important;
+    background-color: var(--bg) !important;
     transition: background-color var(--transition-time) ease;
 }
 
@@ -99,12 +145,11 @@ html, body {
 
 
 body {
-    color: var(--primary-color) !important;
+    color: var(--ink) !important;
     background-color: inherit !important;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     font-family: 'Montserrat Variable', sans-serif;
-
 }
 
 .layout {
@@ -114,6 +159,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: background 400ms ease;
 }
 
 .layout > * {
@@ -121,21 +167,42 @@ body {
     z-index: 1;
 }
 
+/* Subtle warm dotted texture */
 .layout::after {
     position: absolute;
     content: '';
-    opacity: 0.5;
+    opacity: 0.55;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(var(--bg-pattern-dot) 0.75px, transparent 0.75px), radial-gradient(var(--bg-pattern-dot) 0.75px, var(--bg-pattern) 0.75px);
-    background-size: 30px 30px;
-    background-position: 0 0, 15px 15px;
+    background-image: radial-gradient(var(--bg-pattern-dot) 0.75px, transparent 0.75px);
+    background-size: 22px 22px;
+    background-position: 0 0;
     z-index: 0;
-    transition: background-image var(--transition-time) ease;
+    transition: background-image var(--transition-time) ease, opacity var(--transition-time) ease;
+}
+
+/* Room state-driven page background — accent fades from header into body.
+   RoomPage toggles `data-story-state` on <body> so the gradient covers the
+   full viewport without the room component re-mounting the layout. */
+body[data-story-state="active"] {
+    background: linear-gradient(180deg,
+        color-mix(in oklab, var(--warm-soft) 70%, var(--bg)) 0%,
+        var(--bg) 360px) !important;
+}
+body[data-story-state="active"] .layout::after {
+    opacity: 0.35;
+}
+body[data-story-state="finished"] {
+    background: linear-gradient(180deg,
+        color-mix(in oklab, var(--ok-soft) 70%, var(--bg)) 0%,
+        var(--bg) 360px) !important;
+}
+body[data-story-state="finished"] .layout::after {
+    opacity: 0.35;
 }
 
 img, picture, video, canvas, svg {
@@ -156,9 +223,3 @@ p, h1, h2, h3, h4, h5, h6 {
     isolation: isolate;
 }
 
-.theme-switch-container {
-    position: fixed;
-    top: calc(var(--grid-size) * 3);
-    right: calc(var(--grid-size) * 3);
-    z-index: 1000;
-}

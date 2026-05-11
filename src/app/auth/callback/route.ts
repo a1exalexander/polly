@@ -17,15 +17,37 @@ export async function GET(request: Request) {
         const { data: { user } } = await supabase.auth.getUser();
 
         if (user?.id) {
-            await supabase.from('Users')
-                .upsert({ user_id: user.id, name: getUserName(user), email: user.email }, { onConflict: 'user_id' });
+            const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+            const avatarUrl = (meta.avatar_url ?? meta.picture) as string | null | undefined;
+            const baseRow = {
+                user_id: user.id,
+                name: getUserName(user),
+                email: user.email,
+            };
+            // Try with avatar_url first. If the column doesn't exist yet (migration
+            // not applied), retry without it so sign-in still works.
+            const { error } = await supabase.from('Users')
+                .upsert({ ...baseRow, avatar_url: avatarUrl ?? null }, { onConflict: 'user_id' });
+            if (error && /avatar_url/i.test(error.message)) {
+                await supabase.from('Users').upsert(baseRow, { onConflict: 'user_id' });
+            }
         }
     }
 
-    if (redirectTo) {
+    if (isSafeRelativePath(redirectTo)) {
         return NextResponse.redirect(`${origin}${redirectTo}`);
     }
 
     // URL to redirect to after sign up process completes
     return NextResponse.redirect(`${origin}`);
+}
+
+// Restrict post-auth redirects to same-origin relative paths. Reject anything
+// that could resolve to an external host (`//evil.com`, `/\evil.com`, full URLs,
+// etc.) — browsers treat protocol-relative and backslash forms as cross-origin.
+function isSafeRelativePath(value: string | null | undefined): value is string {
+    if (!value) return false;
+    if (!value.startsWith('/')) return false;
+    if (value.startsWith('//') || value.startsWith('/\\')) return false;
+    return true;
 }

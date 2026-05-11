@@ -1,73 +1,196 @@
-.page {
-    max-width: var(--container);
-    margin: 0 auto;
-    padding: calc(var(--grid-size) * 22) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
+/* === Polly v2 — Room layout === */
+
+.shell {
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    align-items: flex-start;
-    gap: calc(var(--grid-size) * 8);
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
-.isHost {
-    padding: calc(var(--grid-size) * 26) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
-}
-
-.page.isColumn {
+.body {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: calc(var(--grid-size) * 3);
+    padding: calc(var(--grid-size) * 4) calc(var(--grid-size) * 4);
+    max-width: 1480px;
     width: 100%;
-    max-width: calc(var(--grid-size) * 70);
-    flex-direction: column;
-    align-items: center;
-    gap: calc(var(--grid-size) * 8);
+    margin: 0 auto;
+    align-items: start;
+}
+
+.body.isColumn {
+    grid-template-columns: 1fr;
+}
+
+.voteArea {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 360px;
+    min-width: 0;
+}
+
+.voteAreaInner {
+    width: 100%;
+    max-width: 920px;
 }
 
 .timeGrid {
-    margin-bottom: calc(var(--grid-size) * 6);
+    width: 100%;
 }
 
-.page.isColumn .timeGrid {
-    align-self: stretch;
+.banner {
+    display: flex;
+    gap: calc(var(--grid-size) * 2);
+    align-items: center;
+    padding: calc(var(--grid-size) * 2) calc(var(--grid-size) * 3);
+    border-radius: var(--radius-lg);
+    background: var(--cool-soft);
+    color: var(--cool-ink);
+    margin-bottom: calc(var(--grid-size) * 3);
+    border: 1px solid color-mix(in oklab, var(--cool) 18%, transparent);
 }
 
-.memberList {
-    align-self: stretch;
+.banner.warm {
+    background: var(--warm-soft);
+    color: var(--warm-ink);
+    border-color: color-mix(in oklab, var(--warm) 18%, transparent);
 }
 
-.typeTag {
-    position: absolute !important;
+.bannerTagIcon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.bannerTitle {
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+}
+
+.bannerCopy {
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.members {
+    align-self: start;
+    position: sticky;
     top: calc(var(--grid-size) * 3);
-    left: calc(var(--grid-size) * 3);
+    max-height: calc(100vh - var(--grid-size) * 8);
+    min-width: 0;
 }
 
-/*.isFinished .memberList {*/
-/*    */
-/*}*/
+.body.isColumn .members {
+    position: static;
+    max-height: none;
+}
 
-@media (min-width: 768px) {
-    .page {
-        flex-direction: row;
-        gap: calc(var(--grid-size) * 4);
+/* Reveal summary card — shown when story is finished */
+.revealCard {
+    margin-top: calc(var(--grid-size) * 4);
+    padding: calc(var(--grid-size) * 3);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+}
+
+.revealRow {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr;
+    align-items: start;
+    gap: calc(var(--grid-size) * 1.5);
+}
+
+.revealStat {
+    text-align: center;
+}
+
+.revealLabel {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.revealBig {
+    margin-top: 4px;
+    font-weight: 700;
+    font-size: 2.1rem;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--ink);
+}
+
+/* Spread shows two values joined by an arrow ("2.25 → 9.75") which is much
+   wider than the other stats — use a smaller font so it doesn't wrap. */
+.revealBig.revealBigSpread {
+    font-size: 1.5rem;
+    white-space: nowrap;
+}
+
+.revealUnit {
+    font-size: 1rem;
+    color: var(--ink-3);
+    margin-left: 2px;
+    font-weight: 500;
+}
+
+.revealDivider {
+    width: 1px;
+    height: 36px;
+    background: var(--line);
+    justify-self: center;
+    align-self: center;
+}
+
+.revealFoot {
+    margin-top: calc(var(--grid-size) * 2.75);
+    padding-top: calc(var(--grid-size) * 2.25);
+    border-top: 1px dashed var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: calc(var(--grid-size) * 2);
+    flex-wrap: wrap;
+}
+
+.revealHint {
+    font-size: 0.85rem;
+    color: var(--ink-3);
+}
+
+@media (max-width: 767.98px) {
+    .body {
+        grid-template-columns: 1fr;
+        padding: calc(var(--grid-size) * 3);
     }
-    .isHost {
-        padding: calc(var(--grid-size) * 30) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
-    }
-    .isHost .memberList {
-        min-width: 400px;
-    }
-    .timeGrid {
-        margin-bottom: 0;
+
+    .members {
+        position: static;
+        max-height: none;
     }
 }
 
-@media (min-width: 790px) {
-    .isHost {
-        padding: calc(var(--grid-size) * 26) calc(var(--grid-size) * 3) calc(var(--grid-size) * 3);
+/* Reveal collapses to 2-col earlier — at 768–~1100px the main column is too
+   narrow for the 7-cell layout (sidebar eats ~380px + padding + gap). */
+@media (max-width: 1099.98px) {
+    .revealRow {
+        grid-template-columns: 1fr 1fr;
+        row-gap: calc(var(--grid-size) * 2);
+    }
+
+    .revealDivider {
+        display: none;
     }
 }
 
-/* @media (min-width: 1024px) {
-    .isHost .memberList {
-        min-width: 400px;
-    }
-} */
 
+/* Type tag in top-left of room (legacy positioning, kept for now) */
+.typeTag {
+    display: none !important;
+}

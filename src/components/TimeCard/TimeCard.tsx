@@ -39,9 +39,10 @@ export const TimeCard = ({
         <div className={clsx(
             styles.card,
             styles[type],
-            { 
+            {
                 [styles.hasSubValues]: hasSubs,
-                [styles.isCardSelected]: isCardActive || isSelected
+                [styles.isCardSelected]: isCardActive || isSelected,
+                [styles.isCardDisabled]: isDisabled,
             },
             className,
         )}>

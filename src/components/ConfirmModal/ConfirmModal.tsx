@@ -41,9 +41,12 @@ export const ConfirmModal = ({
         setMounted(true);
     }, []);
 
+    const wasOpenRef = useRef(false);
+
     // Handle open/close with animation
     useEffect(() => {
         if (isOpen) {
+            wasOpenRef.current = true;
             // Store the currently focused element
             previousActiveElement.current = document.activeElement as HTMLElement;
             setShouldRender(true);
@@ -55,11 +58,17 @@ export const ConfirmModal = ({
             });
         } else {
             setIsVisible(false);
+            const shouldRestoreFocus = wasOpenRef.current;
+            wasOpenRef.current = false;
             // Wait for animation to complete before unmounting
             const timer = setTimeout(() => {
                 setShouldRender(false);
-                // Restore focus to the previously focused element
-                previousActiveElement.current?.focus();
+                // Only restore focus if the modal was actually open before — otherwise
+                // a stray focus on the initial mount (or rapid re-renders) would steal
+                // focus from whatever the user is currently interacting with.
+                if (shouldRestoreFocus) {
+                    previousActiveElement.current?.focus();
+                }
             }, ANIMATION_DURATION);
             return () => clearTimeout(timer);
         }

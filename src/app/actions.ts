@@ -9,12 +9,22 @@ export const signInAction = async () => {
     const supabase = await createClient();
     const headersMap = await headers();
 
+    // Only forward `redirect_to` from the referer, and only if it's a safe
+    // same-origin relative path. Prevents an attacker-crafted login URL from
+    // bouncing the user to an external host post-auth.
     const referer = headersMap.get('referer');
-    const params = String(referer).split('?')[1];
+    const refererQuery = referer ? new URL(referer).searchParams.get('redirect_to') : null;
+    const safeRedirect =
+        refererQuery && refererQuery.startsWith('/') && !refererQuery.startsWith('//') && !refererQuery.startsWith('/\\')
+            ? refererQuery
+            : null;
+    const callbackUrl = safeRedirect
+        ? `${headersMap.get('origin')}/auth/callback?redirect_to=${encodeURIComponent(safeRedirect)}`
+        : `${headersMap.get('origin')}/auth/callback`;
     const { error, data } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: `${headersMap.get('origin')}/auth/callback?${params}`,
+            redirectTo: callbackUrl,
         },
     });
 
@@ -32,9 +42,11 @@ export const signOutAction = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
         const { data } = await supabase.from('Users').select('*').eq('user_id', user?.id).single();
-        supabase.from('UsersOnRooms').delete().eq('public_user_id', Number(data?.id));
+        if (data?.id) {
+            await supabase.from('UsersOnRooms').delete().eq('public_user_id', Number(data.id));
+        }
     }
-    supabase.auth.signOut();
+    await supabase.auth.signOut();
     return redirect('/start');
 };
 
@@ -133,6 +145,24 @@ export const joinRoomAction = async (roomId: string) => {
 
     if (publicUserResponse.error) {
         return encodedRedirect('error', '/start', publicUserResponse.error.message);
+    }
+
+    // Backfill avatar_url for users who signed in before this column existed
+    // or whose Google profile picture changed since their last sign-in.
+    // Fire-and-forget — failure must not block joining a room (e.g. before the
+    // avatar_url migration has been applied to the DB).
+    const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+    const incomingAvatarUrl = (meta.avatar_url ?? meta.picture) as string | null | undefined;
+    if (incomingAvatarUrl && publicUserResponse.data?.avatar_url !== incomingAvatarUrl) {
+        supabase
+            .from('Users')
+            .update({ avatar_url: incomingAvatarUrl })
+            .eq('id', publicUserResponse.data.id)
+            .then(({ error }) => {
+                if (error && process.env.NODE_ENV !== 'production') {
+                    console.warn('[avatar backfill skipped]', error.message);
+                }
+            });
     }
 
     const isCurrentUserInRoom = userOnRoomResponse.data;

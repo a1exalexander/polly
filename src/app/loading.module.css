@@ -1,0 +1,77 @@
+/* Mirrors src/app/page.module.css — keep visual parity with the live dashboard. */
+.shell {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--grid-size) * 2.25) calc(var(--grid-size) * 5);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--grid-size);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+
+.greetingRow {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--grid-size) * 1.5);
+}
+
+.main {
+    flex: 1 1 auto;
+    padding: calc(var(--grid-size) * 5);
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: calc(var(--grid-size) * 4);
+    align-items: start;
+}
+
+.createCard {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: calc(var(--grid-size) * 4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 1.25);
+}
+
+.lists {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 3);
+}
+
+@media (max-width: 980px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .main {
+        padding: calc(var(--grid-size) * 3);
+    }
+    .nav {
+        padding: calc(var(--grid-size) * 2) calc(var(--grid-size) * 3);
+    }
+}

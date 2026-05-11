@@ -62,36 +62,38 @@ export const TimeGrid = ({
         activityLoading.setFalse();
     }, [onParticipateAction, activityLoading]);
 
+    const showStartOverlay = storyStatus === StoryStatusTypes.IDLE && isHost;
+    const showParticipateOverlay =
+        !isUserActive && (!isHost || (isHost && storyStatus !== StoryStatusTypes.IDLE));
+    const showDimOverlay = !!isDisabled && !showStartOverlay && !showParticipateOverlay;
+
     return <div
         id="time-grid"
         className={clsx(styles.grid, styles[type], className)}>
-        {
-            storyStatus === StoryStatusTypes.IDLE && isHost && (
-                <div className={styles.buttonWrapper}>
-                    <Button
-                        className={styles.button}
-                        isLoading={startLoading.value}
-                        size="m"
-                        icon={<TbPlayerPlay />}
-                        variant="primary"
-                        onClick={handleStart}>Start story</Button>
-                </div>
-            )
-        }
-        {
-            !isUserActive && (!isHost || (isHost && storyStatus !== StoryStatusTypes.IDLE)) && (
-                <div className={styles.buttonWrapper}>
-                    <Button
-                        className={styles.button}
-                        isLoading={activityLoading.value}
-                        size="m"
-                        bordered
-                        icon={<MdOutlineHowToVote />}
-                        variant="warning"
-                        onClick={handleParticipate}>Participate</Button>
-                </div>
-            )
-        }
+        {showStartOverlay && (
+            <div className={styles.buttonWrapper}>
+                <Button
+                    className={styles.button}
+                    isLoading={startLoading.value}
+                    size="m"
+                    icon={<TbPlayerPlay />}
+                    variant="accent"
+                    onClick={handleStart}>Start story</Button>
+            </div>
+        )}
+        {showParticipateOverlay && (
+            <div className={styles.buttonWrapper}>
+                <Button
+                    className={styles.button}
+                    isLoading={activityLoading.value}
+                    size="m"
+                    bordered
+                    icon={<MdOutlineHowToVote />}
+                    variant="warning"
+                    onClick={handleParticipate}>Participate</Button>
+            </div>
+        )}
+        {showDimOverlay && <div className={styles.dimOverlay} aria-hidden="true" />}
         {values.map((value) => {
             const isCardSelected = selected !== null && (
                 type === VoteValuesTypes.days ? Math.floor(selected) === value : selected === value

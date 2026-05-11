@@ -3,7 +3,6 @@
 import { createRoomAction } from '@/app/actions';
 import { Button, Tag } from '@/components';
 import { tagTypesByVoteType, VoteValues, VoteValuesType } from '@/constants/VoteValues';
-import clsx from 'clsx';
 import { usePostHog } from 'posthog-js/react';
 import { FormEvent, useCallback, useMemo, useState } from 'react';
 import { MdMeetingRoom } from 'react-icons/md';
@@ -36,7 +35,7 @@ export const CreateRoomForm = () => {
 
         return list.map((value) => {
             if (value === '...') {
-                return <span className={styles.dots} key="dots">...</span>;
+                return <span className={styles.dots} key="dots">…</span>;
             }
             return <span
                 key={String(value)}
@@ -48,14 +47,20 @@ export const CreateRoomForm = () => {
         <form
             onSubmit={onSubmit}
             className={styles.form}>
+            <div>
+                <div className={styles.eyebrow}>New room</div>
+                <h2 className={styles.heading}>Spin up an estimation room</h2>
+                <p className={styles.tagline}>Give it a name, pick a scale, share the link. No setup.</p>
+            </div>
+
             <div className={styles.inner}>
-                <div className={clsx(styles.field, styles.inputField)}>
+                <div className={styles.field}>
                     <label
                         className={styles.label}
-                        htmlFor="title">Room name</label>
+                        htmlFor="title">Title</label>
                     <input
                         className={styles.input}
-                        placeholder="My new room"
+                        placeholder="e.g. Sprint 48 grooming"
                         id="title"
                         name="title"
                         type="text"
@@ -64,31 +69,33 @@ export const CreateRoomForm = () => {
                         required />
                 </div>
                 <div className={styles.field}>
-                    <label
-                        className={styles.label}
-                        htmlFor="title">Values type</label>
+                    <span className={styles.label}>Estimation scale</span>
                     <div className={styles.tags}>
-                        {
-                            (Object.keys(VoteValues) as VoteValuesType[]).map((value) => {
-                                return <Tag
-                                    type={tagTypesByVoteType[value]}
-                                    key={value}
-                                    value={value}
-                                    onChange={setSelectedType}
-                                    name="type">{value}</Tag>;
-                            })
-                        }
+                        {(Object.keys(VoteValues) as VoteValuesType[]).map((value) => (
+                            <Tag
+                                type={tagTypesByVoteType[value]}
+                                key={value}
+                                value={value}
+                                onChange={setSelectedType}
+                                checked={selectedType === value}
+                                name="type">{value}</Tag>
+                        ))}
                     </div>
                 </div>
+                {!!selectedType && (
+                    <div className={styles.typeDemo}>
+                        <span className={styles.previewLabel}>Preview</span>
+                        {demoList}
+                    </div>
+                )}
                 <Button
                     icon={<MdMeetingRoom />}
                     className={styles.button}
                     formAction={createRoomAction}
-                    variant="inverted">
+                    variant="accent">
                     Create room
                 </Button>
             </div>
-            {!!selectedType && <div className={styles.typeDemo}>{demoList}</div>}
         </form>
     );
 };

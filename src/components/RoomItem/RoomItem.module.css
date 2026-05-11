@@ -1,3 +1,4 @@
+/* === Polly v2 — Room item card === */
 .link {
     width: 100%;
     height: 100%;
@@ -5,90 +6,98 @@
     cursor: pointer;
     display: flex;
     justify-content: space-between;
-    gap: calc(var(--grid-size) * 4);
+    gap: calc(var(--grid-size) * 2);
     align-items: center;
     text-decoration: none;
-    padding: 0 calc(var(--grid-size) * 3);
-    transition: background-color var(--transition-time) ease;
-}
-
-.link:hover  {
-    background-color: var(--grey-ligheness);
-}
-
-.link:focus-visible, .link:focus {
-    .title {
-        color: var(--hot-pink);
-    }
+    padding: calc(var(--grid-size) * 1.75) calc(var(--grid-size) * 2);
+    border-radius: var(--radius-md);
 }
 
 .titleSection {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--grid-size) / 2);
-    flex-grow: 1;
+    gap: 4px;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .title {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: var(--primary-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.metaRow {
+    display: flex;
+    gap: calc(var(--grid-size) * 1.5);
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .visitDate {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--grey-darken);
-    line-height: 1;
+    font-size: 0.78rem;
+    color: var(--ink-3);
 }
 
 .row {
     display: flex;
     align-items: center;
-    gap: calc(var(--grid-size) * 2);
+    gap: calc(var(--grid-size) * 1.5);
+}
+
+.tag {
+    flex-shrink: 0;
 }
 
 .info {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--grid-size);
+    gap: 4px;
+    color: var(--ink-3);
+    font-size: 0.85rem;
 }
 
 .infoIcon {
     flex-shrink: 0;
-    stroke: var(--primary-color);
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 0.95rem;
+    height: 0.95rem;
 }
 
 .online {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--grid-size);
-    color: var(--success-color);
+    gap: 4px;
+    color: var(--ok);
+    font-size: 0.85rem;
 }
 
 .offline {
-    color: var(--danger-color);
+    color: var(--ink-4);
+    display: none;
 }
 
 .onlineIcon {
     flex-shrink: 0;
     stroke: currentColor;
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 0.95rem;
+    height: 0.95rem;
 }
 
-.infoValue {
-    line-height: 1.2;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--grey-dark);
-}
-
+.infoValue,
 .onlineValue {
-    line-height: 1.2;
-    font-size: 1rem;
-    font-weight: 500;
-    color: currentColor;
+    font-weight: 600;
+}
+
+.arrow {
+    color: var(--ink-4);
+    transition: color var(--transition-time) ease, transform var(--transition-time) ease;
+    flex-shrink: 0;
+}
+
+.link:hover .arrow {
+    color: var(--cool);
+    transform: translateX(3px);
 }

@@ -1,14 +1,16 @@
 .tag {
     display: inline-flex;
-    height: 1.4rem;
-    border: 1px solid var(--secondary-color);
-    background-color: var(--primary-color);
-    border-radius: var(--grid-size);
-    color: var(--secondary-color);
-    font-weight: 500;
+    align-items: center;
+    height: 1.55rem;
+    border: 1px solid transparent;
+    background-color: var(--bg-2);
+    border-radius: var(--radius-pill);
+    color: var(--ink-2);
+    font-weight: 600;
+    letter-spacing: 0.01em;
     text-transform: capitalize;
     padding: 0 calc(var(--grid-size) * 1.5);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     transition-property: border-color, background-color, color;
     transition-duration: var(--transition-time);
     transition-timing-function: ease-in-out;
@@ -26,40 +28,66 @@
 }
 
 .input {
-    z-index: -1;
     position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .input:checked + .info,
+.isChecked .info,
 .info:hover,
 .textTag.info {
-    border-color: var(--info-color);
-    color: var(--info-color);
+    border-color: var(--cool);
+    color: var(--cool-ink);
+}
+
+.isChecked .info {
+    background-color: var(--cool-soft);
 }
 
 .textTag.info {
-    background-color: var(--info-color-opacity);
+    background-color: var(--cool-soft);
+    border-color: transparent;
 }
 
 .input:checked + .warning,
+.isChecked .warning,
 .warning:hover,
 .textTag.warning {
-    border-color: var(--warning-color);
-    color: var(--warning-color);
+    border-color: var(--warm);
+    color: var(--warm-ink);
+}
 
+.isChecked .warning {
+    background-color: var(--warm-soft);
 }
 
 .textTag.warning {
-    background-color: var(--warning-color-opacity);
+    background-color: var(--warm-soft);
+    border-color: transparent;
 }
 
 .input:checked + .danger,
+.isChecked .danger,
 .danger:hover,
 .textTag.danger {
-    border-color: var(--danger-color);
-    color: var(--danger-color);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.isChecked .danger {
+    background-color: var(--danger-soft);
 }
 
 .textTag.danger {
-    background-color: var(--danger-color-opacity);
+    background-color: var(--danger-soft);
+    border-color: transparent;
 }

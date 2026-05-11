@@ -1,57 +1,73 @@
+/* === Polly v2 — Room list block === */
+.section {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: calc(var(--grid-size) * 3);
+    box-shadow: var(--shadow-sm);
+}
+
+.section:not(:first-child) {
+    margin-top: calc(var(--grid-size) * 3);
+}
+
 .label {
-    font-weight: 500;
-    color: var(--grey-darken);
-    margin-bottom: var(--grid-size);
-    padding-left: calc(var(--grid-size) * 3);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin: 0;
 }
 
-.list {
-    background-color: var(--secondary-color);
-    flex-grow: 1;
-    padding-left: 0;
-    list-style: none;
+.head {
     display: flex;
-    flex-direction: column;
-    border-radius: calc(var(--grid-size) * 2);
-    overflow: hidden;
-    box-shadow: var(--shadow);
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: calc(var(--grid-size) * 2);
 }
 
-.item {
-    height: 60px;
-}
-
-.item:not(:last-child)  {
-    border-bottom: 2px solid var(--primary-color);
+.headMeta {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .content {
     display: flex;
     flex-direction: column;
-    min-height: 124px;
-    border-radius: calc(var(--grid-size) * 2);
-    border: 2px solid var(--primary-color);
     position: relative;
-    overflow: hidden;
+    min-height: 80px;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size));
+}
+
+.item {
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    transition: background var(--transition-time) ease,
+                border-color var(--transition-time) ease,
+                transform var(--transition-time) ease;
+}
+
+.item:hover {
+    background: var(--surface);
+    border-color: var(--line);
+    transform: translateX(4px);
 }
 
 .empty {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--grey-darken);
-    background-color: var(--secondary-color);
-}
-
-.section {
-    margin-bottom: calc(var(--grid-size) * 4);
-}
-
-.section:last-child {
-    margin-bottom: 0;
+    color: var(--ink-3);
+    text-align: center;
+    padding: calc(var(--grid-size) * 3);
+    font-size: 0.95rem;
 }

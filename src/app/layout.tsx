@@ -1,5 +1,5 @@
 import { CSPostHogProvider } from '@/app/providers';
-import { ThemeProvider, ThemeSwitch } from '@/components';
+import { ThemeProvider } from '@/components';
 import { getThemeCookie } from '@/components/ThemeProvider/actions';
 import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/montserrat';
@@ -8,9 +8,6 @@ import './globals.css';
 export const metadata: Metadata = {
     title: 'Polly',
     description: 'Real-Time Task Estimation and Voting Platform',
-    icons: {
-        icon: '/favicon.png',
-    },
 };
 
 export const viewport: Viewport = {
@@ -32,9 +29,6 @@ export default async function RootLayout({
             <ThemeProvider initialTheme={theme}>
                 <div className="layout">
                     {children}
-                    <div className="theme-switch-container">
-                        <ThemeSwitch />
-                    </div>
                 </div>
             </ThemeProvider>
             </body>

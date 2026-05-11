@@ -99,6 +99,8 @@ export const Tooltip = ({
             className={clsx(styles.container, className)}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onFocus={handleMouseEnter}
+            onBlur={handleMouseLeave}
         >
             {children}
             {mounted && createPortal(tooltip, document.body)}

@@ -1,45 +1,69 @@
+/* === Polly v2 — Vote grid === */
 .grid {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: calc(var(--grid-size) * 2);
-    flex-basis: 680px;
-    flex-grow: 1;
-    border-radius: var(--grid-size);
+    width: 100%;
+    border-radius: var(--radius-lg);
 }
 
 .grid.boolean {
-    width: 100%;
     flex-wrap: nowrap;
-    flex-basis: auto;
     justify-content: center;
     align-items: center;
+    gap: calc(var(--grid-size) * 2);
+}
+
+@media (min-width: 768px) {
+    .grid {
+        gap: calc(var(--grid-size) * 2);
+    }
 }
 
 @media (min-width: 1024px) {
     .grid {
-        gap: calc(var(--grid-size) * 3);
+        gap: calc(var(--grid-size) * 1.5);
     }
 }
 
+/* Overlay scrim shown when voting is locked (idle for host, observer mode) */
 .buttonWrapper {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: var(--grid-size);
+    background: linear-gradient(180deg,
+        color-mix(in oklab, var(--bg) 65%, transparent) 0%,
+        color-mix(in oklab, var(--bg) 92%, transparent) 100%);
+    backdrop-filter: blur(2px);
+    border-radius: var(--radius-lg);
 }
-.button {
+
+/* Dimming layer shown when voting is disabled but no CTA overlay is visible
+   (e.g. non-host viewing an idle story). Communicates "cards aren't live yet". */
+.dimOverlay {
     position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg,
+        color-mix(in oklab, var(--bg) 55%, transparent) 0%,
+        color-mix(in oklab, var(--bg) 85%, transparent) 100%);
+    backdrop-filter: blur(1.5px);
+    cursor: not-allowed;
+    pointer-events: auto;
+}
+
+.button {
+    position: relative;
+    z-index: 3;
 }
 
 .itemInactive {
-    opacity: 0.5;
+    opacity: 0.45;
+    filter: grayscale(0.15);
 }

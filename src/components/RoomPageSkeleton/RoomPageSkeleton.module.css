@@ -1,0 +1,290 @@
+/* === Polly v2 — Room loading skeleton === */
+.shell {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* === Header === */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--grid-size) * 3);
+    padding: calc(var(--grid-size) * 2) calc(var(--grid-size) * 4);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+}
+
+.navLeft {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--grid-size) * 2);
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--grid-size);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+
+.sep {
+    color: var(--ink-4);
+    font-size: 1.1rem;
+}
+
+.titleBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.titleMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--grid-size);
+}
+
+.navRight {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--grid-size) * 1.5);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.statusBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    padding-right: calc(var(--grid-size) * 1.5);
+    border-right: 1px solid var(--line);
+}
+
+/* === Body grid === */
+/* Track dimensions and breakpoints must match RoomPage.module.css to avoid
+   layout shift on hydration (sidebar 380px, single-column below 768px). */
+.body {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: calc(var(--grid-size) * 3);
+    padding: calc(var(--grid-size) * 4);
+    max-width: 1480px;
+    width: 100%;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.voteArea {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.voteAreaInner {
+    width: 100%;
+    max-width: 920px;
+}
+
+/* === Loading hero === */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: calc(var(--grid-size) * 4.5) 0 calc(var(--grid-size) * 1.5);
+    text-align: center;
+    color: var(--ink-2);
+}
+
+.heroTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+
+.heroSub {
+    font-size: 0.85rem;
+    color: var(--ink-3);
+}
+
+.spinner {
+    display: flex;
+    gap: 6px;
+    margin-bottom: calc(var(--grid-size) * 1.75);
+}
+
+.spinner span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--cool);
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.spinner span:nth-child(2) {
+    background: var(--warm);
+    animation-delay: 0.15s;
+}
+
+.spinner span:nth-child(3) {
+    background: var(--ink);
+    animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spinner span {
+        animation: none;
+        opacity: 0.7;
+    }
+}
+
+/* === Card grid === */
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px 12px;
+    margin-top: calc(var(--grid-size) * 3.5);
+    align-items: start;
+}
+
+.cardCell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.cardSkel {
+    width: 100%;
+    height: 130px;
+    border-radius: 26px;
+    background: linear-gradient(90deg, var(--bg-2) 0%, var(--bg-3) 50%, var(--bg-2) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border: 1px solid var(--line);
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cardSkel {
+        animation: none;
+    }
+}
+
+.subRow {
+    display: flex;
+    gap: 4px;
+}
+
+/* === Members aside === */
+.members {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: calc(var(--grid-size) * 2.5);
+    box-shadow: var(--shadow-sm);
+    align-self: start;
+    position: sticky;
+    top: calc(var(--grid-size) * 3);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--grid-size) * 1.5);
+}
+
+.membersHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--grid-size);
+}
+
+.membersHeading {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.memberList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: calc(var(--grid-size));
+}
+
+.memberRow {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--grid-size) * 1.5);
+    padding: calc(var(--grid-size)) 0;
+}
+
+.memberName {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* === Responsive === */
+@media (max-width: 1024px) {
+    .cardGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .cardSkel {
+        height: 150px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .body {
+        grid-template-columns: 1fr;
+        padding: calc(var(--grid-size) * 3);
+    }
+    .members {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav {
+        padding: calc(var(--grid-size) * 2);
+        gap: calc(var(--grid-size) * 2);
+    }
+    .statusBlock {
+        align-items: flex-start;
+        border-right: none;
+        padding-right: 0;
+    }
+    .cardGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .cardSkel {
+        height: 110px;
+    }
+}
