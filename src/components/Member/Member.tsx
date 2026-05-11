@@ -159,13 +159,15 @@ export function Member({
             </div>
             <div className={styles.tail}>
                 <div className={styles.valueSlot}>{valueContent}</div>
-                {canOpenMenu && (
+                {canOpenMenu ? (
                     <DropdownMenu
                         ariaLabel={`Manage ${name ?? 'member'}`}
                         data-ph="member-menu"
                         triggerClassName={clsx(styles.menuTrigger, { [styles.isInProgress]: isInProgress }, menuClass)}
                         items={menuItems}
                     />
+                ) : (
+                    <span className={styles.menuPlaceholder} aria-hidden="true" />
                 )}
             </div>
             <ConfirmModal

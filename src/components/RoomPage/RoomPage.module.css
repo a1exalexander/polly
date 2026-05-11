@@ -28,6 +28,7 @@
     align-items: flex-start;
     justify-content: center;
     min-height: 360px;
+    min-width: 0;
 }
 
 .voteAreaInner {
@@ -79,6 +80,7 @@
     position: sticky;
     top: calc(var(--grid-size) * 3);
     max-height: calc(100vh - var(--grid-size) * 8);
+    min-width: 0;
 }
 
 .body.isColumn .members {
@@ -162,7 +164,7 @@
     color: var(--ink-3);
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767.98px) {
     .body {
         grid-template-columns: 1fr;
         padding: calc(var(--grid-size) * 3);
@@ -172,7 +174,11 @@
         position: static;
         max-height: none;
     }
+}
 
+/* Reveal collapses to 2-col earlier — at 768–~1100px the main column is too
+   narrow for the 7-cell layout (sidebar eats ~380px + padding + gap). */
+@media (max-width: 1099.98px) {
     .revealRow {
         grid-template-columns: 1fr 1fr;
         row-gap: calc(var(--grid-size) * 2);

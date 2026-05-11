@@ -502,7 +502,7 @@ export const RoomPage = ({
                                     <div className={styles.revealStat}>
                                         <div className={styles.revealLabel}>Spread</div>
                                         <div className={clsx(styles.revealBig, styles.revealBigSpread)}>
-                                            {minVote != null && maxVote != null ? `${minVote} → ${maxVote}` : '—'}
+                                            {minVote != null && maxVote != null ? (minVote === maxVote ? `${minVote}` : `${minVote} → ${maxVote}`) : '—'}
                                         </div>
                                     </div>
                                     <div className={styles.revealDivider} />

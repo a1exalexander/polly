@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     gap: calc(var(--grid-size) * 1.5);
-    padding: calc(var(--grid-size) * 1) calc(var(--grid-size) * 1);
+    padding: calc(var(--grid-size) * 1) 12px;
     border-radius: var(--radius-md);
     transition: background-color var(--transition-time) ease, opacity var(--transition-time) ease;
     min-height: calc(var(--grid-size) * 6);
@@ -175,4 +175,10 @@ img.avatar {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+}
+
+.menuPlaceholder {
+    width: 32px;
+    height: 24px;
+    flex-shrink: 0;
 }

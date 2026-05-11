@@ -31,7 +31,7 @@
 .card.isCardSelected {
     background-color: var(--ink);
     border-color: var(--ink);
-    color: #ffffff;
+    color: var(--surface);
     transform: translateY(-8px) rotate(-2deg);
     box-shadow: var(--shadow-md);
 }
@@ -136,16 +136,16 @@
 
 /* When the parent card is selected (ink background), make subs readable */
 .card.isCardSelected .subButton {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.75);
+    background-color: color-mix(in srgb, var(--surface) 12%, transparent);
+    color: color-mix(in srgb, var(--surface) 75%, transparent);
 }
 .card.isCardSelected .subButton.isSelected {
     background-color: var(--warm);
     color: white;
 }
 .card.isCardSelected .subButton:not(.isDisabled, .isSelected):hover {
-    background-color: rgba(255, 255, 255, 0.22);
-    color: white;
+    background-color: color-mix(in srgb, var(--surface) 22%, transparent);
+    color: var(--surface);
 }
 
 /* Responsive: card widths */
