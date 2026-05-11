@@ -34,10 +34,20 @@ export async function GET(request: Request) {
         }
     }
 
-    if (redirectTo) {
+    if (isSafeRelativePath(redirectTo)) {
         return NextResponse.redirect(`${origin}${redirectTo}`);
     }
 
     // URL to redirect to after sign up process completes
     return NextResponse.redirect(`${origin}`);
+}
+
+// Restrict post-auth redirects to same-origin relative paths. Reject anything
+// that could resolve to an external host (`//evil.com`, `/\evil.com`, full URLs,
+// etc.) — browsers treat protocol-relative and backslash forms as cross-origin.
+function isSafeRelativePath(value: string | null | undefined): value is string {
+    if (!value) return false;
+    if (!value.startsWith('/')) return false;
+    if (value.startsWith('//') || value.startsWith('/\\')) return false;
+    return true;
 }

@@ -72,10 +72,12 @@
 }
 
 /* === Body grid === */
+/* Track dimensions and breakpoints must match RoomPage.module.css to avoid
+   layout shift on hydration (sidebar 380px, single-column below 768px). */
 .body {
     flex: 1 1 auto;
     display: grid;
-    grid-template-columns: 1fr 360px;
+    grid-template-columns: minmax(0, 1fr) 380px;
     gap: calc(var(--grid-size) * 3);
     padding: calc(var(--grid-size) * 4);
     max-width: 1480px;
@@ -177,7 +179,7 @@
 }
 
 .cardSkel {
-    width: 96px;
+    width: 100%;
     height: 130px;
     border-radius: 26px;
     background: linear-gradient(90deg, var(--bg-2) 0%, var(--bg-3) 50%, var(--bg-2) 100%);
@@ -255,12 +257,11 @@
         grid-template-columns: repeat(4, 1fr);
     }
     .cardSkel {
-        width: 100%;
-        max-width: 96px;
+        height: 150px;
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767.98px) {
     .body {
         grid-template-columns: 1fr;
         padding: calc(var(--grid-size) * 3);

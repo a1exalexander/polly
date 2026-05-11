@@ -345,7 +345,7 @@ export const RoomPage = ({
             roomPageService,
             roomId,
             dispatch,
-            channel: supabase.channel(`realtime ${roomId}}`),
+            channel: supabase.channel(`realtime:room:${roomId}`),
             storyId,
         });
 

@@ -28,12 +28,17 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
     );
 
     useEffect(() => {
+        if (!serverUser?.id) {
+            loading.setFalse();
+            return;
+        }
         const supabase = createClient();
+        const publicUserId = Number(serverUser.id);
 
         const getRooms = async () => {
             loading.setTrue();
             const [rooms, usersOnRooms, recentlyVisited] = await Promise.all([
-                supabase.from('Rooms').select('*').eq('public_user_id', Number(serverUser?.id)),
+                supabase.from('Rooms').select('*').eq('public_user_id', publicUserId),
                 supabase.from('UsersOnRooms').select('*'),
                 supabase
                     .from('RecentlyVisitedRooms')
@@ -49,14 +54,13 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
                             user_id
                         )
                     `)
-                    .eq('public_user_id', Number(serverUser?.id))
+                    .eq('public_user_id', publicUserId)
                     .order('last_visited_at', { ascending: false })
                     .limit(5),
             ]);
             dispatch({ type: ActionTypes.ROOMS_FETCHED, payload: rooms.data as Room[] });
             dispatch({ type: ActionTypes.USER_ON_ROOMS_FETCHED, payload: usersOnRooms.data as UserOnRoom[] });
-            
-                        // Transform the recently visited data
+
             const recentRoomsData = recentlyVisited.data?.map(item => ({
                 ...item.Rooms,
                 last_visited_at: item.last_visited_at,
@@ -66,13 +70,13 @@ export const RoomList = ({ className, serverUser }: RoomListProps) => {
         };
         getRooms();
 
-        const channel = realtime(supabase.channel('realtime rooms'), dispatch, Number(serverUser?.id));
+        const channel = realtime(supabase.channel(`realtime:rooms:${publicUserId}`), dispatch, publicUserId);
 
         return () => {
             supabase.removeChannel(channel);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [serverUser?.id]);
 
     const isRoomsEmpty = useMemo(() => getters.isRoomsEmpty(state), [state]);
     const isRecentlyVisitedEmpty = useMemo(() => getters.isRecentlyVisitedRoomsEmpty(state), [state]);

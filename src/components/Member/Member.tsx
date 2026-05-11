@@ -124,6 +124,8 @@ export function Member({
                 <img
                     src={avatarUrl}
                     alt=""
+                    width={36}
+                    height={36}
                     className={styles.avatar}
                     referrerPolicy="no-referrer"
                 />
