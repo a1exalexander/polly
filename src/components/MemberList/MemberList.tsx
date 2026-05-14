@@ -65,16 +65,14 @@ export const MemberList = ({
 
     const sortedMembers = useMemo(
         () => [...(members ?? [])].sort((a, b) => {
-            const aIsTop = a.id === hostId || a.isAdmin || a.active;
-            const bIsTop = b.id === hostId || b.isAdmin || b.active;
-            if (aIsTop !== bIsTop) {
-                return aIsTop ? -1 : 1;
+            if (!!a.active !== !!b.active) {
+                return a.active ? -1 : 1;
             }
             const nameA = (a.name ?? '').toLocaleLowerCase();
             const nameB = (b.name ?? '').toLocaleLowerCase();
             return nameA.localeCompare(nameB);
         }),
-        [members, hostId],
+        [members],
     );
 
     const yesAmount = members?.filter(({ active, value }) => value === 1 && active)?.length ?? 0;
