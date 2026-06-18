@@ -107,10 +107,10 @@
 }
 
 .subButton {
-    padding: 3px 7px;
+    padding: 4px 10px;
     border: 1px solid transparent;
     border-radius: 999px;
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 700;
     background-color: var(--bg-2);
     color: var(--ink-3);
@@ -171,6 +171,16 @@
     .card:not(.boolean) {
         width: calc((100% / 3) - var(--grid-size) * 4 / 3);
     }
+    .subButton {
+        font-size: 0.8rem;
+    }
+}
+
+
+@media (min-width: 890px) {
+    .subButton {
+        font-size: 1rem;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -184,7 +194,7 @@
         font-size: 3.5rem;
     }
     .subButton {
-        font-size: 0.7rem;
+        font-size: 1rem;
     }
 }
 
@@ -194,3 +204,16 @@
         width: calc((100% / 4) - var(--grid-size) * 6 / 4);
     }
 }
+
+@media (min-width: 1180px) {
+    .subButton {
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1260px) {
+    .subButton {
+        font-size: 1rem;
+    }
+}
+
