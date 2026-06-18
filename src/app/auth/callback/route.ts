@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { getUserName } from '@/utils/utils';
+import * as Sentry from '@sentry/nextjs';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -13,7 +14,17 @@ export async function GET(request: Request) {
 
     if (code) {
         const supabase = await createClient();
-        await supabase.auth.exchangeCodeForSession(code);
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+        // Fail loudly instead of falling through to `/` and getting bounced back to
+        // `/start` with no clue why. Surface the reason and capture it for diagnosis.
+        if (exchangeError) {
+            Sentry.captureException(exchangeError);
+            return NextResponse.redirect(
+                `${origin}/start?error=${encodeURIComponent(exchangeError.message)}`,
+            );
+        }
+
         const { data: { user } } = await supabase.auth.getUser();
 
         if (user?.id) {

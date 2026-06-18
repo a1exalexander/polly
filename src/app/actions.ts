@@ -1,7 +1,8 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
-import { encodedRedirect } from '@/utils/utils';
+import { encodedRedirect, getURL } from '@/utils/utils';
+import * as Sentry from '@sentry/nextjs';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -18,9 +19,14 @@ export const signInAction = async () => {
         refererQuery && refererQuery.startsWith('/') && !refererQuery.startsWith('//') && !refererQuery.startsWith('/\\')
             ? refererQuery
             : null;
+    // Behind a reverse proxy the `origin` header can be missing; falling back to it
+    // bare would build `null/auth/callback`, which Supabase rejects and silently
+    // replaces with its Site URL — landing cookies on the wrong origin. Fall back to
+    // the configured site URL instead. (getURL() returns a trailing slash.)
+    const baseUrl = (headersMap.get('origin') ?? getURL()).replace(/\/$/, '');
     const callbackUrl = safeRedirect
-        ? `${headersMap.get('origin')}/auth/callback?redirect_to=${encodeURIComponent(safeRedirect)}`
-        : `${headersMap.get('origin')}/auth/callback`;
+        ? `${baseUrl}/auth/callback?redirect_to=${encodeURIComponent(safeRedirect)}`
+        : `${baseUrl}/auth/callback`;
     const { error, data } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -33,6 +39,7 @@ export const signInAction = async () => {
     }
 
     if (error) {
+        Sentry.captureException(error);
         return encodedRedirect('error', '/start', error.message);
     }
 };

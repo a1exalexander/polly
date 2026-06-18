@@ -1,8 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
-const protectedRoutes = ['/', '/room'];
-
 export const updateSession = async (request: NextRequest) => {
     let response = NextResponse.next({
         request: {
@@ -36,15 +34,22 @@ export const updateSession = async (request: NextRequest) => {
     // This will refresh session if expired - required for Server Components
     // https://supabase.com/docs/guides/auth/server-side/nextjs
 
-    const user = await supabase.auth.getUser();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
     const path = request.nextUrl.pathname;
 
-    const isProtectedRoute = protectedRoutes.includes(path);
+    const isProtectedRoute = path === '/' || path.startsWith('/room');
 
-    if (isProtectedRoute && user?.error) {
-        await supabase.auth.signOut();
-        return NextResponse.redirect(new URL('/start', request.url));
+    // Redirect unauthenticated users away from protected routes. We intentionally
+    // do NOT sign out here: a transient getUser() failure must not destroy a valid
+    // session, otherwise a single network blip locks the user out permanently.
+    if (isProtectedRoute && !user) {
+        const redirect = NextResponse.redirect(new URL('/start', request.url));
+        // Carry over any refreshed-session cookies so we don't drop a refresh.
+        response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+        return redirect;
     }
 
     return response;
