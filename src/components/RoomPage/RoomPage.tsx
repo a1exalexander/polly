@@ -92,6 +92,9 @@ export const RoomPage = ({
     const roomType = (state.room?.type || VoteValuesTypes.days) as VoteValuesType;
     const timeValues = VoteValues[roomType];
 
+    console.log({average});
+    
+
     const fetchPageData = useCallback(async () => {
         if (!roomPageService) {
             return;
@@ -501,7 +504,7 @@ export const RoomPage = ({
                                     <div className={styles.revealDivider} />
                                     <div className={styles.revealStat}>
                                         <div className={styles.revealLabel}>Spread</div>
-                                        <div className={clsx(styles.revealBig, styles.revealBigSpread)}>
+                                        <div className={clsx(styles.revealBig, {[styles.revealBigSpread]: minVote != null && maxVote != null && minVote !== maxVote})}>
                                             {minVote != null && maxVote != null ? (minVote === maxVote ? `${minVote}` : `${minVote} → ${maxVote}`) : '—'}
                                         </div>
                                     </div>

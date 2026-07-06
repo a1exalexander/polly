@@ -67,7 +67,7 @@ export const Navbar = ({
         }
     }, [roomLinkPath, copied]);
 
-    const linkLabel = roomLinkPath && host ? `${host}${roomLinkPath}` : roomLinkPath ?? '';
+    const linkLabel = roomLinkPath ? `...${roomLinkPath}` : '';
 
     const startLoading = useBoolean(false);
     const nextLoading = useBoolean(false);

@@ -187,13 +187,18 @@ export const getters = {
         if (!state.story?.finished_at) {
             return null;
         }
-        const average = state.usersOnStory.reduce((acc, { value, public_user_id }) => {
+
+        const users = state.usersOnStory.filter(({ public_user_id }) => {
             const user = state.users.find(({ id }) => id === public_user_id);
-            if (value === null || !user?.active) {
+            return user?.active;
+        });
+        
+        const average = users.reduce((acc, { value }) => {            
+            if (value === null) {
                 return acc;
             }
             return acc + value;
-        }, 0) / (state.usersOnStory.length || 1);
+        }, 0) / (users.length || 1);
 
         return round(average, 2);
     },

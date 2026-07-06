@@ -131,7 +131,7 @@
 
 .subButton.isDisabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.9;
 }
 
 /* When the parent card is selected (ink background), make subs readable */
