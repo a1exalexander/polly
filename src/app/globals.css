@@ -56,6 +56,8 @@
     --danger-color: var(--danger);
     --danger-color-opacity: var(--danger-soft);
 
+    --text-color-contrast: black;
+
     --grey-ligheness: var(--bg-2);
     --grey-lighen: var(--bg-3);
     --grey-light: var(--line-2);
@@ -102,6 +104,8 @@
     --warm-soft: #4a2d20;
     --warm-ink: #ffd1ba;
     --ok-soft: #1f3328;
+
+    --text-color-contrast: white;
 
     --primary-color: var(--ink);
     --secondary-color: var(--surface);

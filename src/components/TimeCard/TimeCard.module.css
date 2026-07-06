@@ -24,7 +24,7 @@
 }
 
 .card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-1px);
     background-color: var(--bg-2);
 }
 
@@ -113,7 +113,7 @@
     font-size: 1rem;
     font-weight: 700;
     background-color: var(--bg-2);
-    color: var(--ink-3);
+    color: var(--ink-2);
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 120ms ease, color 120ms ease, transform 120ms ease;
@@ -121,7 +121,8 @@
 
 .subButton:not(.isDisabled, .isSelected):hover {
     background-color: var(--cool-soft);
-    color: var(--cool-ink);
+    color: var(--text-color-contrast);
+    transform: scale(1.2);
 }
 
 .subButton.isSelected {

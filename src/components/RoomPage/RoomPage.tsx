@@ -90,10 +90,7 @@ export const RoomPage = ({
     const average = useMemo(() => getters.averageStoryValue(state), [state]);
     const isStoryFinished = useMemo(() => getters.isStoryFinished(state), [state]);
     const roomType = (state.room?.type || VoteValuesTypes.days) as VoteValuesType;
-    const timeValues = VoteValues[roomType];
-
-    console.log({average});
-    
+    const timeValues = VoteValues[roomType];    
 
     const fetchPageData = useCallback(async () => {
         if (!roomPageService) {
