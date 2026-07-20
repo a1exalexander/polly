@@ -134,7 +134,8 @@ export const joinRoomAction = async (roomId: string) => {
             .select('*, user:Users(*)')
             .eq('room_id', Number(roomId))
             .eq('user_id', user.id)
-            .single(),
+            .limit(1)
+            .maybeSingle(),
         supabase.from('StoriesOnRooms')
             .select('*')
             .eq('room_id', Number(roomId))

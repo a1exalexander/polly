@@ -40,9 +40,13 @@ export class RoomPageService {
             return [];
         }
 
-        return users
+        const uniqueUsers = new Map<number, UserWithActivity>();
+        users
             .map(({ user, active, is_admin }) => ({ ...user, active, isAdmin: !!is_admin }))
-            .filter(user => user) as UserWithActivity[];
+            .filter(user => user)
+            .forEach((user) => uniqueUsers.set((user as UserWithActivity).id, user as UserWithActivity));
+
+        return Array.from(uniqueUsers.values());
     }
 
     async getStory() {
@@ -102,9 +106,10 @@ export class RoomPageService {
             .select('*, user:Users(*)')
             .eq('room_id', this.roomId)
             .eq('public_user_id', userId)
-            .single();
+            .limit(1)
+            .maybeSingle();
 
-        if (error) {
+        if (error || !data) {
             console.error('Error fetching member', error);
             return null;
         }
