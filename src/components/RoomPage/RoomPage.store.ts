@@ -103,8 +103,16 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
     switch (action.type) {
         case ActionTypes.USERS_FETCHED:
             return { ...state, users: action.payload, usersLoading: false };
-        case ActionTypes.USER_CREATED:
-            return { ...state, users: [...state.users, action.payload] };
+        case ActionTypes.USER_CREATED: {
+            const shallowCopy = [...state.users];
+            const userIdx = shallowCopy.findIndex(({ id }) => id === action.payload.id);
+            if (userIdx !== -1) {
+                shallowCopy.splice(userIdx, 1, action.payload);
+            } else {
+                shallowCopy.push(action.payload);
+            }
+            return { ...state, users: shallowCopy };
+        }
         case ActionTypes.USER_DELETED: {
             const shallowCopy = [...state.users];
             const userIdx = shallowCopy.findIndex(({ id }) => id === action.payload.id);
@@ -135,8 +143,18 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
             return { ...state, room: action.payload };
         case ActionTypes.USERS_ON_STORY_FETCHED:
             return { ...state, usersOnStory: action.payload, usersOnStoryLoading: false };
-        case ActionTypes.USER_ON_STORY_CREATED:
-            return { ...state, usersOnStory: [...state.usersOnStory, action.payload] };
+        case ActionTypes.USER_ON_STORY_CREATED: {
+            const shallowCopy = [...state.usersOnStory];
+            const userOnStoryIdx = shallowCopy.findIndex(({ public_user_id, story_id }) => {
+                return public_user_id === action.payload.public_user_id && story_id === action.payload.story_id;
+            });
+            if (userOnStoryIdx !== -1) {
+                shallowCopy.splice(userOnStoryIdx, 1, action.payload);
+            } else {
+                shallowCopy.push(action.payload);
+            }
+            return { ...state, usersOnStory: shallowCopy };
+        }
         case ActionTypes.USER_ON_STORY_UPDATED: {
             const shallowCopy = [...state.usersOnStory];
             const userOnStoryIdx = shallowCopy.findIndex(({ id }) => id === action.payload.id);
