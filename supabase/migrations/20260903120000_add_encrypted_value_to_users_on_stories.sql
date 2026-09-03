@@ -3,4 +3,4 @@
 -- The plain "value" column is kept for backwards compatibility with old rows
 -- and is no longer written by the app.
 ALTER TABLE "public"."UsersOnStories"
-ADD COLUMN "encrypted_value" text;
+ADD COLUMN IF NOT EXISTS "encrypted_value" text;
