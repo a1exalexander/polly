@@ -234,6 +234,7 @@ export type Database = {
       UsersOnStories: {
         Row: {
           created_at: string
+          encrypted_value: string | null
           id: number
           public_user_id: number
           story_id: number
@@ -241,6 +242,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          encrypted_value?: string | null
           id?: number
           public_user_id: number
           story_id: number
@@ -248,6 +250,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          encrypted_value?: string | null
           id?: number
           public_user_id?: number
           story_id?: number

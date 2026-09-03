@@ -1,6 +1,7 @@
 import { RoomPageService } from '@/components/RoomPage/RoomPage.service';
 import { Room, Story, StoryOnRoom, User, UserOnRoom, UserOnStory } from '@/types';
 import { RealtimeChannel } from '@supabase/realtime-js';
+import { decodeUserOnStory } from '@/utils/voteCipher';
 import { ActionTypes, DispatchType } from './RoomPage.store';
 
 export const realtime = ({
@@ -66,7 +67,7 @@ export const realtime = ({
                 if (userOnStory.story_id !== storyId) {
                     return;
                 }
-                dispatch({ type: ActionTypes.USER_ON_STORY_CREATED, payload: userOnStory });
+                dispatch({ type: ActionTypes.USER_ON_STORY_CREATED, payload: await decodeUserOnStory(userOnStory) });
             },
         )
         .on(
@@ -77,7 +78,7 @@ export const realtime = ({
                 if (userOnStory.story_id !== storyId) {
                     return;
                 }
-                dispatch({ type: ActionTypes.USER_ON_STORY_UPDATED, payload: userOnStory });
+                dispatch({ type: ActionTypes.USER_ON_STORY_UPDATED, payload: await decodeUserOnStory(userOnStory) });
             },
         )
         .on(
