@@ -1,6 +1,7 @@
 import { formatISO } from 'date-fns';
 import { Room, Story, UserWithActivity } from '@/types';
 import { createClient, SupabaseClient } from '@/utils/supabase/client';
+import { decodeUsersOnStory, encryptVote } from '@/utils/voteCipher';
 
 export class RoomPageService {
     supabase: SupabaseClient;
@@ -64,11 +65,15 @@ export class RoomPageService {
             .limit(1)
             .single();
 
-        if (Array.isArray(data?.story)) {
-            return data?.story?.[0] || null;
+        const story: Story | null = Array.isArray(data?.story)
+            ? (data?.story?.[0] as Story) || null
+            : (data?.story as Story) || null;
+
+        if (story?.users) {
+            story.users = await decodeUsersOnStory(story.users);
         }
 
-        return data?.story || null;
+        return story;
     }
 
     async getUsersOnStory(storyId: number) {
@@ -82,7 +87,7 @@ export class RoomPageService {
             return [];
         }
 
-        return usersOnStory;
+        return decodeUsersOnStory(usersOnStory);
     }
 
     async getUser(userId: number) {
@@ -159,12 +164,15 @@ export class RoomPageService {
     }
 
     async selectTime(storyId: number, userId: number, value: number) {
+        const encrypted_value = await encryptVote(value);
         return this.supabase
             .from('UsersOnStories')
             .upsert({
                 story_id: storyId,
                 public_user_id: userId,
-                value,
+                // Plain value is no longer stored; the number is only kept encrypted.
+                value: null,
+                encrypted_value,
             });
     }
 

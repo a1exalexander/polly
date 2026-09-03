@@ -33,7 +33,7 @@ export async function POST(request: Request) {
                 .eq('active', true),
             supabase
                 .from('UsersOnStories')
-                .select('public_user_id, value')
+                .select('public_user_id, value, encrypted_value')
                 .eq('story_id', storyId)
         ]);
 
@@ -83,11 +83,13 @@ export async function POST(request: Request) {
 
         const usersOnStory = votesResult.data || [];
 
-        // Check if all active users have voted
+        // Check if all active users have voted. Votes are stored encrypted in
+        // `encrypted_value`; the plain `value` column only exists for legacy rows.
+        // Presence of either is enough here, the number itself is not needed.
         const allVoted = activeUsers.every(({ public_user_id }) =>
             usersOnStory.some(
-                ({ public_user_id: voterId, value }) =>
-                    public_user_id === voterId && isNumber(value)
+                ({ public_user_id: voterId, value, encrypted_value }) =>
+                    public_user_id === voterId && (!!encrypted_value || isNumber(value))
             )
         );
 
